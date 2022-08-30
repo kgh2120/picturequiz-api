@@ -14,6 +14,10 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
                 .csrf().disable()
+                .authorizeRequests()
+                    .antMatchers("/**").permitAll()
+                    .anyRequest().authenticated()
+                .and()
                 .cors().and().build();
     }
 }

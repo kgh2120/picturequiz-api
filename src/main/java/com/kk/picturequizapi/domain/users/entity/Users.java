@@ -29,7 +29,7 @@ public class Users {
 
 
 
-    public Users createUserEntity(String loginId, String encrytedPassword) {
+    public static Users createUserEntity(String loginId, String encrytedPassword) {
         Users user = new Users();
         user.loginId = loginId;
         user.password = encrytedPassword;
