@@ -8,12 +8,14 @@ import com.kk.picturequizapi.domain.users.exception.LoginDataNotFoundException;
 import com.kk.picturequizapi.domain.users.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.NoSuchElementException;
+import java.util.ArrayList;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -43,5 +45,12 @@ public class UserServiceImpl implements UserService{
             throw new LoginDataNotFoundException();
 
         return new LoginResponseDto();
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Users users = userRepository.findByLoginId(username)
+                .orElseThrow();
+        return new User(users.getLoginId(), users.getPassword(), new ArrayList<>());
     }
 }
