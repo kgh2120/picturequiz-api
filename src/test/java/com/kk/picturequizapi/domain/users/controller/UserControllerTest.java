@@ -1,13 +1,12 @@
 package com.kk.picturequizapi.domain.users.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.kk.picturequizapi.domain.users.dto.LoginResponseDto;
+import com.kk.picturequizapi.domain.users.dto.TokenResponseDto;
 import com.kk.picturequizapi.domain.users.dto.SignUpResponseDto;
 import com.kk.picturequizapi.domain.users.dto.UserAccessRequestDto;
 import com.kk.picturequizapi.domain.users.service.UserServiceImpl;
 import com.kk.picturequizapi.global.config.SecurityConfig;
 import org.junit.jupiter.api.Test;
-import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -16,7 +15,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static org.hamcrest.Matchers.is;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -62,7 +60,7 @@ class UserControllerTest {
     void login () throws Exception{
         //given
         given(userService.login(dto))
-                .willReturn(LoginResponseDto.builder()
+                .willReturn(TokenResponseDto.builder()
                         .accessToken("access")
                         .refreshToken("refresh")
                         .build());

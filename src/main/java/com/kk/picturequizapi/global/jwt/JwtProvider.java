@@ -9,7 +9,6 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import javax.servlet.http.HttpServletRequest;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.Date;
@@ -56,12 +55,6 @@ public class JwtProvider {
             return  Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody()
                     .getSubject();
     }
-
-    public String resolveToken(HttpServletRequest request) {
-
-        return request.getHeader("X-AUTH-TOKEN");
-    }
-
 //    public String getLoginId() {
 //        SecurityContext context = SecurityContextHolder.getContext();
 //        Authentication authentication = context.getAuthentication();

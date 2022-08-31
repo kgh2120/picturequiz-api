@@ -1,9 +1,9 @@
 package com.kk.picturequizapi.global.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.kk.picturequizapi.domain.users.dto.LoginResponseDto;
+import com.kk.picturequizapi.domain.refreshtoken.service.RefreshTokenService;
+import com.kk.picturequizapi.domain.users.dto.TokenResponseDto;
 import com.kk.picturequizapi.domain.users.dto.UserAccessRequestDto;
-import com.kk.picturequizapi.domain.users.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -11,7 +11,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.stereotype.Component;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -23,11 +22,14 @@ public class JwtAuthorizationFilter extends UsernamePasswordAuthenticationFilter
 
     private final AuthenticationManager authenticationManager;
     private final JwtProvider jwtProvider;
+    private final RefreshTokenService refreshTokenService;
 
 
-    public JwtAuthorizationFilter(AuthenticationManager authenticationManager, JwtProvider jwtProvider) {
+    public JwtAuthorizationFilter(AuthenticationManager authenticationManager, JwtProvider jwtProvider
+            , RefreshTokenService refreshTokenService) {
         this.authenticationManager = authenticationManager;
         this.jwtProvider = jwtProvider;
+        this.refreshTokenService = refreshTokenService;
     }
 
 
@@ -57,10 +59,11 @@ public class JwtAuthorizationFilter extends UsernamePasswordAuthenticationFilter
         String accessToken = jwtProvider.createAccessToken(user.getUsername());
         String refreshToken = jwtProvider.createRefreshToken(user.getUsername());
 
-        LoginResponseDto dto = LoginResponseDto.builder()
+        TokenResponseDto dto = TokenResponseDto.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .build();
+        refreshTokenService.createToken(user.getUsername(),refreshToken);
 
         response.addHeader("accessToken",dto.getAccessToken());
         response.addHeader("refreshToken",dto.getRefreshToken());

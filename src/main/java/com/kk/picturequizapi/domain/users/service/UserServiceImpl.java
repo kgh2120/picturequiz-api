@@ -1,6 +1,6 @@
 package com.kk.picturequizapi.domain.users.service;
 
-import com.kk.picturequizapi.domain.users.dto.LoginResponseDto;
+import com.kk.picturequizapi.domain.users.dto.TokenResponseDto;
 import com.kk.picturequizapi.domain.users.dto.SignUpResponseDto;
 import com.kk.picturequizapi.domain.users.dto.UserAccessRequestDto;
 import com.kk.picturequizapi.domain.users.entity.Users;
@@ -37,14 +37,14 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public LoginResponseDto login(UserAccessRequestDto dto) {
+    public TokenResponseDto login(UserAccessRequestDto dto) {
         Users users = userRepository.findByLoginId(dto.getLoginId())
                 .orElseThrow(LoginDataNotFoundException::new);
 
         if(!encoder.matches(dto.getPassword(),users.getPassword()))
             throw new LoginDataNotFoundException();
 
-        return new LoginResponseDto();
+        return new TokenResponseDto();
     }
 
     @Override

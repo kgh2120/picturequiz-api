@@ -1,6 +1,6 @@
 package com.kk.picturequizapi.domain.users.controller;
 
-import com.kk.picturequizapi.domain.users.dto.LoginResponseDto;
+import com.kk.picturequizapi.domain.users.dto.TokenResponseDto;
 import com.kk.picturequizapi.domain.users.dto.SignUpResponseDto;
 import com.kk.picturequizapi.domain.users.dto.UserAccessRequestDto;
 import com.kk.picturequizapi.domain.users.service.UserService;
@@ -26,8 +26,8 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponseDto> login(@RequestBody UserAccessRequestDto dto) {
-        LoginResponseDto responseDto = userService.login(dto);
+    public ResponseEntity<TokenResponseDto> login(@RequestBody UserAccessRequestDto dto) {
+        TokenResponseDto responseDto = userService.login(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }
     @GetMapping("/test")
