@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kk.picturequizapi.domain.refreshtoken.service.RefreshTokenService;
 import com.kk.picturequizapi.domain.users.dto.TokenResponseDto;
 import com.kk.picturequizapi.domain.users.dto.UserAccessRequestDto;
+import com.kk.picturequizapi.domain.users.entity.Users;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -47,8 +48,6 @@ public class JwtAuthorizationFilter extends UsernamePasswordAuthenticationFilter
         }
         UsernamePasswordAuthenticationToken authenticationToken
                 = new UsernamePasswordAuthenticationToken(dto.getLoginId(), dto.getPassword());
-        log.info("[JWTAuthorizationFilter] loginId = {}", dto.getLoginId());
-        log.info("[JWTAuthorizationFilter] password = {}", dto.getPassword());
         return authenticationManager.authenticate(authenticationToken);
     }
 
@@ -56,7 +55,7 @@ public class JwtAuthorizationFilter extends UsernamePasswordAuthenticationFilter
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
         log.info("[JWTAuthorizationFilter] - successfulAuthentication 시작");
-        User user = (User) authResult.getPrincipal();
+        Users user = (Users) authResult.getPrincipal();
         log.info("[JWTAuthorizationFilter] - User = {}", user);
         String accessToken = jwtProvider.createAccessToken(user.getUsername());
         String refreshToken = jwtProvider.createRefreshToken(user.getUsername());
@@ -66,12 +65,10 @@ public class JwtAuthorizationFilter extends UsernamePasswordAuthenticationFilter
                 .refreshToken(refreshToken)
                 .build();
         refreshTokenService.createToken(user.getUsername(),refreshToken);
-        log.info("access token - {}", dto.getAccessToken());
+
         response.addHeader("Access-Token",dto.getAccessToken());
         response.addHeader("Refresh-Token",dto.getRefreshToken());
         response.setStatus(201);
-        log.info("[JWTAuthorizationFilter] - successfulAuthentication accessToken = {}", accessToken);
-        log.info("[JWTAuthorizationFilter] - successfulAuthentication refreshToken = {}", refreshToken);
-        log.info("[JWTAuthorizationFilter] - successfulAuthentication 끝");
+
     }
 }

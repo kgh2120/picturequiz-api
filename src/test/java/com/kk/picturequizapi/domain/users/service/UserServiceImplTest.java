@@ -1,16 +1,20 @@
 package com.kk.picturequizapi.domain.users.service;
 
+import com.kk.picturequizapi.domain.users.dto.MyInfoResponseDto;
 import com.kk.picturequizapi.domain.users.dto.TokenResponseDto;
 import com.kk.picturequizapi.domain.users.dto.SignUpResponseDto;
 import com.kk.picturequizapi.domain.users.dto.UserAccessRequestDto;
 import com.kk.picturequizapi.domain.users.entity.Users;
 import com.kk.picturequizapi.domain.users.exception.LoginDataNotFoundException;
 import com.kk.picturequizapi.domain.users.repository.UserRepository;
+import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -106,6 +110,22 @@ class UserServiceImplTest {
         assertThatThrownBy(() -> userService.login(dto))
                 .isInstanceOf(LoginDataNotFoundException.class);
 
+    }
+    
+    @Test
+    void readMyInfo () throws Exception{
+        //given
+        SecurityContextHolder.getContext()
+                .setAuthentication(new UsernamePasswordAuthenticationToken(
+                        createUser("tester","password"),"password",null));
+        //when
+        MyInfoResponseDto dto = userService.readMyInfo();
+        //then
+        SoftAssertions.assertSoftly(sa -> {
+            assertThat(dto.getLoginId()).isEqualTo("tester");
+            assertThat(dto.getNickname()).isNull();
+            assertThat(dto.getAuthEmail()).isNull();
+        });
     }
 
     private Users createUser(String id, String pwd) throws Exception {
