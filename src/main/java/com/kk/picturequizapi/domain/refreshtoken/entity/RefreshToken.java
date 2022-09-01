@@ -1,11 +1,12 @@
-package com.kk.picturequizapi.domain.users.entity;
+package com.kk.picturequizapi.domain.refreshtoken.entity;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity @Getter
 public class RefreshToken {
 
@@ -13,17 +14,20 @@ public class RefreshToken {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private Users user;
+    @Column(nullable = false)
+    private String loginId;
 
     @Column(nullable = false)
     private String refreshTokenBody;
 
-    public static RefreshToken createRefreshTokenEntity(String refreshToken, Users user) {
+    public static RefreshToken createRefreshTokenEntity(String refreshToken, String loginId) {
         RefreshToken token = new RefreshToken();
         token.refreshTokenBody = refreshToken;
-        token.user = user;
+        token.loginId = loginId;
         return token;
+    }
+
+    public void modifyTokenBody(String refreshTokenBody) {
+        this.refreshTokenBody = refreshTokenBody;
     }
 }
