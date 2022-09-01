@@ -1,21 +1,20 @@
 package com.kk.picturequizapi.domain.users.service;
 
-import com.kk.picturequizapi.domain.users.dto.TokenResponseDto;
+import com.kk.picturequizapi.domain.users.dto.MyInfoResponseDto;
 import com.kk.picturequizapi.domain.users.dto.SignUpResponseDto;
+import com.kk.picturequizapi.domain.users.dto.TokenResponseDto;
 import com.kk.picturequizapi.domain.users.dto.UserAccessRequestDto;
 import com.kk.picturequizapi.domain.users.entity.Users;
 import com.kk.picturequizapi.domain.users.exception.LoginDataNotFoundException;
 import com.kk.picturequizapi.domain.users.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -48,9 +47,18 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    public MyInfoResponseDto readMyInfo() {
+        return MyInfoResponseDto.createDto(getUser());
+    }
+
+    @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Users users = userRepository.findByLoginId(username)
+        return userRepository.findByLoginId(username)
                 .orElseThrow();
-        return new User(users.getLoginId(), users.getPassword(), new ArrayList<>());
+    }
+
+    private Users getUser() {
+        return (Users) SecurityContextHolder.getContext().getAuthentication().getPrincipal()
+                ;
     }
 }

@@ -1,5 +1,6 @@
 package com.kk.picturequizapi.domain.users.service;
 
+import com.kk.picturequizapi.domain.users.dto.MyInfoResponseDto;
 import com.kk.picturequizapi.domain.users.dto.TokenResponseDto;
 import com.kk.picturequizapi.domain.users.dto.SignUpResponseDto;
 import com.kk.picturequizapi.domain.users.dto.UserAccessRequestDto;
@@ -13,6 +14,9 @@ public interface UserService extends UserDetailsService {
 
     // 로그인 기능
     TokenResponseDto login(UserAccessRequestDto dto);
+
+    // 내 정보 조회하기 기능
+    MyInfoResponseDto readMyInfo();
 
 
 }
