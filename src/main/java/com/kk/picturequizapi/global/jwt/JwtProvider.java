@@ -12,8 +12,8 @@ import javax.annotation.PostConstruct;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.Date;
-@PropertySource("classpath:secret.properties")
 @Component
+@PropertySource("classpath:secret.properties")
 public class JwtProvider {
 
     @Value("${jwt.secretkey}")
@@ -55,14 +55,6 @@ public class JwtProvider {
             return  Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody()
                     .getSubject();
     }
-//    public String getLoginId() {
-//        SecurityContext context = SecurityContextHolder.getContext();
-//        Authentication authentication = context.getAuthentication();
-//        Auth auth = (Auth) authentication.getPrincipal();
-//
-//        return auth.getEmail();
-//    }
-
     public Claims validateToken(String token) {
             Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
             return claims.getBody();
