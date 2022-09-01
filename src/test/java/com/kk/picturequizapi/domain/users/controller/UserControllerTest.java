@@ -90,10 +90,11 @@ class UserControllerTest {
                         .accessToken("access")
                         .refreshToken("refresh")
                         .build());
+        Users user = createUser(dto.getLoginId(), dto.getPassword());
         given(userService.loadUserByUsername(any()))
-                .willReturn(new User(dto.getLoginId(), bCryptPasswordEncoder.encode(dto.getPassword()), new ArrayList<>()));
+                .willReturn(user);
         given(authenticationManager.authenticate(any()))
-                .willReturn(new UsernamePasswordAuthenticationToken(new User(dto.getLoginId(), bCryptPasswordEncoder.encode(dto.getPassword()), new ArrayList<>()), dto.getPassword()));
+                .willReturn(new UsernamePasswordAuthenticationToken(user, dto.getPassword()));
         given(jwtProvider.createAccessToken(any()))
                 .willReturn("token");
         given(jwtProvider.createRefreshToken(any()))
