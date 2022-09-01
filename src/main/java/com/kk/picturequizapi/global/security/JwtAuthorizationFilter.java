@@ -1,17 +1,20 @@
-package com.kk.picturequizapi.global.jwt;
+package com.kk.picturequizapi.global.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kk.picturequizapi.domain.refreshtoken.service.RefreshTokenService;
 import com.kk.picturequizapi.domain.users.dto.TokenResponseDto;
 import com.kk.picturequizapi.domain.users.dto.UserAccessRequestDto;
 import com.kk.picturequizapi.domain.users.entity.Users;
+import com.kk.picturequizapi.domain.users.exception.LoginDataNotFoundException;
+import com.kk.picturequizapi.global.exception.ErrorResponse;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.FilterChain;
@@ -19,20 +22,22 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-@Slf4j
+@Slf4j @RequiredArgsConstructor
 public class JwtAuthorizationFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
     private final JwtProvider jwtProvider;
     private final RefreshTokenService refreshTokenService;
 
+    private final AuthenticationFailureHandler authenticationFailureHandler;
 
-    public JwtAuthorizationFilter(AuthenticationManager authenticationManager, JwtProvider jwtProvider
-            , RefreshTokenService refreshTokenService) {
-        this.authenticationManager = authenticationManager;
-        this.jwtProvider = jwtProvider;
-        this.refreshTokenService = refreshTokenService;
-    }
+
+//    public JwtAuthorizationFilter(AuthenticationManager authenticationManager, JwtProvider jwtProvider
+//            , RefreshTokenService refreshTokenService) {
+//        this.authenticationManager = authenticationManager;
+//        this.jwtProvider = jwtProvider;
+//        this.refreshTokenService = refreshTokenService;
+//    }
 
 
 
@@ -48,7 +53,9 @@ public class JwtAuthorizationFilter extends UsernamePasswordAuthenticationFilter
         }
         UsernamePasswordAuthenticationToken authenticationToken
                 = new UsernamePasswordAuthenticationToken(dto.getLoginId(), dto.getPassword());
+
         return authenticationManager.authenticate(authenticationToken);
+
     }
 
     // jwt 토큰을 만들어서 response로 전달해줘서 유저가 받아서 사용할 수 있게끔 한다.
@@ -70,5 +77,11 @@ public class JwtAuthorizationFilter extends UsernamePasswordAuthenticationFilter
         response.addHeader("Refresh-Token",dto.getRefreshToken());
         response.setStatus(201);
 
+    }
+
+    @Override
+    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
+        log.info("[JWTAuthorizationFilter] - 인증실패");
+        authenticationFailureHandler.onAuthenticationFailure(request,response,failed);
     }
 }

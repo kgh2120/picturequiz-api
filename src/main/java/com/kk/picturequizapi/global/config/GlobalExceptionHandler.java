@@ -6,12 +6,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import javax.servlet.http.HttpServletRequest;
+
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(AbstractApiException.class)
-    public ResponseEntity<ErrorResponse> handleGlobalExcpetion(AbstractApiException ex) {
+    public ResponseEntity<ErrorResponse> handleGlobalExcpetion(AbstractApiException ex, HttpServletRequest request) {
         return ResponseEntity.status(ex.getHttpStatus())
-                .body(ErrorResponse.createErrorResponse(ex));
+                .body(ErrorResponse.createErrorResponse(ex, request.getRequestURI()));
     }
 }

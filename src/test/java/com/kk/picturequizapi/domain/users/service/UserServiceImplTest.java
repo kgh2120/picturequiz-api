@@ -58,59 +58,6 @@ class UserServiceImplTest {
         //then
         assertThat(responseDto.getId()).isSameAs(1L);
     }
-
-    @Test
-    void login() throws Exception {
-        //given
-        String id = "test";
-        String pwd = "password";
-        given(passwordEncoder.matches(any(),any()))
-                .willReturn(encoder.matches(pwd,createUser(id,pwd).getPassword()));
-        given(userRepository.findByLoginId(id))
-                .willReturn(Optional.of(createUser(id, pwd)));
-        UserAccessRequestDto dto = new UserAccessRequestDto();
-        dto.setPassword(pwd);
-        dto.setLoginId(id);
-        //when
-
-        TokenResponseDto responseDto = userService.login(dto);
-
-        //then
-        assertThat(responseDto).isNotNull();
-    }
-
-    @Test
-    void login_exception_idNotFound () throws Exception{
-        //given
-        String id = "test";
-        String pwd = "password";
-        given(userRepository.findByLoginId(any()))
-                .willThrow(LoginDataNotFoundException.class);
-        UserAccessRequestDto dto = new UserAccessRequestDto();
-        dto.setPassword(pwd);
-        dto.setLoginId(id);
-        //when then
-        assertThatThrownBy(() -> userService.login(dto))
-                .isInstanceOf(LoginDataNotFoundException.class);
-    }
-    
-    @Test
-    void login_exception_passwordUnMatched () throws Exception{
-        //given
-        String id = "test";
-        String pwd = "password";
-        given(userRepository.findByLoginId(any()))
-                .willReturn(Optional.of(createUser(id, pwd)));
-        given(passwordEncoder.matches(any(),any()))
-                .willReturn(encoder.matches("unMatchedPassword",createUser(id,pwd).getPassword()));
-        UserAccessRequestDto dto = new UserAccessRequestDto();
-        dto.setPassword(pwd);
-        dto.setLoginId(id);
-        //when then
-        assertThatThrownBy(() -> userService.login(dto))
-                .isInstanceOf(LoginDataNotFoundException.class);
-
-    }
     
     @Test
     void readMyInfo () throws Exception{
