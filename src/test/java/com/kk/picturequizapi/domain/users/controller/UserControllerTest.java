@@ -3,7 +3,6 @@ package com.kk.picturequizapi.domain.users.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kk.picturequizapi.domain.refreshtoken.service.RefreshTokenService;
 import com.kk.picturequizapi.domain.users.dto.MyInfoResponseDto;
-import com.kk.picturequizapi.domain.users.dto.TokenResponseDto;
 import com.kk.picturequizapi.domain.users.dto.SignUpResponseDto;
 import com.kk.picturequizapi.domain.users.dto.UserAccessRequestDto;
 import com.kk.picturequizapi.domain.users.entity.Users;
@@ -28,14 +27,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import javax.security.sasl.AuthenticationException;
 import java.lang.reflect.Field;
-import java.time.LocalDateTime;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.*;
+import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -153,11 +150,8 @@ class UserControllerTest {
     @Test
     void readMyInfo () throws Exception{
         //given
-        given(jwtProvider.validateToken(any()))
-                .willReturn(Jwts.claims().setSubject("test"));
         Users user = createUser("test", "password");
-        given(userService.loadUserByUsername(any()))
-                .willReturn(user);
+        setSecurityAfterLogin(user);
         given(userService.readMyInfo())
                 .willReturn(MyInfoResponseDto.createDto(user));
 
@@ -169,10 +163,45 @@ class UserControllerTest {
                 .andExpect(jsonPath("$.nickname", nullValue()))
                 .andExpect(jsonPath("$.authEmail", nullValue()))
                 .andDo(print());
-
-        
-    
     }
+    
+    @Test
+    void checkNicknameDuplicate_TRUE () throws Exception{
+        //given
+        Users user = createUser("test", "password");
+        setSecurityAfterLogin(user);
+        given(userService.isExistNickname(any()))
+                .willReturn(true);
+        //when //then
+        mockMvc.perform(MockMvcRequestBuilders.get("/my-profile/nickname?nickname=nickname")
+                        .header("Authorization","Bearer Token"))
+                .andExpect(status().isOk())
+                .andExpect(content().string("true"))
+                .andDo(print());
+    }
+
+    @Test
+    void checkNicknameDuplicate_FALSE () throws Exception{
+        //given
+        Users user = createUser("test", "password");
+        setSecurityAfterLogin(user);
+        given(userService.isExistNickname(any()))
+                .willReturn(false);
+        //when //then
+        mockMvc.perform(MockMvcRequestBuilders.get("/my-profile/nickname?nickname=nickname")
+                        .header("Authorization","Bearer Token"))
+                .andExpect(status().isOk())
+                .andExpect(content().string("false"))
+                .andDo(print());
+    }
+
+    private void setSecurityAfterLogin(Users user) {
+        given(jwtProvider.validateToken(any()))
+                .willReturn(Jwts.claims().setSubject("test"));
+        given(userService.loadUserByUsername(any()))
+                .willReturn(user);
+    }
+
     private Users createUser(String id, String pwd) throws Exception {
         Users user = Users.createUserEntity(id, bCryptPasswordEncoder.encode(pwd));
         Field idField = user.getClass().getDeclaredField("id");

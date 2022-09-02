@@ -11,9 +11,11 @@ public interface UserService extends UserDetailsService {
     SignUpResponseDto signUp(UserAccessRequestDto dto);
 
 
-
     // 내 정보 조회하기 기능
     MyInfoResponseDto readMyInfo();
+
+    // 닉네임이 존재하는지 체크 하는 기능
+    boolean isExistNickname(String nickname);
 
 
 }

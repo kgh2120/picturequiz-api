@@ -62,9 +62,7 @@ class UserServiceImplTest {
     @Test
     void readMyInfo () throws Exception{
         //given
-        SecurityContextHolder.getContext()
-                .setAuthentication(new UsernamePasswordAuthenticationToken(
-                        createUser("tester","password"),"password",null));
+        setSecurity();
         //when
         MyInfoResponseDto dto = userService.readMyInfo();
         //then
@@ -73,6 +71,37 @@ class UserServiceImplTest {
             assertThat(dto.getNickname()).isNull();
             assertThat(dto.getAuthEmail()).isNull();
         });
+    }
+
+    private void setSecurity() throws Exception {
+        SecurityContextHolder.getContext()
+                .setAuthentication(new UsernamePasswordAuthenticationToken(
+                        createUser("tester","password"),"password",null));
+    }
+
+
+    @Test
+    void isExistNickname_TRUE () throws Exception{
+        //given
+        given(userRepository.existsByNickname(any()))
+                .willReturn(true);
+        //when
+        boolean result = userService.isExistNickname("nickname");
+
+        //then
+        assertThat(result).isTrue();
+    }
+
+    @Test
+    void isExistNickname_FALSE () throws Exception{
+        //given
+        given(userRepository.existsByNickname(any()))
+                .willReturn(false);
+        //when
+        boolean result = userService.isExistNickname("nickname");
+
+        //then
+        assertThat(result).isFalse();
     }
 
     private Users createUser(String id, String pwd) throws Exception {

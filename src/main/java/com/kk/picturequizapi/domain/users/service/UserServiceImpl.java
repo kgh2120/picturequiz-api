@@ -17,13 +17,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @RequiredArgsConstructor
-@Service @Transactional
+@Service @Transactional(readOnly = true)
 public class UserServiceImpl implements UserService{
 
     private final UserRepository userRepository;
     private final PasswordEncoder encoder;
 
 
+    @Transactional
     @Override
     public SignUpResponseDto signUp(UserAccessRequestDto dto) {
 
@@ -36,6 +37,11 @@ public class UserServiceImpl implements UserService{
     @Override
     public MyInfoResponseDto readMyInfo() {
         return MyInfoResponseDto.createDto(getUser());
+    }
+
+    @Override
+    public boolean isExistNickname(String nickname) {
+        return userRepository.existsByNickname(nickname);
     }
 
     @Override
