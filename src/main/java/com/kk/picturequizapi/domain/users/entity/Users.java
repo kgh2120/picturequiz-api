@@ -42,6 +42,10 @@ public class Users implements UserDetails {
         return user;
     }
 
+    public void changeNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -15,10 +15,7 @@ class UserRepositoryTest {
 
     @Autowired
     UserRepository userRepository;
-
-
-
-
+    
     @Test
     void findByLoginId () throws Exception{
         //given
@@ -27,11 +24,39 @@ class UserRepositoryTest {
         Long id = userRepository.save(users).getId();
         //when
         Users find = userRepository.findByLoginId(loginid).get();
-
         //then
         assertThat(id).isSameAs(find.getId());
+    }
+    
+    @Test
+    void existsByNickname_TRUE  () throws Exception{
+        //given
+        String loginid = "loginid";
+        Users users = Users.createUserEntity(loginid, "password");
+        String nickname = "nickname";
+        users.changeNickname(nickname);
+        userRepository.save(users);
 
+        //when
+        boolean result = userRepository.existsByNickname(nickname);
 
+        //then
+        assertThat(result).isTrue();
+    }
+    @Test
+    void existsByNickname_FALSE  () throws Exception{
+        //given
+        String loginid = "loginid";
+        Users users = Users.createUserEntity(loginid, "password");
+        String nickname = "nickname";
+        users.changeNickname(nickname);
+        userRepository.save(users);
+
+        //when
+        boolean result = userRepository.existsByNickname("nickname2");
+
+        //then
+        assertThat(result).isFalse();
     }
 
 }
