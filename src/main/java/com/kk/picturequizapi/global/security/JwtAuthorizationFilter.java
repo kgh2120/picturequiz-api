@@ -5,12 +5,9 @@ import com.kk.picturequizapi.domain.refreshtoken.service.RefreshTokenService;
 import com.kk.picturequizapi.domain.users.dto.TokenResponseDto;
 import com.kk.picturequizapi.domain.users.dto.UserAccessRequestDto;
 import com.kk.picturequizapi.domain.users.entity.Users;
-import com.kk.picturequizapi.domain.users.exception.LoginDataNotFoundException;
-import com.kk.picturequizapi.global.exception.ErrorResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -28,18 +25,7 @@ public class JwtAuthorizationFilter extends UsernamePasswordAuthenticationFilter
     private final AuthenticationManager authenticationManager;
     private final JwtProvider jwtProvider;
     private final RefreshTokenService refreshTokenService;
-
     private final AuthenticationFailureHandler authenticationFailureHandler;
-
-
-//    public JwtAuthorizationFilter(AuthenticationManager authenticationManager, JwtProvider jwtProvider
-//            , RefreshTokenService refreshTokenService) {
-//        this.authenticationManager = authenticationManager;
-//        this.jwtProvider = jwtProvider;
-//        this.refreshTokenService = refreshTokenService;
-//    }
-
-
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
