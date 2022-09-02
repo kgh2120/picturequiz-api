@@ -1,4 +1,6 @@
 spring:
+  config:
+    import: classpath:mailSender.yml
   h2:
     console:
       enabled: true
