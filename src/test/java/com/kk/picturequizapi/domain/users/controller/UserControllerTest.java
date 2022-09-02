@@ -2,6 +2,7 @@ package com.kk.picturequizapi.domain.users.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kk.picturequizapi.domain.refreshtoken.service.RefreshTokenService;
+import com.kk.picturequizapi.domain.users.dto.ChangeNicknameRequestDto;
 import com.kk.picturequizapi.domain.users.dto.MyInfoResponseDto;
 import com.kk.picturequizapi.domain.users.dto.SignUpResponseDto;
 import com.kk.picturequizapi.domain.users.dto.UserAccessRequestDto;
@@ -28,6 +29,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
@@ -194,6 +196,38 @@ class UserControllerTest {
                 .andExpect(content().string("false"))
                 .andDo(print());
     }
+    
+    @Test
+    void changeNickname () throws Exception{
+        //given
+        Users user = createUser("test", "password");
+        setSecurityAfterLogin(user);
+//        Method getUser = userService.getClass().getDeclaredMethod("getUser");
+//        getUser.setAccessible(true);
+
+//        given(getUser)
+//                .willReturn(user);
+        ChangeNicknameRequestDto dto = new ChangeNicknameRequestDto("nickname");
+        String content = mapper.writeValueAsString(dto);
+
+
+        //when
+        mockMvc.perform(MockMvcRequestBuilders.patch("/my-profile/nickname")
+                        .header("Authorization", "Bearer Token")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .content(content))
+
+        //then
+
+                .andExpect(status().isNoContent())
+                .andDo(print());
+        
+
+        
+    
+    }
+    
 
     private void setSecurityAfterLogin(Users user) {
         given(jwtProvider.validateToken(any()))

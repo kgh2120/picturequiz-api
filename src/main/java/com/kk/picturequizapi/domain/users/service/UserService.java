@@ -1,5 +1,6 @@
 package com.kk.picturequizapi.domain.users.service;
 
+import com.kk.picturequizapi.domain.users.dto.ChangeNicknameRequestDto;
 import com.kk.picturequizapi.domain.users.dto.MyInfoResponseDto;
 import com.kk.picturequizapi.domain.users.dto.SignUpResponseDto;
 import com.kk.picturequizapi.domain.users.dto.UserAccessRequestDto;
@@ -16,6 +17,8 @@ public interface UserService extends UserDetailsService {
 
     // 닉네임이 존재하는지 체크 하는 기능
     boolean isExistNickname(String nickname);
+
+    void changeNickname(ChangeNicknameRequestDto dto);
 
 
 }

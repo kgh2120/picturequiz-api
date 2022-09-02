@@ -1,9 +1,6 @@
 package com.kk.picturequizapi.domain.users.service;
 
-import com.kk.picturequizapi.domain.users.dto.MyInfoResponseDto;
-import com.kk.picturequizapi.domain.users.dto.TokenResponseDto;
-import com.kk.picturequizapi.domain.users.dto.SignUpResponseDto;
-import com.kk.picturequizapi.domain.users.dto.UserAccessRequestDto;
+import com.kk.picturequizapi.domain.users.dto.*;
 import com.kk.picturequizapi.domain.users.entity.Users;
 import com.kk.picturequizapi.domain.users.exception.LoginDataNotFoundException;
 import com.kk.picturequizapi.domain.users.repository.UserRepository;
@@ -38,6 +35,7 @@ class UserServiceImplTest {
     UserServiceImpl userService;
 
     BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+    String loginId = "tester";
 
     @Test
     void signUp() throws Exception {
@@ -74,9 +72,10 @@ class UserServiceImplTest {
     }
 
     private void setSecurity() throws Exception {
+
         SecurityContextHolder.getContext()
                 .setAuthentication(new UsernamePasswordAuthenticationToken(
-                        createUser("tester","password"),"password",null));
+                        createUser(loginId,"password"),"password",null));
     }
 
 
@@ -102,6 +101,24 @@ class UserServiceImplTest {
 
         //then
         assertThat(result).isFalse();
+    }
+    
+    @Test
+    void changeNickname () throws Exception{
+        //given
+        setSecurity();
+        given(userRepository.findByLoginId(any()))
+                .willReturn( Optional.of((Users)SecurityContextHolder.getContext()
+                        .getAuthentication().getPrincipal()));
+        String nickname = "nickname";
+        ChangeNicknameRequestDto dto = new ChangeNicknameRequestDto(nickname);
+        //when
+        userService.changeNickname(dto);
+        Users users = userRepository.findByLoginId(loginId).get();
+        //then
+        assertThat(users.getNickname()).isEqualTo(nickname);
+        
+    
     }
 
     private Users createUser(String id, String pwd) throws Exception {

@@ -1,5 +1,6 @@
 package com.kk.picturequizapi.domain.users.controller;
 
+import com.kk.picturequizapi.domain.users.dto.ChangeNicknameRequestDto;
 import com.kk.picturequizapi.domain.users.dto.MyInfoResponseDto;
 import com.kk.picturequizapi.domain.users.dto.SignUpResponseDto;
 import com.kk.picturequizapi.domain.users.dto.UserAccessRequestDto;
@@ -31,5 +32,10 @@ public class UserController {
     public ResponseEntity<Boolean> checkNicknameDuplicate(@RequestParam("nickname") String nickname) {
         boolean result = userService.isExistNickname(nickname);
         return ResponseEntity.ok(result);
+    }
+    @PatchMapping("/my-profile/nickname")
+    public ResponseEntity<Void> changeNickname(@RequestBody ChangeNicknameRequestDto dto) {
+        userService.changeNickname(dto);
+        return ResponseEntity.noContent().build();
     }
 }
