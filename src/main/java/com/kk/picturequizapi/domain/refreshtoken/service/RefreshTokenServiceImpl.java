@@ -3,7 +3,7 @@ package com.kk.picturequizapi.domain.refreshtoken.service;
 import com.kk.picturequizapi.domain.refreshtoken.entity.RefreshToken;
 import com.kk.picturequizapi.domain.refreshtoken.repository.RefreshTokenRepository;
 import com.kk.picturequizapi.domain.users.dto.TokenResponseDto;
-import com.kk.picturequizapi.global.jwt.JwtProvider;
+import com.kk.picturequizapi.global.security.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

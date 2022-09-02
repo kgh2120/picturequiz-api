@@ -7,28 +7,30 @@ import com.kk.picturequizapi.domain.users.dto.TokenResponseDto;
 import com.kk.picturequizapi.domain.users.dto.SignUpResponseDto;
 import com.kk.picturequizapi.domain.users.dto.UserAccessRequestDto;
 import com.kk.picturequizapi.domain.users.entity.Users;
+import com.kk.picturequizapi.domain.users.exception.LoginDataNotFoundException;
 import com.kk.picturequizapi.domain.users.service.UserServiceImpl;
 import com.kk.picturequizapi.global.config.SecurityConfig;
-import com.kk.picturequizapi.global.jwt.JwtAuthenticationFilter;
-import com.kk.picturequizapi.global.jwt.JwtAuthorizationFilter;
-import com.kk.picturequizapi.global.jwt.JwtProvider;
+import com.kk.picturequizapi.global.security.CustomAuthenticationFailureHandler;
+import com.kk.picturequizapi.global.security.JwtAuthenticationFilter;
+import com.kk.picturequizapi.global.security.JwtAuthorizationFilter;
+import com.kk.picturequizapi.global.security.JwtProvider;
 import io.jsonwebtoken.Jwts;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import javax.security.sasl.AuthenticationException;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
+import java.time.LocalDateTime;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
@@ -38,7 +40,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
-@WebMvcTest(value = {UserController.class, SecurityConfig.class, JwtAuthorizationFilter.class, JwtAuthenticationFilter.class})
+@WebMvcTest(value = {UserController.class, SecurityConfig.class, JwtAuthorizationFilter.class
+        , JwtAuthenticationFilter.class, CustomAuthenticationFailureHandler.class})
 class UserControllerTest {
 
     @Autowired
@@ -63,10 +66,6 @@ class UserControllerTest {
             .loginId("test")
             .password("password")
             .build();
-
-
-
-
     @Test
     void signUp () throws Exception{
         //given
@@ -85,11 +84,6 @@ class UserControllerTest {
     @Test
     void login () throws Exception{
         //given
-        given(userService.login(dto))
-                .willReturn(TokenResponseDto.builder()
-                        .accessToken("access")
-                        .refreshToken("refresh")
-                        .build());
         Users user = createUser(dto.getLoginId(), dto.getPassword());
         given(userService.loadUserByUsername(any()))
                 .willReturn(user);
@@ -109,6 +103,51 @@ class UserControllerTest {
                 .andExpect(header().exists("Access-Token"))
                 .andExpect(header().exists("Refresh-Token"))
                 .andDo(print());
+    }
+    
+    @Test
+    void login_exception_id_not_found () throws Exception{
+        //given
+        given(userService.loadUserByUsername(any()))
+                .willThrow(new LoginDataNotFoundException());
+        given(authenticationManager.authenticate(any()))
+                .willThrow(new LoginDataNotFoundException());
+        
+        //when //then
+        mockMvc.perform(MockMvcRequestBuilders.post("/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(dto))
+                ).andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.httpStatus", is("NOT_FOUND")))
+                .andExpect(jsonPath("$.errorCode", is("U-0001")))
+                .andExpect(jsonPath("$.errorName", is("LOGIN_DATA_NOT_FOUND")))
+                .andExpect(jsonPath("$.errorMessage", is("아이디 혹은 비밀번호가 알맞지 않습니다.")))
+                .andDo(print());
+
+        
+    
+    }
+    @Test
+    void login_exception_password_mismatch () throws Exception{
+        //given
+        given(userService.loadUserByUsername(any()))
+                .willReturn(createUser("test","pass"));
+        given(authenticationManager.authenticate(any()))
+                .willThrow(new InternalAuthenticationServiceException("로그인 데이터가 없어용",new LoginDataNotFoundException()));
+        //when //then
+        mockMvc.perform(MockMvcRequestBuilders.post("/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(dto))
+                ).andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.httpStatus", is("NOT_FOUND")))
+                .andExpect(jsonPath("$.errorCode", is("U-0001")))
+                .andExpect(jsonPath("$.errorName", is("LOGIN_DATA_NOT_FOUND")))
+                .andExpect(jsonPath("$.errorMessage", is("아이디 혹은 비밀번호가 알맞지 않습니다.")))
+                .andDo(print());
+        
+    
     }
     
     @Test

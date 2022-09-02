@@ -1,4 +1,4 @@
-package com.kk.picturequizapi.global.jwt;
+package com.kk.picturequizapi.global.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;

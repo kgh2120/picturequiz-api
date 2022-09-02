@@ -2,9 +2,10 @@ package com.kk.picturequizapi.global.config;
 
 import com.kk.picturequizapi.domain.refreshtoken.service.RefreshTokenService;
 import com.kk.picturequizapi.domain.users.service.UserService;
-import com.kk.picturequizapi.global.jwt.JwtAuthenticationFilter;
-import com.kk.picturequizapi.global.jwt.JwtAuthorizationFilter;
-import com.kk.picturequizapi.global.jwt.JwtProvider;
+import com.kk.picturequizapi.global.security.CustomAuthenticationFailureHandler;
+import com.kk.picturequizapi.global.security.JwtAuthenticationFilter;
+import com.kk.picturequizapi.global.security.JwtAuthorizationFilter;
+import com.kk.picturequizapi.global.security.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -13,6 +14,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @EnableWebSecurity
@@ -46,10 +48,18 @@ public class SecurityConfig {
                 .and()
                 .cors().and()
                 .authenticationManager(authenticationManager)
-                .addFilterBefore(new JwtAuthorizationFilter(authenticationManager,jwtProvider, refreshTokenService)
+//                .formLogin()
+//                .failureHandler(authenticationFailureHandler())
+//                .and()
+                .addFilterBefore(new JwtAuthorizationFilter(authenticationManager,jwtProvider, refreshTokenService, authenticationFailureHandler())
                         ,UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(new JwtAuthenticationFilter(jwtProvider,userDetailsService)
                         ,JwtAuthorizationFilter.class)
                 .build();
+    }
+
+    @Bean
+    public AuthenticationFailureHandler authenticationFailureHandler() {
+        return new CustomAuthenticationFailureHandler();
     }
 }
