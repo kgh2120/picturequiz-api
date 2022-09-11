@@ -1,0 +1,24 @@
+spring:
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: {YOUR_GMAIL_ADDRESS}
+    password: {YOUR_GMAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+#  메일 전송 구현을 위한 설정 파일
+#  src/mail/resources/mailSender-example.yml
+#
+#  1. 파일 이름에서 "-example" 부분 지우기.
+#  mailSender-example.yml -> mailSender.yml
+#  2. 파일 내용에서 username/password는 본인 gmail 아이디/비번
+#
+#  + 구글 계정에 2단계 보안이 걸려 있는 경우 앱 비밀번호를 발급받아 사용해야 함.
+#
+#  https://support.google.com/accounts/answer/185833?hl=ko
+#  위 링크 안내대로 앱 비밀번호 발급 (app:Mail, device:Window Desktop or other)
+#  발급받은 비밀번호를 설정파일의 password에 구글 비번 대신 넣으면 됨.

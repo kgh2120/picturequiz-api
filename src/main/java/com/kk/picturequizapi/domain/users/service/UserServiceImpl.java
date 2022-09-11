@@ -53,6 +53,14 @@ public class UserServiceImpl implements UserService{
         users.changeNickname(dto.getNickname());
     }
 
+    @Transactional
+    @Override
+    public void registerEmailAccount(String email) {
+        Users users = userRepository.findByLoginId(getUser().getLoginId())
+                .orElseThrow(LoginDataNotFoundException::new);
+        users.registerEmailAccount(email);
+    }
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByLoginId(username)

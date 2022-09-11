@@ -19,6 +19,7 @@ public interface UserService extends UserDetailsService {
     boolean isExistNickname(String nickname);
 
     void changeNickname(ChangeNicknameRequestDto dto);
+    void registerEmailAccount(String email);
 
 
 }
