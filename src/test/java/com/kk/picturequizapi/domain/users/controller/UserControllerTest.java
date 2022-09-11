@@ -9,6 +9,8 @@ import com.kk.picturequizapi.domain.users.dto.UserAccessRequestDto;
 import com.kk.picturequizapi.domain.users.entity.Users;
 import com.kk.picturequizapi.domain.users.exception.LoginDataNotFoundException;
 import com.kk.picturequizapi.domain.users.service.UserServiceImpl;
+import com.kk.picturequizapi.domain.users.service.VerificationService;
+import com.kk.picturequizapi.domain.users.service.VerificationServiceImpl;
 import com.kk.picturequizapi.global.config.SecurityConfig;
 import com.kk.picturequizapi.global.security.CustomAuthenticationFailureHandler;
 import com.kk.picturequizapi.global.security.JwtAuthenticationFilter;
@@ -48,6 +50,8 @@ class UserControllerTest {
 
     @MockBean
     UserServiceImpl userService;
+    @MockBean
+    VerificationServiceImpl verificationService;
     @MockBean
     JwtProvider jwtProvider;
     @MockBean
