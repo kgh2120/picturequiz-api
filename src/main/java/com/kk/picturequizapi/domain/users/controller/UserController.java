@@ -1,14 +1,12 @@
 package com.kk.picturequizapi.domain.users.controller;
 
-import com.kk.picturequizapi.domain.users.dto.ChangeNicknameRequestDto;
-import com.kk.picturequizapi.domain.users.dto.MyInfoResponseDto;
-import com.kk.picturequizapi.domain.users.dto.SignUpResponseDto;
-import com.kk.picturequizapi.domain.users.dto.UserAccessRequestDto;
+import com.kk.picturequizapi.domain.users.dto.*;
 import com.kk.picturequizapi.domain.users.service.VerificationService;
 import com.kk.picturequizapi.domain.users.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -45,14 +43,14 @@ public class UserController {
     }
 
     @PostMapping("/my-profile/send-mail")
-    public ResponseEntity<String> sendAuthEmail(@RequestBody Map<String, String> dto) {
-        verificationService.mailSend(dto.get("email"));
+    public ResponseEntity<String> sendAuthEmail(@RequestBody @Validated MailSendRequestDto dto) {
+        verificationService.mailSend(dto.getEmail());
         return ResponseEntity.ok("잘 갔다네?");
     }
 
     @PostMapping("/my-profile/verify-code")
-    public ResponseEntity<String> verifyCode(@RequestBody Map<String,String> dto) {
-        verificationService.verifyCode(dto.get("email"),dto.get("code"));
+    public ResponseEntity<String> verifyCode(@RequestBody @Validated CodeVerificationRequestDto dto) {
+        verificationService.verifyCode(dto.getEmail(),dto.getCode());
         return ResponseEntity.ok("인증 성공");
     }
 }
