@@ -2,10 +2,7 @@ package com.kk.picturequizapi.global.config;
 
 import com.kk.picturequizapi.domain.refreshtoken.service.RefreshTokenService;
 import com.kk.picturequizapi.domain.users.service.UserService;
-import com.kk.picturequizapi.global.security.CustomAuthenticationFailureHandler;
-import com.kk.picturequizapi.global.security.JwtAuthenticationFilter;
-import com.kk.picturequizapi.global.security.JwtAuthorizationFilter;
-import com.kk.picturequizapi.global.security.JwtProvider;
+import com.kk.picturequizapi.global.security.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -54,6 +51,8 @@ public class SecurityConfig {
                         ,UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(new JwtAuthenticationFilter(jwtProvider,userDetailsService)
                         ,JwtAuthorizationFilter.class)
+                .addFilterBefore(new JwtExceptionHandlingFilter(),
+                        JwtAuthenticationFilter.class)
                 .build();
     }
 
