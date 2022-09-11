@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
@@ -23,6 +24,7 @@ public class VerificationServiceImpl implements VerificationService {
     private final StringRedisTemplate stringRedisTemplate;
     private final UserService userService;
 
+    @Async
     @Override
     public void mailSend(String email) {
 

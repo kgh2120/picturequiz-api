@@ -1,15 +1,15 @@
 package com.kk.picturequizapi.domain.users.controller;
 
 import com.kk.picturequizapi.domain.users.dto.*;
-import com.kk.picturequizapi.domain.users.service.VerificationService;
 import com.kk.picturequizapi.domain.users.service.UserService;
+import com.kk.picturequizapi.domain.users.service.VerificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.AsyncResult;
+import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
 
 
 @RequiredArgsConstructor
@@ -43,9 +43,9 @@ public class UserController {
     }
 
     @PostMapping("/my-profile/send-mail")
-    public ResponseEntity<String> sendAuthEmail(@RequestBody @Validated MailSendRequestDto dto) {
+    public ListenableFuture<ResponseEntity<Void>> sendAuthEmail(@RequestBody @Validated MailSendRequestDto dto) {
         verificationService.mailSend(dto.getEmail());
-        return ResponseEntity.ok("잘 갔다네?");
+        return new AsyncResult<>(ResponseEntity.noContent().build());
     }
 
     @PostMapping("/my-profile/verify-code")
