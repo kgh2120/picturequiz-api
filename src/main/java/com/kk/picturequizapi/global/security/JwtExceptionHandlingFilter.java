@@ -21,12 +21,12 @@ public class JwtExceptionHandlingFilter extends OncePerRequestFilter {
         try {
             filterChain.doFilter(request, response);
         } catch (JwtException e) {
-            sendErrorResposne(e, request, response);
+            sendErrorResponse(e, request, response);
 
         }
     }
 
-    private void sendErrorResposne(JwtException e, HttpServletRequest request, HttpServletResponse response) throws IOException {
+    private void sendErrorResponse(JwtException e, HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setStatus(HttpStatus.FORBIDDEN.value());
         response.setContentType("application/json; charset=utf-8");
 
