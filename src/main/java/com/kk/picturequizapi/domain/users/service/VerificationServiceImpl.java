@@ -1,5 +1,7 @@
 package com.kk.picturequizapi.domain.users.service;
 
+import com.kk.picturequizapi.domain.users.exception.VerifyCodeExpiredException;
+import com.kk.picturequizapi.domain.users.exception.VerifyCodeInvalidException;
 import com.kk.picturequizapi.domain.users.utility.MailHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -55,10 +57,10 @@ public class VerificationServiceImpl implements VerificationService {
         String originCode = ops.get(email);
 
         if(originCode==null)
-            throw new IllegalArgumentException("이메일 인증 코드가 만료되었습니다.");
+            throw new VerifyCodeExpiredException();
 
         if(!code.equals(originCode))
-            throw new IllegalArgumentException("인증 코드가 잘못되었습니다.");
+            throw new VerifyCodeInvalidException();
 
         userService.registerEmailAccount(email);
     }
