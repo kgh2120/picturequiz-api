@@ -4,7 +4,7 @@ import com.kk.picturequizapi.domain.users.dto.ChangeNicknameRequestDto;
 import com.kk.picturequizapi.domain.users.dto.MyInfoResponseDto;
 import com.kk.picturequizapi.domain.users.dto.SignUpResponseDto;
 import com.kk.picturequizapi.domain.users.dto.UserAccessRequestDto;
-import com.kk.picturequizapi.domain.users.service.MailService;
+import com.kk.picturequizapi.domain.users.service.VerificationService;
 import com.kk.picturequizapi.domain.users.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,7 +19,7 @@ import java.util.Map;
 public class UserController {
 
     private final UserService userService;
-    private final MailService mailService;
+    private final VerificationService verificationService;
 
     @PostMapping("/signUp")
     public ResponseEntity<SignUpResponseDto> signUp(@RequestBody UserAccessRequestDto dto) {
@@ -37,6 +37,7 @@ public class UserController {
         boolean result = userService.isExistNickname(nickname);
         return ResponseEntity.ok(result);
     }
+
     @PatchMapping("/my-profile/nickname")
     public ResponseEntity<Void> changeNickname(@RequestBody ChangeNicknameRequestDto dto) {
         userService.changeNickname(dto);
@@ -44,8 +45,14 @@ public class UserController {
     }
 
     @PostMapping("/my-profile/send-mail")
-    public ResponseEntity<String> sendAuthEmail(@RequestBody Map<String,String> dto) {
-        mailService.mailSend(dto.get("email"));
+    public ResponseEntity<String> sendAuthEmail(@RequestBody Map<String, String> dto) {
+        verificationService.mailSend(dto.get("email"));
         return ResponseEntity.ok("잘 갔다네?");
+    }
+
+    @PostMapping("/my-profile/verify-code")
+    public ResponseEntity<String> verifyCode(@RequestBody Map<String,String> dto) {
+        verificationService.verifyCode(dto.get("email"),dto.get("code"));
+        return ResponseEntity.ok("인증 성공");
     }
 }

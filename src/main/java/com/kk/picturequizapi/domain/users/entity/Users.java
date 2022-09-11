@@ -45,6 +45,9 @@ public class Users implements UserDetails {
     public void changeNickname(String nickname) {
         this.nickname = nickname;
     }
+    public void registerEmailAccount(String email) {
+        this.authEmail = email;
+    }
 
 
     @Override

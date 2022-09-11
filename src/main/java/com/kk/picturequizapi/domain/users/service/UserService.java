@@ -20,5 +20,7 @@ public interface UserService extends UserDetailsService {
 
     void changeNickname(ChangeNicknameRequestDto dto);
 
+    void registerEmailAccount(String email);
+
 
 }

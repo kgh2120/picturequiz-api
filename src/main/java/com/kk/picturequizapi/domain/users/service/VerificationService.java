@@ -1,6 +1,8 @@
 package com.kk.picturequizapi.domain.users.service;
 
-public interface MailService {
+public interface VerificationService {
 
     void mailSend(String email);
+
+    void verifyCode(String email, String code);
 }
