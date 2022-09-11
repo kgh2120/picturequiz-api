@@ -49,8 +49,8 @@ public class UserController {
     }
 
     @PostMapping("/my-profile/verify-code")
-    public ResponseEntity<String> verifyCode(@RequestBody @Validated CodeVerificationRequestDto dto) {
+    public ResponseEntity<Void> verifyCode(@RequestBody @Validated CodeVerificationRequestDto dto) {
         verificationService.verifyCode(dto.getEmail(),dto.getCode());
-        return ResponseEntity.ok("인증 성공");
+        return ResponseEntity.noContent().build();
     }
 }
