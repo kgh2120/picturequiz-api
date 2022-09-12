@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(AbstractApiException.class)
-    public ResponseEntity<ErrorResponse> handleGlobalExcpetion(AbstractApiException ex, HttpServletRequest request) {
+    public ResponseEntity<ErrorResponse> handleGlobalException(AbstractApiException ex, HttpServletRequest request) {
         return ResponseEntity.status(ex.getHttpStatus())
                 .body(ErrorResponse.createErrorResponse(ex, request.getRequestURI()));
     }

@@ -33,11 +33,11 @@ jobs:
       run: chmod +x gradlew
 
     - name: Create mailSender.yml
-        env:
-          SECRET_CODE: ${{ secrets.MAILSENDER }}
-          SECRET_DIR: src/main/resources
-          SECRET_FILE_NAME: mailSender.yml
-        run: echo $SECRET_CODE | base64 --decode > $SECRET_DIR/$SECRET_FILE_NAME
+      env:
+        SECRET_CODE: ${{ secrets.MAILSENDER }}
+        SECRET_DIR: src/main/resources
+        SECRET_FILE_NAME: mailSender.yml
+      run: echo $SECRET_CODE | base64 --decode > $SECRET_DIR/$SECRET_FILE_NAME
 
     - name: Create secret.properties
       env:
