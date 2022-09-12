@@ -48,7 +48,7 @@ public class UserController {
         return new AsyncResult<>(ResponseEntity.noContent().build());
     }
 
-    @PostMapping("/my-profile/verify-code")
+    @PatchMapping("/my-profile/verify-code")
     public ResponseEntity<Void> verifyCode(@RequestBody @Validated CodeVerificationRequestDto dto) {
         verificationService.verifyCode(dto.getEmail(),dto.getCode());
         return ResponseEntity.noContent().build();
