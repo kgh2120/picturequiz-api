@@ -1,5 +1,6 @@
 package com.kk.picturequizapi.global.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -12,9 +13,15 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 @Configuration
 public class RedisConfig {
 
+    @Value("${spring.redis.host}")
+    private String host;
+
+    @Value("${spring.redis.port}")
+    private int port;
+
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
-        return new LettuceConnectionFactory();
+        return new LettuceConnectionFactory(host,port);
     }
 
     @Bean
@@ -23,9 +30,6 @@ public class RedisConfig {
         redisTemplate.setConnectionFactory(redisConnectionFactory());
         redisTemplate.setKeySerializer(new StringRedisSerializer());
         redisTemplate.setValueSerializer(new StringRedisSerializer());
-
-//        redisTemplate.setKeySerializer(new GenericJackson2JsonRedisSerializer());
-//        redisTemplate.setValueSerializer(new GenericJackson2JsonRedisSerializer());
         return redisTemplate;
     }
 
@@ -33,9 +37,6 @@ public class RedisConfig {
     public StringRedisTemplate stringRedisTemplate() {
         StringRedisTemplate stringRedisTemplate = new StringRedisTemplate();
         stringRedisTemplate.setConnectionFactory(redisConnectionFactory());
-//        stringRedisTemplate.setKeySerializer(new StringRedisSerializer());
-//        stringRedisTemplate.setValueSerializer(new StringRedisSerializer());
-
         stringRedisTemplate.setKeySerializer(new GenericJackson2JsonRedisSerializer());
         stringRedisTemplate.setValueSerializer(new GenericJackson2JsonRedisSerializer());
 
