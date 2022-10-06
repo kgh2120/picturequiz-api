@@ -2,14 +2,17 @@ package com.kk.picturequizapi.domain.tag.command.domain;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.io.Serializable;
 import java.util.Objects;
 
 @Embeddable
-@Getter @NoArgsConstructor
+@Getter @NoArgsConstructor @Access(AccessType.FIELD)
 public class TagId implements Serializable {
 
     @Column(name = "tag_id")

@@ -30,6 +30,15 @@ public class QuizData extends BaseEntity {
     @CollectionTable(name = "quiz_tag", joinColumns = @JoinColumn(name = "quiz_id"))
     private List<QuizTag> quizTags;
 
+    public QuizData(QuizId quizId, Long viewCount, Author author, Picture picture, Answer answer, List<QuizTag> quizTags) {
+        this.quizId = quizId;
+        this.viewCount = viewCount;
+        this.author = author;
+        this.picture = picture;
+        this.answer = answer;
+        this.quizTags = quizTags;
+    }
+
 
 
     public String uploadPicture() {
