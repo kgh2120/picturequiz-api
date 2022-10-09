@@ -1,4 +1,17 @@
 spring:
+  profiles:
+    group:
+      "default": "dev"
+      "dev":
+      "prod":
+
+
+
+---
+
+
+
+spring:
   config:
     import: classpath:mailSender.yml
   h2:
@@ -14,7 +27,7 @@ spring:
     generate-ddl: true
     defer-datasource-initialization: true
   redis:
-    host: redis
+    host: localhost
     password:
     port: 6379
     pool:
@@ -22,3 +35,11 @@ spring:
       min-idle: 0
       max-active: 8
       max-wait: -1
+
+---
+spring:
+  config:
+    activate:
+      on-profile: "prod"
+  redis:
+    host: redis
