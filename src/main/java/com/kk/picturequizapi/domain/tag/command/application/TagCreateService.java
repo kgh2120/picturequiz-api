@@ -8,7 +8,9 @@ import com.kk.picturequizapi.domain.tag.exception.TagNameDuplicateException;
 import com.kk.picturequizapi.domain.tag.query.dto.TagSearch;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+@Transactional
 @RequiredArgsConstructor
 @Service
 public class TagCreateService {
