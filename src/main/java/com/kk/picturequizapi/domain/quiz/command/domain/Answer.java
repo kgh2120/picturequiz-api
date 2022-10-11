@@ -1,6 +1,6 @@
 package com.kk.picturequizapi.domain.quiz.command.domain;
 
-import com.kk.picturequizapi.domain.character.domain.CharacterId;
+import com.kk.picturequizapi.domain.character.command.domain.CharacterId;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

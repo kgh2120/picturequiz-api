@@ -19,6 +19,8 @@ spring:
       enabled: true
       settings:
         web-allow-others: true
+  cache:
+    type: redis
 
   jpa:
     hibernate:
