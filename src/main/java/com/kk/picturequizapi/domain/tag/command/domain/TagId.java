@@ -2,7 +2,6 @@ package com.kk.picturequizapi.domain.tag.command.domain;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
@@ -34,5 +33,9 @@ public class TagId implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    public static TagId of(String id) {
+        return new TagId(id);
     }
 }
