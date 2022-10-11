@@ -1,4 +1,4 @@
-package com.kk.picturequizapi.domain.character.domain;
+package com.kk.picturequizapi.domain.character.command.domain;
 
 import lombok.AccessLevel;
 import lombok.Getter;

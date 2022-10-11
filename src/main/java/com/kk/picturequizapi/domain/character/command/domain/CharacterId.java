@@ -1,4 +1,4 @@
-package com.kk.picturequizapi.domain.character.domain;
+package com.kk.picturequizapi.domain.character.command.domain;
 
 import lombok.NoArgsConstructor;
 
@@ -30,4 +30,6 @@ public class CharacterId implements Serializable {
     public int hashCode() {
         return Objects.hash(id);
     }
+
+
 }
