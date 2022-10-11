@@ -11,9 +11,9 @@ import java.util.Objects;
 public class UserId implements Serializable {
 
     @Column(name = "user_id")
-    private String id;
+    private Long id;
 
-    public UserId(String id) {
+    private UserId(Long id) {
         this.id = id;
     }
 
@@ -28,5 +28,9 @@ public class UserId implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    public static UserId of(Long id) {
+        return new UserId(id);
     }
 }

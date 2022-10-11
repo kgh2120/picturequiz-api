@@ -13,7 +13,7 @@ public class QuizId implements Serializable {
     @Column(name = "quiz_id")
     private String id;
 
-    public QuizId(String id) {
+    private QuizId(String id) {
         this.id = id;
     }
 
@@ -28,5 +28,9 @@ public class QuizId implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    public static QuizId of(String id) {
+        return new QuizId(id);
     }
 }

@@ -14,35 +14,57 @@ public class QuizData extends BaseEntity {
 
     @EmbeddedId
     private QuizId quizId;
-
-    private Long viewCount;
-
+    private long viewCount;
     @Embedded
     private Author author;
-
     @Embedded
     private Picture picture;
-
     @Embedded
     private Answer answer;
-
     @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name = "quiz_tag", joinColumns = @JoinColumn(name = "quiz_id"))
     private List<QuizTag> quizTags;
 
-    public QuizData(QuizId quizId, Long viewCount, Author author, Picture picture, Answer answer, List<QuizTag> quizTags) {
-        this.quizId = quizId;
-        this.viewCount = viewCount;
-        this.author = author;
-        this.picture = picture;
-        this.answer = answer;
-        this.quizTags = quizTags;
+    public QuizData(QuizId quizId, Author author, Picture picture, Answer answer, List<QuizTag> quizTags) {
+        this.viewCount = 0;
+        setQuizId(quizId);
+        setAuthor(author);
+        setAnswer(answer);
+        setQuizTags(quizTags);
+        this.picture = picture; // ????
     }
 
+    private void setQuizId(QuizId quizId) {
+        if (quizId == null) {
 
+        }
+        this.quizId = quizId;
+    }
 
-    public String uploadPicture() {
-        return null;
+    private void setAuthor(Author author) {
+        if (author == null) {
+            throw new IllegalArgumentException();
+        }
+        this.author = author;
+    }
+
+    private void setAnswer(Answer answer) {
+        if (answer == null) {
+
+        }
+        this.answer = answer;
+    }
+    private void setQuizTags(List<QuizTag> quizTags) {
+        if (quizTags == null) {
+
+        }
+        this.quizTags = quizTags;
+    }
+    private void setPicture(Picture picture) {
+        if (picture == null) {
+
+        }
+        this.picture = picture;
     }
 
     public String playQuiz() {

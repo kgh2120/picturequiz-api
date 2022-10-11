@@ -14,7 +14,7 @@ public class CharacterId implements Serializable {
     @Column(name = "character_id")
     private Long id;
 
-    public CharacterId(Long id) {
+    private CharacterId(Long id) {
         this.id = id;
     }
 
@@ -29,6 +29,10 @@ public class CharacterId implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    public static CharacterId of(Long id) {
+        return new CharacterId(id);
     }
 
 

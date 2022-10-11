@@ -14,5 +14,4 @@ public interface JpaCharacterSearchDao extends CharacterSearchDao, JpaRepository
 
     List<CharacterSearch> findTop5ByNameStartsWithOrderByName(@Param("name") String name);
 
-
 }

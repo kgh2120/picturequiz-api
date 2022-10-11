@@ -27,4 +27,21 @@ public class CharacterTestUtil {
         }
         return list;
     }
+
+    public static CharacterSearch createCharacterSearch() throws  Exception {
+        CharacterSearch characterSearch = new CharacterSearch();
+        Field characterId = characterSearch.getClass().getDeclaredField("characterId");
+        characterId.setAccessible(true);
+        characterId.set(characterSearch, (long) 1);
+
+        Field name = characterSearch.getClass().getDeclaredField("name");
+        name.setAccessible(true);
+        name.set(characterSearch,"이름");
+
+        Field job = characterSearch.getClass().getDeclaredField("job");
+        job.setAccessible(true);
+        job.set(characterSearch,"학생");
+        return characterSearch;
+
+    }
 }

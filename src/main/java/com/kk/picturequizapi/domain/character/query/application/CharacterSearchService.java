@@ -1,5 +1,6 @@
 package com.kk.picturequizapi.domain.character.query.application;
 
+import com.kk.picturequizapi.domain.character.exception.CharacterNotFoundException;
 import com.kk.picturequizapi.domain.character.query.dao.CharacterSearchDao;
 import com.kk.picturequizapi.domain.character.query.dto.CharacterSearch;
 import lombok.RequiredArgsConstructor;
@@ -21,5 +22,10 @@ public class CharacterSearchService {
     @Cacheable(key = "#name", cacheNames = "characters")
     public List<CharacterSearch> find5CharactersByName(String name) {
         return characterSearchDao.findTop5ByNameStartsWithOrderByName(name);
+    }
+
+    public CharacterSearch findCharacterById(Long id) {
+        return characterSearchDao.findById(id)
+                .orElseThrow(CharacterNotFoundException::new);
     }
 }
