@@ -1,5 +1,6 @@
 package com.kk.picturequizapi.domain.tag.query.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -9,7 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Table(name = "tag")
-@Entity @Getter @NoArgsConstructor
+@Entity @Getter @NoArgsConstructor @AllArgsConstructor
 public class TagSearch {
 
     @Id @Column(name = "tag_id")
