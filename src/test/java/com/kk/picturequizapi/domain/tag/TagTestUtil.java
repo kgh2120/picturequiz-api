@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public class TagTestUtil {
 
-    public static Optional<TagSearch> createTag() throws Exception {
+    public static Optional<TagSearch> createTagSearch() throws Exception {
         TagSearch tagSearch = new TagSearch();
         Field id = tagSearch.getClass().getDeclaredField("id");
         id.setAccessible(true);

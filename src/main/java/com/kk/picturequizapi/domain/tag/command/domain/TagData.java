@@ -1,5 +1,6 @@
 package com.kk.picturequizapi.domain.tag.command.domain;
 
+import com.kk.picturequizapi.domain.tag.query.dto.TagSearch;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,5 +20,10 @@ public class TagData {
     public TagData(TagId tagId, String name) {
         this.tagId = tagId;
         this.name = name;
+    }
+
+
+    public TagSearch createDto() {
+        return new TagSearch(tagId.getId(), name);
     }
 }

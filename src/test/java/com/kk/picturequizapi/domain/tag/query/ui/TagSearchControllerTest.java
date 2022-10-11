@@ -2,13 +2,10 @@ package com.kk.picturequizapi.domain.tag.query.ui;
 
 import com.kk.picturequizapi.domain.tag.exception.TagNotFoundException;
 import com.kk.picturequizapi.domain.tag.query.application.TagSearchService;
-import com.kk.picturequizapi.domain.users.exception.VerifyCodeInvalidException;
 import com.kk.picturequizapi.global.config.GlobalExceptionHandler;
 import com.kk.picturequizapi.global.config.SecurityConfig;
 import com.kk.picturequizapi.global.exception.ErrorResponse;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -17,11 +14,9 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import static com.kk.picturequizapi.domain.tag.TagTestUtil.createTag;
-import static org.junit.jupiter.api.Assertions.*;
+import static com.kk.picturequizapi.domain.tag.TagTestUtil.createTagSearch;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -48,7 +43,7 @@ class TagSearchControllerTest {
     void searchTag_Success () throws Exception{
         //given
         given(service.findTagByName(any()))
-                .willReturn(createTag().get());
+                .willReturn(createTagSearch().get());
 
         //when
         mockMvc.perform(MockMvcRequestBuilders
