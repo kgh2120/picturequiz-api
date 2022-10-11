@@ -1,5 +1,6 @@
 package com.kk.picturequizapi.domain.tag.command.domain;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -11,14 +12,13 @@ import java.io.Serializable;
 import java.util.Objects;
 
 @Embeddable
-@Getter @NoArgsConstructor @Access(AccessType.FIELD)
+@Getter @NoArgsConstructor(access = AccessLevel.PROTECTED) @Access(AccessType.FIELD)
 public class TagId implements Serializable {
 
     @Column(name = "tag_id")
     private String id;
 
-
-    public TagId(String id) {
+    private TagId(String id) {
         this.id = id;
     }
 
