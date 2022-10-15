@@ -1,5 +1,6 @@
 package com.kk.picturequizapi.domain.quiz.command.domain;
 
+import com.kk.picturequizapi.domain.quiz.exception.*;
 import com.kk.picturequizapi.global.jpa.BaseEntity;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -31,38 +32,38 @@ public class QuizData extends BaseEntity {
         setAuthor(author);
         setAnswer(answer);
         setQuizTags(quizTags);
-        this.picture = picture; // ????
+        this.picture = picture;
     }
 
     private void setQuizId(QuizId quizId) {
         if (quizId == null) {
-
+            throw new InputNullDataOnQuizIdException();
         }
         this.quizId = quizId;
     }
 
     private void setAuthor(Author author) {
         if (author == null) {
-            throw new IllegalArgumentException();
+            throw new InputNullDataOnAuthorException();
         }
         this.author = author;
     }
 
     private void setAnswer(Answer answer) {
         if (answer == null) {
-
+            throw new InputNullDataOnAnswerException();
         }
         this.answer = answer;
     }
     private void setQuizTags(List<QuizTag> quizTags) {
         if (quizTags == null) {
-
+            throw new InputNullDataOnQuizTagsException();
         }
         this.quizTags = quizTags;
     }
     private void setPicture(Picture picture) {
         if (picture == null) {
-
+            throw new InputNullDataOnPictureException();
         }
         this.picture = picture;
     }

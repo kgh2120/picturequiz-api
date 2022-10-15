@@ -18,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.lang.reflect.Field;
 import java.util.Optional;
 
+import static com.kk.picturequizapi.TestFactory.createUser;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.*;
@@ -121,12 +122,12 @@ class UserServiceImplTest {
     
     }
 
-    private Users createUser(String id, String pwd) throws Exception {
-        Users user = Users.createUserEntity(id, encoder.encode(pwd));
-        Field idField = user.getClass().getDeclaredField("id");
-        idField.setAccessible(true);
-        idField.set(user, 1L);
-        return user;
-    }
+//    private Users createUser(String id, String pwd) throws Exception {
+//        Users user = Users.createUserEntity(id, encoder.encode(pwd));
+//        Field idField = user.getClass().getDeclaredField("id");
+//        idField.setAccessible(true);
+//        idField.set(user, 1L);
+//        return user;
+//    }
 
 }
