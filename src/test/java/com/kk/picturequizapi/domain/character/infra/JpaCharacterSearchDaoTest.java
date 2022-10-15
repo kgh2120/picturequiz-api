@@ -22,10 +22,19 @@ class JpaCharacterSearchDaoTest {
         //when
         List<CharacterSearch> findedCharacters
                 = dao.findTop5ByNameStartsWithOrderByName("김");
-
         //then
         assertThat(findedCharacters.size()).isSameAs(5);
-
+    }
+    
+    @Test
+    void findById () throws Exception{
+        //given
+        Long id = 1L;
+        //when
+        CharacterSearch cs = dao.findById(id).get();
+        //then
+        assertThat(cs.getCharacterId()).isSameAs(id);
+        
     
     }
 

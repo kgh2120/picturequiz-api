@@ -1,5 +1,6 @@
 package com.kk.picturequizapi.domain.quiz.command.domain;
 
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
@@ -7,13 +8,13 @@ import javax.persistence.Embeddable;
 import java.io.Serializable;
 import java.util.Objects;
 
-@Embeddable @NoArgsConstructor
+@Embeddable @NoArgsConstructor @Getter
 public class QuizId implements Serializable {
 
     @Column(name = "quiz_id")
     private String id;
 
-    public QuizId(String id) {
+    private QuizId(String id) {
         this.id = id;
     }
 
@@ -28,5 +29,9 @@ public class QuizId implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    public static QuizId of(String id) {
+        return new QuizId(id);
     }
 }

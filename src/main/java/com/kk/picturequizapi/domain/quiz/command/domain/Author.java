@@ -6,19 +6,18 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Embeddable;
 import javax.persistence.Embedded;
-import java.util.Objects;
 
 @Embeddable
 @NoArgsConstructor @Getter
 public class Author {
 
     @Embedded
-    private UserId userid;
+    private UserId userId;
 
     private String nickname;
 
     public Author(UserId userid, String nickname) {
-        this.userid = userid;
+        this.userId = userid;
         this.nickname = nickname;
     }
 

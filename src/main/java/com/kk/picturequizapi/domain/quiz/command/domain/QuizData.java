@@ -1,5 +1,6 @@
 package com.kk.picturequizapi.domain.quiz.command.domain;
 
+import com.kk.picturequizapi.domain.quiz.exception.*;
 import com.kk.picturequizapi.global.jpa.BaseEntity;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -14,35 +15,57 @@ public class QuizData extends BaseEntity {
 
     @EmbeddedId
     private QuizId quizId;
-
-    private Long viewCount;
-
+    private long viewCount;
     @Embedded
     private Author author;
-
     @Embedded
     private Picture picture;
-
     @Embedded
     private Answer answer;
-
     @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name = "quiz_tag", joinColumns = @JoinColumn(name = "quiz_id"))
     private List<QuizTag> quizTags;
 
-    public QuizData(QuizId quizId, Long viewCount, Author author, Picture picture, Answer answer, List<QuizTag> quizTags) {
-        this.quizId = quizId;
-        this.viewCount = viewCount;
-        this.author = author;
+    public QuizData(QuizId quizId, Author author, Picture picture, Answer answer, List<QuizTag> quizTags) {
+        this.viewCount = 0;
+        setQuizId(quizId);
+        setAuthor(author);
+        setAnswer(answer);
+        setQuizTags(quizTags);
         this.picture = picture;
-        this.answer = answer;
-        this.quizTags = quizTags;
     }
 
+    private void setQuizId(QuizId quizId) {
+        if (quizId == null) {
+            throw new InputNullDataOnQuizIdException();
+        }
+        this.quizId = quizId;
+    }
 
+    private void setAuthor(Author author) {
+        if (author == null) {
+            throw new InputNullDataOnAuthorException();
+        }
+        this.author = author;
+    }
 
-    public String uploadPicture() {
-        return null;
+    private void setAnswer(Answer answer) {
+        if (answer == null) {
+            throw new InputNullDataOnAnswerException();
+        }
+        this.answer = answer;
+    }
+    private void setQuizTags(List<QuizTag> quizTags) {
+        if (quizTags == null) {
+            throw new InputNullDataOnQuizTagsException();
+        }
+        this.quizTags = quizTags;
+    }
+    private void setPicture(Picture picture) {
+        if (picture == null) {
+            throw new InputNullDataOnPictureException();
+        }
+        this.picture = picture;
     }
 
     public String playQuiz() {

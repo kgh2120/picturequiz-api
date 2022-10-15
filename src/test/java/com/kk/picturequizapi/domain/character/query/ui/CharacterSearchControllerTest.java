@@ -2,12 +2,8 @@ package com.kk.picturequizapi.domain.character.query.ui;
 
 import com.kk.picturequizapi.domain.character.query.application.CharacterSearchService;
 import com.kk.picturequizapi.global.config.SecurityConfig;
-import com.kk.picturequizapi.global.security.JwtAuthenticationFilter;
-import com.kk.picturequizapi.global.security.JwtAuthorizationFilter;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -15,12 +11,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MockMvcBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import static com.kk.picturequizapi.domain.character.CharacterTestUtil.create5CharacterSearch;
-import static org.junit.jupiter.api.Assertions.*;
+import static com.kk.picturequizapi.TestFactory.create5CharacterSearch;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
