@@ -1,6 +1,10 @@
 package com.kk.picturequizapi;
 
+import com.kk.picturequizapi.domain.character.command.domain.CharacterId;
 import com.kk.picturequizapi.domain.character.query.dto.CharacterSearch;
+import com.kk.picturequizapi.domain.quiz.command.domain.*;
+import com.kk.picturequizapi.domain.tag.command.domain.TagId;
+import com.kk.picturequizapi.domain.users.entity.UserId;
 import com.kk.picturequizapi.domain.users.entity.Users;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -54,5 +58,14 @@ public final class TestFactory {
         job.setAccessible(true);
         job.set(characterSearch,"학생");
         return characterSearch;
+    }
+
+    public static QuizData createMockQuizData() throws Exception {
+        List<QuizTag> tag = new ArrayList<>();
+        tag.add(new QuizTag(TagId.of("111"),"운동"));
+        tag.add(new QuizTag(TagId.of("112"),"운동2"));
+
+        return new QuizData(QuizId.of("123"), new Author(UserId.of(1L),"작가")
+        ,new Picture("/mock"), new Answer(CharacterId.of(1L),"정답"), tag);
     }
 }

@@ -21,4 +21,12 @@ public class QuizTag {
         this.tagId = tagId;
         this.name = name;
     }
+
+    @Override
+    public String toString() {
+        return "QuizTag{" +
+                "tagId=" + tagId +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }

@@ -19,4 +19,12 @@ public class Answer {
         this.characterId = characterId;
         this.name = name;
     }
+
+    @Override
+    public String toString() {
+        return "Answer{" +
+                "characterId=" + characterId +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }
