@@ -5,6 +5,7 @@ import com.kk.picturequizapi.global.jpa.BaseEntity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.BatchSize;
 
 import javax.persistence.*;
 import java.util.List;
@@ -22,8 +23,10 @@ public class QuizData extends BaseEntity {
     private Picture picture;
     @Embedded
     private Answer answer;
+
+    @BatchSize(size = 10)
     @ElementCollection(fetch = FetchType.LAZY)
-    @CollectionTable(name = "quiz_tag", joinColumns = @JoinColumn(name = "quiz_id"))
+    @CollectionTable(name = "quiz_tag",  joinColumns = @JoinColumn(name = "quiz_id"))
     private List<QuizTag> quizTags;
 
     public QuizData(QuizId quizId, Author author, Picture picture, Answer answer, List<QuizTag> quizTags) {
@@ -32,7 +35,8 @@ public class QuizData extends BaseEntity {
         setAuthor(author);
         setAnswer(answer);
         setQuizTags(quizTags);
-        this.picture = picture;
+        setPicture(picture);
+
     }
 
     private void setQuizId(QuizId quizId) {
@@ -73,4 +77,15 @@ public class QuizData extends BaseEntity {
     }
 
 
+    @Override
+    public String toString() {
+        return "QuizData{" +
+                "quizId=" + quizId +
+                ", viewCount=" + viewCount +
+                ", author=" + author +
+                ", picture=" + picture +
+                ", answer=" + answer +
+                ", quizTags=" + quizTags +
+                '}';
+    }
 }

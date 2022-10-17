@@ -21,4 +21,11 @@ public class Author {
         this.nickname = nickname;
     }
 
+    @Override
+    public String toString() {
+        return "Author{" +
+                "userId=" + userId +
+                ", nickname='" + nickname + '\'' +
+                '}';
+    }
 }
