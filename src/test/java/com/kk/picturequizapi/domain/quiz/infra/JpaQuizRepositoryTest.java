@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import static com.kk.picturequizapi.TestFactory.createMockQuizData;
+import static com.kk.picturequizapi.TestFactory.createMockQuiz;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
@@ -20,7 +20,7 @@ class JpaQuizRepositoryTest {
     void findById () throws Exception{
         //given
         String quizId = "123";
-        Quiz quiz = createMockQuizData();
+        Quiz quiz = createMockQuiz();
         quizRepository.save(quiz);
         //when
 

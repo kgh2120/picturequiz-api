@@ -1,10 +1,11 @@
 package com.kk.picturequizapi.domain.quiz.infra;
 
+import com.kk.picturequizapi.domain.quiz.command.domain.QQuiz;
 import com.kk.picturequizapi.domain.quiz.command.domain.Quiz;
 import com.kk.picturequizapi.domain.quiz.exception.NoMoreQuizDataException;
-import com.kk.picturequizapi.domain.quiz.query.dto.QuizSearchCondition;
 import com.kk.picturequizapi.domain.quiz.query.dao.QuizSearchDao;
 import com.kk.picturequizapi.domain.quiz.query.dto.QuizSearch;
+import com.kk.picturequizapi.domain.quiz.query.dto.QuizSearchCondition;
 import com.kk.picturequizapi.domain.quiz.query.dto.QuizSearchOrderCondition;
 import com.kk.picturequizapi.domain.quiz.query.dto.QuizSearchResponse;
 import com.kk.picturequizapi.domain.users.entity.UserId;
@@ -21,7 +22,7 @@ import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.kk.picturequizapi.domain.quiz.command.domain.QQuizData.quizData;
+import static com.kk.picturequizapi.domain.quiz.command.domain.QQuiz.*;
 import static com.kk.picturequizapi.domain.quiz.command.domain.QQuizTag.quizTag;
 import static org.springframework.util.StringUtils.hasText;
 
@@ -42,14 +43,14 @@ public class QueryDslQuizSearchDao implements QuizSearchDao {
     @Override
     public QuizSearchResponse searchQuizByCondition(QuizSearchCondition cond, int pageNum) {
 
-        JPAQuery<Quiz> where = queryFactory.selectFrom(quizData).distinct()
-                .leftJoin(quizData.quizTags, quizTag)
+        JPAQuery<Quiz> where = queryFactory.selectFrom(quiz).distinct()
+                .leftJoin(quiz.quizTags, quizTag)
                 .where(buildCondition(cond));
 
         if (cond.getTagNames() != null) { // ??
             where
-                    .groupBy(quizData.quizId)
-                    .having(quizData.quizId.count().goe((long) cond.getTagNames().size()));
+                    .groupBy(quiz.quizId)
+                    .having(quiz.quizId.count().goe((long) cond.getTagNames().size()));
         }
 
         int limit = 10;
@@ -75,10 +76,10 @@ public class QueryDslQuizSearchDao implements QuizSearchDao {
     public QuizSearchResponse searchMyQuizzes(UserId userId, int pageNum) {
 
         int limit = 10;
-        List<Quiz> quizzes = queryFactory.selectFrom(quizData)
+        List<Quiz> quizzes = queryFactory.selectFrom(quiz)
                 .distinct()
-                .leftJoin(quizData.quizTags, quizTag)
-                .where(quizData.author.userId.eq(userId))
+                .leftJoin(quiz.quizTags, quizTag)
+                .where(quiz.author.userId.eq(userId))
                 .offset(pageNum*limit)
                 .limit(limit + 1)
                 .fetch();
@@ -98,13 +99,13 @@ public class QueryDslQuizSearchDao implements QuizSearchDao {
 
     private OrderSpecifier<?> quizOrder(QuizSearchOrderCondition orderCond) {
         if(orderCond == null)
-            return new OrderSpecifier(Order.DESC,quizData.viewCount);
+            return new OrderSpecifier(Order.DESC,quiz.viewCount);
 
         switch (orderCond) {
-            case POPULAR: return new OrderSpecifier(Order.DESC,quizData.viewCount);
-            case RECENT: return new OrderSpecifier(Order.DESC,quizData.createdDate);
+            case POPULAR: return new OrderSpecifier(Order.DESC,quiz.viewCount);
+            case RECENT: return new OrderSpecifier(Order.DESC,quiz.createdDate);
             default:
-                return new OrderSpecifier(Order.DESC,quizData.viewCount);
+                return new OrderSpecifier(Order.DESC,quiz.viewCount);
         }
     }
 
@@ -114,7 +115,7 @@ public class QueryDslQuizSearchDao implements QuizSearchDao {
         BooleanBuilder bb = new BooleanBuilder();
 
         if (hasText(cond.getAnswerName())) {
-            bb.and(quizData.answer.name.eq(cond.getAnswerName()));
+            bb.and(quiz.answer.name.eq(cond.getAnswerName()));
         }
 
         if (cond.getTagNames() != null && !cond.getTagNames().isEmpty()) {

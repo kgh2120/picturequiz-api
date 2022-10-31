@@ -63,7 +63,7 @@ public final class TestFactory {
         return characterSearch;
     }
 
-    public static Quiz createMockQuizData() throws Exception {
+    public static Quiz createMockQuiz() throws Exception {
         List<QuizTag> tag = new ArrayList<>();
         tag.add(new QuizTag(TagId.of("111"),"운동"));
         tag.add(new QuizTag(TagId.of("112"),"운동2"));
@@ -77,9 +77,9 @@ public final class TestFactory {
     public static QuizSearchResponse createMockQuizSearchResponse() throws Exception {
 
         List<QuizSearch> searches = new ArrayList<>();
-        searches.add(new QuizSearch(createMockQuizData()));
-        searches.add(new QuizSearch(createMockQuizData()));
-        searches.add(new QuizSearch(createMockQuizData()));
+        searches.add(new QuizSearch(createMockQuiz()));
+        searches.add(new QuizSearch(createMockQuiz()));
+        searches.add(new QuizSearch(createMockQuiz()));
         return new QuizSearchResponse(searches,1,true);
     }
 
