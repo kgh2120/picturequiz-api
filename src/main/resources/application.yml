@@ -1,4 +1,17 @@
 spring:
+  profiles:
+    group:
+      "default": "dev"
+      "dev":
+      "prod":
+
+
+
+---
+
+
+
+spring:
   config:
     import: classpath:mailSender.yml
   h2:
@@ -6,6 +19,8 @@ spring:
       enabled: true
       settings:
         web-allow-others: true
+  cache:
+    type: redis
 
   jpa:
     hibernate:
@@ -22,3 +37,11 @@ spring:
       min-idle: 0
       max-active: 8
       max-wait: -1
+
+---
+spring:
+  config:
+    activate:
+      on-profile: "prod"
+  redis:
+    host: redis

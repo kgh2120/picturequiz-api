@@ -217,11 +217,7 @@ class UserControllerTest {
         //given
         Users user = createUser("test", "password");
         setSecurityAfterLogin(user);
-//        Method getUser = userService.getClass().getDeclaredMethod("getUser");
-//        getUser.setAccessible(true);
 
-//        given(getUser)
-//                .willReturn(user);
         ChangeNicknameRequestDto dto = new ChangeNicknameRequestDto("nickname");
         String content = mapper.writeValueAsString(dto);
 

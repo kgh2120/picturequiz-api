@@ -14,6 +14,8 @@ public enum GlobalErrorCode implements ErrorCode{
     JWT_MALFORMED(HttpStatus.FORBIDDEN, "G-0003","토큰의 형식이 잘못되었습니다. 토큰은 [header].[payload].[secret]의 형식이어야 합니다."), // v
     JWT_UNSUPPORTED(HttpStatus.FORBIDDEN, "G-0004","지원하지 않는 종류의 토큰입니다."),
 
+    MISSING_REQUEST_PART(HttpStatus.BAD_REQUEST,"G-0005","이미지 파일 혹은 JSON이 전달되지 않았습니다."),
+    MISSING_REQUEST_PARAM(HttpStatus.BAD_REQUEST,"G-0006","리퀘스트 파라미터가 누락되었습니다..")
     ;
 
     private final HttpStatus httpStatus;

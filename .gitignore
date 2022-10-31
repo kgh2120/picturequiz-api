@@ -36,5 +36,9 @@ out/
 ### VS Code ###
 .vscode/
 
+## properties
 src/main/resources/secret.properties
 src/main/resources/mailSender.yml
+
+### queryDSL ###
+/src/main/generated
