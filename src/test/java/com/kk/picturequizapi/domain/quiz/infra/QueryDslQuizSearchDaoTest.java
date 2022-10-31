@@ -152,7 +152,7 @@ class QueryDslQuizSearchDaoTest {
         //then
     }
     
-    // TODO 테스트 완성하기
+
     @Test
     void searchMyQuiz () throws Exception{
         //given

@@ -1,6 +1,7 @@
 package com.kk.picturequizapi.domain.quiz.infra;
 
 import com.kk.picturequizapi.domain.quiz.command.domain.QuizData;
+import com.kk.picturequizapi.domain.quiz.exception.NoMoreQuizDataException;
 import com.kk.picturequizapi.domain.quiz.query.dto.QuizSearchCondition;
 import com.kk.picturequizapi.domain.quiz.query.dao.QuizSearchDao;
 import com.kk.picturequizapi.domain.quiz.query.dto.QuizSearch;
@@ -42,7 +43,7 @@ public class QueryDslQuizSearchDao implements QuizSearchDao {
     public QuizSearchResponse searchQuizByCondition(QuizSearchCondition cond, int pageNum) {
 
         JPAQuery<QuizData> where = queryFactory.selectFrom(quizData).distinct()
-                .join(quizData.quizTags, quizTag)
+                .leftJoin(quizData.quizTags, quizTag)
                 .where(buildCondition(cond));
 
         if (cond.getTagNames() != null) { // ??
@@ -54,9 +55,12 @@ public class QueryDslQuizSearchDao implements QuizSearchDao {
         int limit = 10;
         List<QuizData> quizzes = where
                 .orderBy(quizOrder(cond.getOrderCondition()))
-                .offset(pageNum)
+                .offset(pageNum*limit)
                 .limit(limit+1)
                 .fetch();
+
+        if(quizzes.isEmpty())
+            throw new NoMoreQuizDataException();
 
         boolean hasNext = quizzes.size() > limit;
 
@@ -73,11 +77,14 @@ public class QueryDslQuizSearchDao implements QuizSearchDao {
         int limit = 10;
         List<QuizData> quizzes = queryFactory.selectFrom(quizData)
                 .distinct()
-                .join(quizData.quizTags, quizTag)
+                .leftJoin(quizData.quizTags, quizTag)
                 .where(quizData.author.userId.eq(userId))
-                .offset(pageNum)
+                .offset(pageNum*limit)
                 .limit(limit + 1)
                 .fetch();
+
+        if(quizzes.isEmpty())
+            throw new NoMoreQuizDataException();
 
         boolean hasNext = quizzes.size() > limit;
 
