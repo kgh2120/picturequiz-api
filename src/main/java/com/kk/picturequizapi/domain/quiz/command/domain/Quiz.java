@@ -12,7 +12,7 @@ import java.util.List;
 
 @Table(name = "Quiz")
 @Entity @Getter @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class QuizData extends BaseEntity {
+public class Quiz extends BaseEntity {
 
     @EmbeddedId
     private QuizId quizId;
@@ -29,7 +29,7 @@ public class QuizData extends BaseEntity {
     @CollectionTable(name = "quiz_tag",  joinColumns = @JoinColumn(name = "quiz_id"))
     private List<QuizTag> quizTags;
 
-    public QuizData(QuizId quizId, Author author, Picture picture, Answer answer, List<QuizTag> quizTags) {
+    public Quiz(QuizId quizId, Author author, Picture picture, Answer answer, List<QuizTag> quizTags) {
         this.viewCount = 0;
         setQuizId(quizId);
         setAuthor(author);

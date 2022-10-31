@@ -1,7 +1,5 @@
 package com.kk.picturequizapi.domain.tag.command.domain;
 
-import com.kk.picturequizapi.domain.tag.query.dto.TagSearch;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -9,7 +7,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import javax.persistence.EntityManager;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 class TagRepositoryTest {
@@ -21,13 +18,13 @@ class TagRepositoryTest {
     @Test
     void save () throws Exception{
         //given
-        TagData data = new TagData(TagId.of(repository.nextId()), "운동");
+        Tag data = new Tag(TagId.of(repository.nextId()), "운동");
 
         //when
         repository.save(data);
         
         //then
-        TagData search = em.find(TagData.class, data.getTagId());
+        Tag search = em.find(Tag.class, data.getTagId());
 
         assertThat(search.getName())
                 .isEqualTo(data.getName());
@@ -49,7 +46,7 @@ class TagRepositoryTest {
     @Test
     void isExist_true () throws Exception{
         //given
-        TagData data = new TagData(TagId.of(repository.nextId()), "운동");
+        Tag data = new Tag(TagId.of(repository.nextId()), "운동");
 
         //when
         repository.save(data);
@@ -66,7 +63,7 @@ class TagRepositoryTest {
     @Test
     void isExist_false () throws Exception{
         //given
-        TagData data = new TagData(TagId.of(repository.nextId()), "운동");
+        Tag data = new Tag(TagId.of(repository.nextId()), "운동");
 
         //when
         repository.save(data);

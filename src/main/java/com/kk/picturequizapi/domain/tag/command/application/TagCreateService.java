@@ -1,7 +1,7 @@
 package com.kk.picturequizapi.domain.tag.command.application;
 
 
-import com.kk.picturequizapi.domain.tag.command.domain.TagData;
+import com.kk.picturequizapi.domain.tag.command.domain.Tag;
 import com.kk.picturequizapi.domain.tag.command.domain.TagId;
 import com.kk.picturequizapi.domain.tag.command.domain.TagRepository;
 import com.kk.picturequizapi.domain.tag.exception.TagNameDuplicateException;
@@ -23,8 +23,8 @@ public class TagCreateService {
             throw new TagNameDuplicateException();
         }
 
-        TagData tagData = new TagData(TagId.of(tagRepository.nextId()), tagRequest.getName());
-        tagRepository.save(tagData);
-        return tagData.createDto();
+        Tag tag = new Tag(TagId.of(tagRepository.nextId()), tagRequest.getName());
+        tagRepository.save(tag);
+        return tag.createDto();
     }
 }

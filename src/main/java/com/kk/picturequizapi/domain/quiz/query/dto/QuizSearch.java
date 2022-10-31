@@ -1,6 +1,6 @@
 package com.kk.picturequizapi.domain.quiz.query.dto;
 
-import com.kk.picturequizapi.domain.quiz.command.domain.QuizData;
+import com.kk.picturequizapi.domain.quiz.command.domain.Quiz;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -17,7 +17,7 @@ public class QuizSearch {
 
     private List<String> tagNames;
 
-    public QuizSearch(QuizData quiz) {
+    public QuizSearch(Quiz quiz) {
         this.quizId = quiz.getQuizId().getId();
         this.pictureUrl = quiz.getPicture().getUrl();
         this.characterName = quiz.getAnswer().getName();

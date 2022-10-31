@@ -11,13 +11,13 @@ import javax.persistence.Table;
 
 @Table(name = "tag")
 @Entity @NoArgsConstructor(access = AccessLevel.PROTECTED) @Getter
-public class TagData {
+public class Tag {
 
     @EmbeddedId
     private TagId tagId;
     private String name;
 
-    public TagData(TagId tagId, String name) {
+    public Tag(TagId tagId, String name) {
         this.tagId = tagId;
         this.name = name;
     }

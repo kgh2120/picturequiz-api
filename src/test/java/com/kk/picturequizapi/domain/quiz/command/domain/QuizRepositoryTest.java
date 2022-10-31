@@ -2,17 +2,14 @@ package com.kk.picturequizapi.domain.quiz.command.domain;
 
 import com.kk.picturequizapi.domain.character.command.domain.CharacterId;
 import com.kk.picturequizapi.domain.users.entity.UserId;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import javax.persistence.EntityManager;
 import java.util.ArrayList;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 class QuizRepositoryTest {
@@ -30,7 +27,7 @@ class QuizRepositoryTest {
     @Test
     void saveQuiz () throws Exception{
         //given
-        QuizData quiz = new QuizData(QuizId.of(quizRepository.nextId()),
+        Quiz quiz = new Quiz(QuizId.of(quizRepository.nextId()),
                 new Author(UserId.of(1L), "Kim"),
                 new Picture("ex"),
                 new Answer(CharacterId.of(1L), "Test"),
@@ -40,7 +37,7 @@ class QuizRepositoryTest {
         //when
 
         //then
-        QuizData quizData = em.find(QuizData.class, QuizId.of(quiz.getQuizId().getId()));
+        Quiz quizData = em.find(Quiz.class, QuizId.of(quiz.getQuizId().getId()));
         assertThat(quiz.getQuizId()).isEqualTo(quizData.getQuizId());
 
     }
