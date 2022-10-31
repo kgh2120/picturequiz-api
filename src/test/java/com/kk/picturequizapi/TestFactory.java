@@ -2,6 +2,7 @@ package com.kk.picturequizapi;
 
 import com.kk.picturequizapi.domain.character.command.domain.CharacterId;
 import com.kk.picturequizapi.domain.character.query.dto.CharacterSearch;
+import com.kk.picturequizapi.domain.quiz.command.application.PlayQuizResponse;
 import com.kk.picturequizapi.domain.quiz.command.domain.*;
 import com.kk.picturequizapi.domain.quiz.query.dto.QuizSearch;
 import com.kk.picturequizapi.domain.quiz.query.dto.QuizSearchResponse;
@@ -80,5 +81,9 @@ public final class TestFactory {
         searches.add(new QuizSearch(createMockQuizData()));
         searches.add(new QuizSearch(createMockQuizData()));
         return new QuizSearchResponse(searches,1,true);
+    }
+
+    public static PlayQuizResponse createMockPlayQuizResponse() {
+        return new PlayQuizResponse("/mock");
     }
 }
