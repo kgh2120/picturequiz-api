@@ -15,8 +15,9 @@ public enum QuizErrorCode implements ErrorCode {
     INPUT_NULL_DATA_ON_QUIZ_TAGS(HttpStatus.INTERNAL_SERVER_ERROR, "q-0005","퀴즈 데이터가 생성될 때, 퀴즈 태그에 null 이 들어갔습니다."),
     INPUT_NULL_DATA_ON_PICTURE(HttpStatus.INTERNAL_SERVER_ERROR, "q-0006","퀴즈 데이터가 생성될 때, 사진에 null 이 들어갔습니다."),
 
-    NO_MORE_QUIZ_DATA(HttpStatus.NOT_FOUND,"q-0007","더이상 조회할 수 있는 퀴즈가 존재하지 않습니다.")
+    NO_MORE_QUIZ_DATA(HttpStatus.NOT_FOUND,"q-0007","더이상 조회할 수 있는 퀴즈가 존재하지 않습니다."),
 
+    QUIZ_NOT_FOUND_BY_ID(HttpStatus.NOT_FOUND,"q-0008","ID에 매칭되는 퀴즈가 존재하지 않습니다."),
     ;
 
     private final HttpStatus httpStatus;

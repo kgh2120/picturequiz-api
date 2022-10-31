@@ -73,7 +73,8 @@ public class QuizData extends BaseEntity {
     }
 
     public String playQuiz() {
-        return null;
+        this.viewCount++;
+        return this.picture.getUrl();
     }
 
 
