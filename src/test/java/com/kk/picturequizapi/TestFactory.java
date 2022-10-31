@@ -3,6 +3,8 @@ package com.kk.picturequizapi;
 import com.kk.picturequizapi.domain.character.command.domain.CharacterId;
 import com.kk.picturequizapi.domain.character.query.dto.CharacterSearch;
 import com.kk.picturequizapi.domain.quiz.command.domain.*;
+import com.kk.picturequizapi.domain.quiz.query.dto.QuizSearch;
+import com.kk.picturequizapi.domain.quiz.query.dto.QuizSearchResponse;
 import com.kk.picturequizapi.domain.tag.command.domain.TagId;
 import com.kk.picturequizapi.domain.users.entity.UserId;
 import com.kk.picturequizapi.domain.users.entity.Users;
@@ -67,5 +69,16 @@ public final class TestFactory {
 
         return new QuizData(QuizId.of("123"), new Author(UserId.of(1L),"작가")
         ,new Picture("/mock"), new Answer(CharacterId.of(1L),"정답"), tag);
+    }
+    public static Author createMockAuthor() throws Exception {
+        return new Author(UserId.of(1L),"nickname");
+    }
+    public static QuizSearchResponse createMockQuizSearchResponse() throws Exception {
+
+        List<QuizSearch> searches = new ArrayList<>();
+        searches.add(new QuizSearch(createMockQuizData()));
+        searches.add(new QuizSearch(createMockQuizData()));
+        searches.add(new QuizSearch(createMockQuizData()));
+        return new QuizSearchResponse(searches,1,true);
     }
 }

@@ -6,6 +6,7 @@ import com.kk.picturequizapi.domain.quiz.query.dao.QuizSearchDao;
 import com.kk.picturequizapi.domain.quiz.query.dto.QuizSearch;
 import com.kk.picturequizapi.domain.quiz.query.dto.QuizSearchOrderCondition;
 import com.kk.picturequizapi.domain.quiz.query.dto.QuizSearchResponse;
+import com.kk.picturequizapi.domain.users.entity.UserId;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
@@ -65,6 +66,28 @@ public class QueryDslQuizSearchDao implements QuizSearchDao {
 
        return new QuizSearchResponse(searches, pageNum+1, hasNext);
     }
+
+    @Override
+    public QuizSearchResponse searchMyQuizzes(UserId userId, int pageNum) {
+
+        int limit = 10;
+        List<QuizData> quizzes = queryFactory.selectFrom(quizData)
+                .distinct()
+                .join(quizData.quizTags, quizTag)
+                .where(quizData.author.userId.eq(userId))
+                .offset(pageNum)
+                .limit(limit + 1)
+                .fetch();
+
+        boolean hasNext = quizzes.size() > limit;
+
+
+        List<QuizSearch> searches = new ArrayList<>();
+        quizzes.forEach( q -> searches.add(new QuizSearch(q)));
+
+        return new QuizSearchResponse(searches, pageNum+1, hasNext);
+    }
+
 
     private OrderSpecifier<?> quizOrder(QuizSearchOrderCondition orderCond) {
         if(orderCond == null)
