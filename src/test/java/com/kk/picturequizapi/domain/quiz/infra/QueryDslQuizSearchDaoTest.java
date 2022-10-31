@@ -2,6 +2,8 @@ package com.kk.picturequizapi.domain.quiz.infra;
 
 import com.kk.picturequizapi.domain.character.command.domain.CharacterId;
 import com.kk.picturequizapi.domain.quiz.command.domain.*;
+import com.kk.picturequizapi.domain.quiz.query.dao.QuizSearchDao;
+import com.kk.picturequizapi.domain.quiz.query.dto.QuizSearchResponse;
 import com.kk.picturequizapi.domain.tag.command.domain.TagId;
 import com.kk.picturequizapi.domain.users.entity.UserId;
 import com.querydsl.core.BooleanBuilder;
@@ -38,11 +40,14 @@ class QueryDslQuizSearchDaoTest {
 
     JPAQueryFactory qf;
 
+
+    QueryDslQuizSearchDao quizSearchDao;
+
     @BeforeEach
     void beforeEach() throws Exception {
         qf = new JPAQueryFactory(em);
 
-
+        quizSearchDao = new QueryDslQuizSearchDao(em);
     }
 
 
@@ -146,6 +151,20 @@ class QueryDslQuizSearchDaoTest {
         assertThat(fetch.size()).isEqualTo(2);
         //then
     }
+    
+
+    @Test
+    void searchMyQuiz () throws Exception{
+        //given
+        createDatas();
+        //when
+        QuizSearchResponse r = quizSearchDao.searchMyQuizzes(UserId.of(2L), 0);
+
+        //then
+        assertThat(r.getQuizzes().size()).isSameAs(1);
+        
+    
+    }
 
     private BooleanExpression nameEq(String name) {
         return hasText(name) ?  quizData.answer.name.eq(name) : null;
@@ -185,7 +204,7 @@ class QueryDslQuizSearchDaoTest {
         tag3.add(new QuizTag(TagId.of("3333"),"독서2"));
         tag3.add(new QuizTag(TagId.of("112"),"운동2"));
 
-        em.persist(new QuizData(QuizId.of("3333"), new Author(UserId.of(1L),"작가")
+        em.persist(new QuizData(QuizId.of("3333"), new Author(UserId.of(2L),"작가2")
                 ,new Picture("/mock"), new Answer(CharacterId.of(1L),"정답"), tag3));;
 
     }

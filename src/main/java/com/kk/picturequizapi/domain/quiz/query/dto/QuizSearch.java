@@ -23,8 +23,8 @@ public class QuizSearch {
         this.characterName = quiz.getAnswer().getName();
         this.authorNickname = quiz.getAuthor().getNickname();
         this.tagNames = new ArrayList<>();
-        quiz.getQuizTags().forEach(qt ->{
-            tagNames.add(qt.getName());
-        });
+        quiz.getQuizTags().forEach(qt ->
+            tagNames.add(qt.getName())
+        );
     }
 }
