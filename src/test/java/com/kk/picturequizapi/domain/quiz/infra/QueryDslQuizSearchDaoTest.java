@@ -40,14 +40,14 @@ class QueryDslQuizSearchDaoTest {
 
     JPAQueryFactory qf;
 
-    @Autowired
-    QuizSearchDao quizSearchDao;
+
+    QueryDslQuizSearchDao quizSearchDao;
 
     @BeforeEach
     void beforeEach() throws Exception {
         qf = new JPAQueryFactory(em);
 
-
+        quizSearchDao = new QueryDslQuizSearchDao(em);
     }
 
 
@@ -161,7 +161,7 @@ class QueryDslQuizSearchDaoTest {
         QuizSearchResponse r = quizSearchDao.searchMyQuizzes(UserId.of(2L), 0);
 
         //then
-        assertThat(r.getQuizzes().size()).isEqualTo(2);
+        assertThat(r.getQuizzes().size()).isSameAs(1);
         
     
     }
