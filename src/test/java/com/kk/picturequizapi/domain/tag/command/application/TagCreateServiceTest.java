@@ -1,6 +1,6 @@
 package com.kk.picturequizapi.domain.tag.command.application;
 
-import com.kk.picturequizapi.domain.tag.command.domain.TagData;
+import com.kk.picturequizapi.domain.tag.command.domain.Tag;
 import com.kk.picturequizapi.domain.tag.command.domain.TagId;
 import com.kk.picturequizapi.domain.tag.command.domain.TagRepository;
 import com.kk.picturequizapi.domain.tag.exception.TagNameDuplicateException;
@@ -36,7 +36,7 @@ class TagCreateServiceTest {
         given(repository.existsByName(any()))
                 .willReturn(false);
         given(repository.save(any()))
-                .willReturn(new TagData(createTagId(), "운동"));
+                .willReturn(new Tag(createTagId(), "운동"));
         //when
         TagCreateRequest r = new TagCreateRequest();
         r.setName("운동");

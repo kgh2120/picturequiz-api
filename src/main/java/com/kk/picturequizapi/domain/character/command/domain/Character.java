@@ -10,14 +10,14 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "character") @Getter @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class CharacterData {
+public class Character {
 
     @EmbeddedId
     private CharacterId characterId;
     private String name;
     private String job;
 
-    public CharacterData(CharacterId characterId, String name, String job) {
+    public Character(CharacterId characterId, String name, String job) {
         this.characterId = characterId;
         this.name = name;
         this.job = job;

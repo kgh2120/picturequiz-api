@@ -5,9 +5,9 @@ import java.util.UUID;
 
 public interface QuizRepository {
 
-    QuizData save(QuizData quizData);
+    Quiz save(Quiz quiz);
 
-    Optional<QuizData> findById(QuizId quizId);
+    Optional<Quiz> findById(QuizId quizId);
 
     default String nextId() {
         return UUID.randomUUID().toString();

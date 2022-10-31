@@ -34,7 +34,7 @@ public class QuizCreateService {
         Picture picture = createPicture(file);
         List<QuizTag> quizTags = createQuizTag(request.getTagNames());
 
-        QuizData quiz = new QuizData(QuizId.of(quizRepository.nextId()),
+        Quiz quiz = new Quiz(QuizId.of(quizRepository.nextId()),
                 author, picture, answer, quizTags);
         quizRepository.save(quiz);
     }

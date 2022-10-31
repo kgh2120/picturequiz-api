@@ -1,6 +1,6 @@
 package com.kk.picturequizapi.domain.quiz.infra;
 
-import com.kk.picturequizapi.domain.quiz.command.domain.QuizData;
+import com.kk.picturequizapi.domain.quiz.command.domain.Quiz;
 import com.kk.picturequizapi.domain.quiz.exception.NoMoreQuizDataException;
 import com.kk.picturequizapi.domain.quiz.query.dto.QuizSearchCondition;
 import com.kk.picturequizapi.domain.quiz.query.dao.QuizSearchDao;
@@ -42,7 +42,7 @@ public class QueryDslQuizSearchDao implements QuizSearchDao {
     @Override
     public QuizSearchResponse searchQuizByCondition(QuizSearchCondition cond, int pageNum) {
 
-        JPAQuery<QuizData> where = queryFactory.selectFrom(quizData).distinct()
+        JPAQuery<Quiz> where = queryFactory.selectFrom(quizData).distinct()
                 .leftJoin(quizData.quizTags, quizTag)
                 .where(buildCondition(cond));
 
@@ -53,7 +53,7 @@ public class QueryDslQuizSearchDao implements QuizSearchDao {
         }
 
         int limit = 10;
-        List<QuizData> quizzes = where
+        List<Quiz> quizzes = where
                 .orderBy(quizOrder(cond.getOrderCondition()))
                 .offset(pageNum*limit)
                 .limit(limit+1)
@@ -75,7 +75,7 @@ public class QueryDslQuizSearchDao implements QuizSearchDao {
     public QuizSearchResponse searchMyQuizzes(UserId userId, int pageNum) {
 
         int limit = 10;
-        List<QuizData> quizzes = queryFactory.selectFrom(quizData)
+        List<Quiz> quizzes = queryFactory.selectFrom(quizData)
                 .distinct()
                 .leftJoin(quizData.quizTags, quizTag)
                 .where(quizData.author.userId.eq(userId))

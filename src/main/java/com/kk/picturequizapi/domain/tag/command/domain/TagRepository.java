@@ -6,7 +6,7 @@ public interface TagRepository {
 
     // 생성
 
-    TagData save(TagData tag);
+    Tag save(Tag tag);
 
     boolean existsByName(String name);
 
