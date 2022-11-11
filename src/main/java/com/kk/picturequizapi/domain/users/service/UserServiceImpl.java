@@ -1,9 +1,6 @@
 package com.kk.picturequizapi.domain.users.service;
 
-import com.kk.picturequizapi.domain.users.dto.ChangeNicknameRequestDto;
-import com.kk.picturequizapi.domain.users.dto.MyInfoResponseDto;
-import com.kk.picturequizapi.domain.users.dto.SignUpResponseDto;
-import com.kk.picturequizapi.domain.users.dto.UserAccessRequestDto;
+import com.kk.picturequizapi.domain.users.dto.*;
 import com.kk.picturequizapi.domain.users.entity.Users;
 import com.kk.picturequizapi.domain.users.exception.LoginDataNotFoundException;
 import com.kk.picturequizapi.domain.users.repository.UserRepository;
@@ -59,6 +56,22 @@ public class UserServiceImpl implements UserService{
         Users users = userRepository.findByLoginId(getUser().getLoginId())
                 .orElseThrow(LoginDataNotFoundException::new);
         users.registerEmailAccount(email);
+    }
+
+    @Transactional
+    @Override
+    public void changePassword(ChangePasswordDto dto) {
+        Users users = userRepository.findByLoginId(getUser().getLoginId())
+                .orElseThrow(LoginDataNotFoundException::new);
+        users.changePassword(dto.getCurrentPassword(), dto.getNewPassword(), encoder);
+    }
+    @Transactional
+    @Override
+    public void deleteAccount() {
+        Users users = userRepository.findByLoginId(getUser().getLoginId())
+                .orElseThrow(LoginDataNotFoundException::new);
+        users.deleteAccount();
+
     }
 
     @Override

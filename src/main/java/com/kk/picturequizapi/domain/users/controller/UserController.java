@@ -54,4 +54,15 @@ public class UserController {
         verificationService.verifyCode(dto.getEmail(),dto.getCode());
         return ResponseEntity.noContent().build();
     }
+    @PatchMapping("/my-profile/password")
+    public ResponseEntity<Void> changePassword(@RequestBody @Validated ChangePasswordDto dto) {
+        userService.changePassword(dto);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/my-profile")
+    public ResponseEntity<Void> deleteAccount() {
+        userService.deleteAccount();
+        return ResponseEntity.noContent().build();
+    }
 }
