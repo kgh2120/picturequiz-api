@@ -13,6 +13,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.core.env.Environment;
 
 import javax.persistence.EntityManager;
 
@@ -35,14 +36,15 @@ class QueryDslQuizSearchDaoTest {
 
     JPAQueryFactory qf;
 
-
+    @Autowired
+    Environment env;
     QueryDslQuizSearchDao quizSearchDao;
 
     @BeforeEach
     void beforeEach() throws Exception {
         qf = new JPAQueryFactory(em);
 
-        quizSearchDao = new QueryDslQuizSearchDao(em);
+        quizSearchDao = new QueryDslQuizSearchDao(em,env);
     }
 
 

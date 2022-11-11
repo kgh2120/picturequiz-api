@@ -46,7 +46,10 @@ public class SecurityConfig {
                 .headers().frameOptions().disable()
                 .and()
                 .authorizeRequests()
-                    .antMatchers("/signUp", "/login","/refresh","/h2-console/**","/character", "/tag").permitAll()
+                .antMatchers("/quiz/add").authenticated()
+                .antMatchers(
+                            "/signUp", "/login","/refresh","/h2-console/**","/character", "/tag"
+                    ,"/quiz/**").permitAll()
                     .antMatchers("/**").authenticated()
                     .anyRequest().authenticated()
                 .and()

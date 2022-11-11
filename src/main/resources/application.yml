@@ -5,7 +5,8 @@ spring:
       "dev":
       "prod":
 
-
+quiz:
+  limit : 50
 
 ---
 

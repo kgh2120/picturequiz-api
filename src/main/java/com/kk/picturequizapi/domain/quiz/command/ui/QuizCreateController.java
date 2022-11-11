@@ -15,7 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class QuizCreateController {
     private final QuizCreateService quizCreateService;
 
-    @PostMapping("/quiz/add")
+    @PostMapping(value = "/quiz/add", consumes = {"multipart/form-data"})
     public ResponseEntity<Void> createQuiz(@RequestPart("image")MultipartFile file,
                                            @RequestPart("quiz")QuizCreateRequest request) {
         quizCreateService.createQuiz(file,request);

@@ -15,6 +15,8 @@ import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,10 +36,15 @@ public class QueryDslQuizSearchDao implements QuizSearchDao {
 
     private final JPAQueryFactory queryFactory;
 
+    private final Environment env;
+    private int quizLimit;
+
     @Autowired
-    public QueryDslQuizSearchDao(EntityManager em) {
+    public QueryDslQuizSearchDao(EntityManager em, Environment env) {
         this.em = em;
         this.queryFactory = new JPAQueryFactory(em);
+        this.env = env;
+        quizLimit = Integer.parseInt(this.env.getProperty("quiz.limit"));
     }
 
     @Override
@@ -53,17 +60,17 @@ public class QueryDslQuizSearchDao implements QuizSearchDao {
                     .having(quiz.quizId.count().goe((long) cond.getTagNames().size()));
         }
 
-        int limit = 10;
+
         List<Quiz> quizzes = where
                 .orderBy(quizOrder(cond.getOrderCondition()))
-                .offset(pageNum*limit)
-                .limit(limit+1)
+                .offset(pageNum*quizLimit)
+                .limit(quizLimit+1)
                 .fetch();
 
         if(quizzes.isEmpty())
             throw new NoMoreQuizDataException();
 
-        boolean hasNext = quizzes.size() > limit;
+        boolean hasNext = quizzes.size() > quizLimit;
 
 
         List<QuizSearch> searches = new ArrayList<>();
@@ -75,19 +82,19 @@ public class QueryDslQuizSearchDao implements QuizSearchDao {
     @Override
     public QuizSearchResponse searchMyQuizzes(UserId userId, int pageNum) {
 
-        int limit = 10;
+
         List<Quiz> quizzes = queryFactory.selectFrom(quiz)
                 .distinct()
                 .leftJoin(quiz.quizTags, quizTag)
                 .where(quiz.author.userId.eq(userId))
-                .offset(pageNum*limit)
-                .limit(limit + 1)
+                .offset(pageNum*quizLimit)
+                .limit(quizLimit + 1)
                 .fetch();
 
         if(quizzes.isEmpty())
             throw new NoMoreQuizDataException();
 
-        boolean hasNext = quizzes.size() > limit;
+        boolean hasNext = quizzes.size() > quizLimit;
 
 
         List<QuizSearch> searches = new ArrayList<>();

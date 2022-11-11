@@ -72,9 +72,9 @@ public class Quiz extends BaseEntity {
         this.picture = picture;
     }
 
-    public String playQuiz() {
+    public String[] playQuiz() {
         this.viewCount++;
-        return this.picture.getUrl();
+        return new String[]{this.picture.getUrl(), this.answer.getName()};
     }
 
 
