@@ -84,6 +84,6 @@ public final class TestFactory {
     }
 
     public static PlayQuizResponse createMockPlayQuizResponse() {
-        return new PlayQuizResponse("/mock");
+        return new PlayQuizResponse("/mock","hello");
     }
 }
