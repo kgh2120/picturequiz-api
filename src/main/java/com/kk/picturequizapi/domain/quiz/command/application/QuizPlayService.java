@@ -18,9 +18,10 @@ public class QuizPlayService {
     public PlayQuizResponse playQuiz(String quizId) {
         Quiz quiz = quizRepository.findById(QuizId.of(quizId))
                 .orElseThrow(QuizNotFoundByIdException::new);
-        String url = quiz.playQuiz();
+        String[] quizInfo = quiz.playQuiz();
 
-        return new PlayQuizResponse(url);
+
+        return new PlayQuizResponse(quizInfo);
 
     }
 }
