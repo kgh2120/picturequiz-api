@@ -30,7 +30,7 @@ spring:
     generate-ddl: true
     defer-datasource-initialization: true
   redis:
-    host: localhost
+    host: my_redis
     password:
     port: 6379
     pool:
