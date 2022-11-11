@@ -1,9 +1,6 @@
 package com.kk.picturequizapi.domain.users.service;
 
-import com.kk.picturequizapi.domain.users.dto.ChangeNicknameRequestDto;
-import com.kk.picturequizapi.domain.users.dto.MyInfoResponseDto;
-import com.kk.picturequizapi.domain.users.dto.SignUpResponseDto;
-import com.kk.picturequizapi.domain.users.dto.UserAccessRequestDto;
+import com.kk.picturequizapi.domain.users.dto.*;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 public interface UserService extends UserDetailsService {
@@ -20,6 +17,10 @@ public interface UserService extends UserDetailsService {
 
     void changeNickname(ChangeNicknameRequestDto dto);
     void registerEmailAccount(String email);
+
+    void changePassword(ChangePasswordDto dto);
+
+    void deleteAccount();
 
 
 }

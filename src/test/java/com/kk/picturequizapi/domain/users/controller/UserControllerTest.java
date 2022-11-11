@@ -5,8 +5,10 @@ import com.kk.picturequizapi.domain.refreshtoken.service.RefreshTokenService;
 import com.kk.picturequizapi.domain.users.dto.*;
 import com.kk.picturequizapi.domain.users.entity.Users;
 import com.kk.picturequizapi.domain.users.exception.LoginDataNotFoundException;
+import com.kk.picturequizapi.domain.users.exception.PasswordIncorrectException;
 import com.kk.picturequizapi.domain.users.exception.VerifyCodeExpiredException;
 import com.kk.picturequizapi.domain.users.exception.VerifyCodeInvalidException;
+import com.kk.picturequizapi.domain.users.service.UserService;
 import com.kk.picturequizapi.domain.users.service.UserServiceImpl;
 import com.kk.picturequizapi.domain.users.service.VerificationService;
 import com.kk.picturequizapi.domain.users.service.VerificationServiceImpl;
@@ -42,8 +44,10 @@ import java.util.Map;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doThrow;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -86,8 +90,7 @@ class UserControllerTest {
         given(userService.signUp(any()))
                 .willReturn(new SignUpResponseDto(1L));
         //when then
-        mockMvc.perform(MockMvcRequestBuilders
-                        .post("/signUp")
+        mockMvc.perform(post("/signUp")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(dto)))
                 .andExpect(status().isCreated())
@@ -109,7 +112,7 @@ class UserControllerTest {
                 .willReturn("token");
 
         //when  //then
-        mockMvc.perform(MockMvcRequestBuilders.post("/login")
+        mockMvc.perform(post("/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(dto)))
@@ -128,7 +131,7 @@ class UserControllerTest {
                 .willThrow(new LoginDataNotFoundException());
 
         //when //then
-        mockMvc.perform(MockMvcRequestBuilders.post("/login")
+        mockMvc.perform(post("/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(dto))
@@ -150,7 +153,7 @@ class UserControllerTest {
         given(authenticationManager.authenticate(any()))
                 .willThrow(new InternalAuthenticationServiceException("로그인 데이터가 없어용", new LoginDataNotFoundException()));
         //when //then
-        mockMvc.perform(MockMvcRequestBuilders.post("/login")
+        mockMvc.perform(post("/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(dto))
@@ -174,7 +177,7 @@ class UserControllerTest {
 
 
         //when //then
-        mockMvc.perform(MockMvcRequestBuilders.get("/my-profile").header("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0IiwiaWF0IjoxNjYxOTk1Njc0LCJleHAiOjE2NjIwODIwNzR9.XQYZmVLvkBL8v1rRXCgLpy1LB2sLSKw21hQy3jPDbxw"))
+        mockMvc.perform(get("/my-profile").header("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0IiwiaWF0IjoxNjYxOTk1Njc0LCJleHAiOjE2NjIwODIwNzR9.XQYZmVLvkBL8v1rRXCgLpy1LB2sLSKw21hQy3jPDbxw"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.loginId", is("test")))
                 .andExpect(jsonPath("$.nickname", nullValue()))
@@ -190,7 +193,7 @@ class UserControllerTest {
         given(userService.isExistNickname(any()))
                 .willReturn(true);
         //when //then
-        mockMvc.perform(MockMvcRequestBuilders.get("/my-profile/nickname?nickname=nickname")
+        mockMvc.perform(get("/my-profile/nickname?nickname=nickname")
                         .header("Authorization", "Bearer Token"))
                 .andExpect(status().isOk())
                 .andExpect(content().string("true"))
@@ -205,7 +208,7 @@ class UserControllerTest {
         given(userService.isExistNickname(any()))
                 .willReturn(false);
         //when //then
-        mockMvc.perform(MockMvcRequestBuilders.get("/my-profile/nickname?nickname=nickname")
+        mockMvc.perform(get("/my-profile/nickname?nickname=nickname")
                         .header("Authorization", "Bearer Token"))
                 .andExpect(status().isOk())
                 .andExpect(content().string("false"))
@@ -223,7 +226,7 @@ class UserControllerTest {
 
 
         //when
-        mockMvc.perform(MockMvcRequestBuilders.patch("/my-profile/nickname")
+        mockMvc.perform(patch("/my-profile/nickname")
                         .header("Authorization", "Bearer Token")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
@@ -248,7 +251,7 @@ class UserControllerTest {
         //when
 
 
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/my-profile/send-mail")
+        MvcResult mvcResult = mockMvc.perform(post("/my-profile/send-mail")
                         .header("Authorization", "Bearer token")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
@@ -256,7 +259,7 @@ class UserControllerTest {
                 .andExpect(request().asyncStarted())
                 .andReturn();
         //then
-        mockMvc.perform(MockMvcRequestBuilders.asyncDispatch(mvcResult))
+        mockMvc.perform(asyncDispatch(mvcResult))
                 .andExpect(status().isNoContent())
                 .andDo(print());
 
@@ -273,7 +276,7 @@ class UserControllerTest {
         dto.setCode("code");
         dto.setEmail("test@naver.com");
         //when
-        mockMvc.perform(MockMvcRequestBuilders.patch("/my-profile/verify-code")
+        mockMvc.perform(patch("/my-profile/verify-code")
                         .header("Authorization", "Bearer token")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
@@ -305,7 +308,7 @@ class UserControllerTest {
 
 
         //when
-        mockMvc.perform(MockMvcRequestBuilders.patch(path)
+        mockMvc.perform(patch(path)
                         .header("Authorization", "Bearer token")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
@@ -344,7 +347,7 @@ class UserControllerTest {
 
 
         //when
-        mockMvc.perform(MockMvcRequestBuilders.patch(path)
+        mockMvc.perform(patch(path)
                         .header("Authorization", "Bearer token")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
@@ -357,8 +360,95 @@ class UserControllerTest {
                 .andExpect(jsonPath("$.errorMessage", is("인증 코드가 잘못되었습니다.")))
                 .andExpect(jsonPath("$.path", is(path)))
                 .andDo(print());
+    }
+    
+    @Test
+    void changePassword () throws Exception{
+        //given
+        String password = "password";
+        Users user = createUser("test", password);
+        setSecurityAfterLogin(user);
+
+        ChangePasswordDto dto = new ChangePasswordDto();
+        dto.setCurrentPassword(password);
+        dto.setNewPassword("password123");
 
 
+        //when
+
+
+       mockMvc.perform(patch("/my-profile/password")
+                        .header("Authorization", "Bearer token")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(dto)))
+               .andExpect(status().isNoContent())
+               .andDo(print());
+
+
+
+    }
+    
+    @Test
+    void changePassword_wrong_password () throws Exception{
+        //given
+
+        String password = "password";
+        Users user = createUser("test", password);
+        setSecurityAfterLogin(user);
+
+        ChangePasswordDto dto = new ChangePasswordDto();
+        dto.setCurrentPassword("password55555");
+        dto.setNewPassword("password123");
+
+        doThrow(PasswordIncorrectException.class)
+                .when(userService)
+                .changePassword(any());
+
+        String path = "/my-profile/password";
+        given(exceptionHandler.handleGlobalException(any(),any()))
+                .willReturn(ResponseEntity.status(409)
+                        .body(ErrorResponse.createErrorResponse(new PasswordIncorrectException()
+                                ,path)));
+
+
+        //when
+
+
+        mockMvc.perform(patch(path)
+                        .header("Authorization", "Bearer token")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(dto)))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.httpStatus", is("CONFLICT")))
+                .andExpect(jsonPath("$.errorCode", is("U-0005")))
+                .andExpect(jsonPath("$.errorName", is("PASSWORD_INCORRECT")))
+                .andExpect(jsonPath("$.errorMessage", is("입력하신 비밀번호가 틀렸습니다.")))
+                .andExpect(jsonPath("$.path", is(path)))
+                .andDo(print());
+    
+    }
+    
+    @Test
+    void deleteAccount () throws Exception{
+        //given
+
+        Users user = createUser("test", "password");
+        setSecurityAfterLogin(user);
+
+        //when
+
+
+        mockMvc.perform(delete("/my-profile")
+                        .header("Authorization", "Bearer token")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(dto)))
+                .andExpect(status().isNoContent())
+                .andDo(print());
+        
+    
     }
 
 

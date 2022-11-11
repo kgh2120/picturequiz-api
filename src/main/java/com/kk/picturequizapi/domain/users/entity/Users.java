@@ -1,14 +1,17 @@
 package com.kk.picturequizapi.domain.users.entity;
 
+import com.kk.picturequizapi.domain.users.exception.PasswordIncorrectException;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.UUID;
 
 @NoArgsConstructor
 @Getter
@@ -47,6 +50,19 @@ public class Users implements UserDetails {
     }
     public void registerEmailAccount(String email) {
         this.authEmail = email;
+    }
+
+    public void deleteAccount() {
+        this.loginId = UUID.randomUUID().toString();
+        this.authEmail = null;
+        this.nickname = null;
+    }
+
+    public void changePassword(String currentPassword, String newPassword, PasswordEncoder encoder) {
+        if (!encoder.matches(currentPassword, password)) {
+            throw new PasswordIncorrectException();
+        }
+        this.password = encoder.encode(newPassword);
     }
 
 

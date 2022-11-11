@@ -3,7 +3,9 @@ package com.kk.picturequizapi.domain.users.service;
 import com.kk.picturequizapi.domain.users.dto.*;
 import com.kk.picturequizapi.domain.users.entity.Users;
 import com.kk.picturequizapi.domain.users.exception.LoginDataNotFoundException;
+import com.kk.picturequizapi.domain.users.exception.PasswordIncorrectException;
 import com.kk.picturequizapi.domain.users.repository.UserRepository;
+import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -57,7 +59,6 @@ class UserServiceImplTest {
         //then
         assertThat(responseDto.getId()).isSameAs(1L);
     }
-    
     @Test
     void readMyInfo () throws Exception{
         //given
@@ -118,16 +119,54 @@ class UserServiceImplTest {
         Users users = userRepository.findByLoginId(loginId).get();
         //then
         assertThat(users.getNickname()).isEqualTo(nickname);
-        
+    }
+    
+    @Test
+    void changePassword () throws Exception{
+        //given
+        Users users = Users.createUserEntity("hello", encoder.encode("password"));
+        //when
+        ChangePasswordDto dto = new ChangePasswordDto();
+        dto.setCurrentPassword("password");
+        dto.setNewPassword("password1");
+
+       users.changePassword(dto.getCurrentPassword(), dto.getNewPassword(), encoder);
+
+        SoftAssertions.assertSoftly(sa -> {
+            assertThat(encoder.matches("password",users.getPassword())).isFalse();
+            assertThat(encoder.matches("password1",users.getPassword())).isTrue();
+        });
+    }
+    
+    @Test
+    void changePassword_ex_passwordIncorrect () throws Exception{
+        //given
+        Users users = Users.createUserEntity("hello", encoder.encode("password"));
+        //when
+        ChangePasswordDto dto = new ChangePasswordDto();
+        dto.setCurrentPassword("password123");
+        dto.setNewPassword("password1");
+
+        assertThatThrownBy(()
+                -> users.changePassword(dto.getCurrentPassword(), dto.getNewPassword(), encoder))
+                .isInstanceOf(PasswordIncorrectException.class);
+    }
+    
+    @Test
+    void deleteAccount () throws Exception{
+        //given
+        String id = "hello";
+        Users users = Users.createUserEntity(id, encoder.encode("password"));
+        users.registerEmailAccount("abcd@gamil.com");
+        //when
+        users.deleteAccount();
+
+
+        SoftAssertions.assertSoftly(sa -> {
+            assertThat(users.getNickname()).isNull();
+            assertThat(users.getAuthEmail()).isNull();
+            assertThat(users.getLoginId()).isNotEqualTo(id);
+        });
     
     }
-
-//    private Users createUser(String id, String pwd) throws Exception {
-//        Users user = Users.createUserEntity(id, encoder.encode(pwd));
-//        Field idField = user.getClass().getDeclaredField("id");
-//        idField.setAccessible(true);
-//        idField.set(user, 1L);
-//        return user;
-//    }
-
 }
