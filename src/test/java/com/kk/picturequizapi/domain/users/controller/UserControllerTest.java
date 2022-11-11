@@ -4,10 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kk.picturequizapi.domain.refreshtoken.service.RefreshTokenService;
 import com.kk.picturequizapi.domain.users.dto.*;
 import com.kk.picturequizapi.domain.users.entity.Users;
-import com.kk.picturequizapi.domain.users.exception.LoginDataNotFoundException;
-import com.kk.picturequizapi.domain.users.exception.PasswordIncorrectException;
-import com.kk.picturequizapi.domain.users.exception.VerifyCodeExpiredException;
-import com.kk.picturequizapi.domain.users.exception.VerifyCodeInvalidException;
+import com.kk.picturequizapi.domain.users.exception.*;
 import com.kk.picturequizapi.domain.users.service.UserService;
 import com.kk.picturequizapi.domain.users.service.UserServiceImpl;
 import com.kk.picturequizapi.domain.users.service.VerificationService;
@@ -410,11 +407,7 @@ class UserControllerTest {
                 .willReturn(ResponseEntity.status(409)
                         .body(ErrorResponse.createErrorResponse(new PasswordIncorrectException()
                                 ,path)));
-
-
         //when
-
-
         mockMvc.perform(patch(path)
                         .header("Authorization", "Bearer token")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -427,7 +420,42 @@ class UserControllerTest {
                 .andExpect(jsonPath("$.errorMessage", is("입력하신 비밀번호가 틀렸습니다.")))
                 .andExpect(jsonPath("$.path", is(path)))
                 .andDo(print());
-    
+    }
+
+    @Test
+    void changePassword_same () throws Exception{
+        //given
+
+        String password = "password";
+        Users user = createUser("test", password);
+        setSecurityAfterLogin(user);
+
+        ChangePasswordDto dto = new ChangePasswordDto();
+        dto.setCurrentPassword("password");
+        dto.setNewPassword("password");
+
+        doThrow(ChangePasswordSameException.class)
+                .when(userService)
+                .changePassword(any());
+
+        String path = "/my-profile/password";
+        given(exceptionHandler.handleGlobalException(any(),any()))
+                .willReturn(ResponseEntity.status(409)
+                        .body(ErrorResponse.createErrorResponse(new ChangePasswordSameException()
+                                ,path)));
+        //when
+        mockMvc.perform(patch(path)
+                        .header("Authorization", "Bearer token")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(dto)))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.httpStatus", is("CONFLICT")))
+                .andExpect(jsonPath("$.errorCode", is("U-0006")))
+                .andExpect(jsonPath("$.errorName", is("CHANGE_PASSWORD_SAME")))
+                .andExpect(jsonPath("$.errorMessage", is("이전 비밀번호와 같은 비밀번호로 변경을 시도하였습니다.")))
+                .andExpect(jsonPath("$.path", is(path)))
+                .andDo(print());
     }
     
     @Test

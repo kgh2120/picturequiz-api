@@ -1,5 +1,6 @@
 package com.kk.picturequizapi.domain.users.entity;
 
+import com.kk.picturequizapi.domain.users.exception.ChangePasswordSameException;
 import com.kk.picturequizapi.domain.users.exception.PasswordIncorrectException;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -59,8 +60,12 @@ public class Users implements UserDetails {
     }
 
     public void changePassword(String currentPassword, String newPassword, PasswordEncoder encoder) {
+
         if (!encoder.matches(currentPassword, password)) {
             throw new PasswordIncorrectException();
+        }
+        if (currentPassword.equals(newPassword)) {
+            throw new ChangePasswordSameException();
         }
         this.password = encoder.encode(newPassword);
     }

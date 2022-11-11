@@ -14,7 +14,9 @@ public enum UserErrorCode implements ErrorCode {
 
     LOGIN_ID_NOT_FOUND(HttpStatus.NOT_FOUND,"U-0004","로그인 아이디가 잘못 되었습니다."),
 
-    PASSWORD_INCORRECT(HttpStatus.CONFLICT, "U-0005", "입력하신 비밀번호가 틀렸습니다.")
+    PASSWORD_INCORRECT(HttpStatus.CONFLICT, "U-0005", "입력하신 비밀번호가 틀렸습니다."),
+
+    CHANGE_PASSWORD_SAME(HttpStatus.CONFLICT, "U-0006", "이전 비밀번호와 같은 비밀번호로 변경을 시도하였습니다."),
 
     ;
     private final HttpStatus httpStatus;

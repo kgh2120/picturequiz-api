@@ -2,6 +2,7 @@ package com.kk.picturequizapi.domain.users.service;
 
 import com.kk.picturequizapi.domain.users.dto.*;
 import com.kk.picturequizapi.domain.users.entity.Users;
+import com.kk.picturequizapi.domain.users.exception.ChangePasswordSameException;
 import com.kk.picturequizapi.domain.users.exception.LoginDataNotFoundException;
 import com.kk.picturequizapi.domain.users.exception.PasswordIncorrectException;
 import com.kk.picturequizapi.domain.users.repository.UserRepository;
@@ -150,6 +151,20 @@ class UserServiceImplTest {
         assertThatThrownBy(()
                 -> users.changePassword(dto.getCurrentPassword(), dto.getNewPassword(), encoder))
                 .isInstanceOf(PasswordIncorrectException.class);
+    }
+
+    @Test
+    void changePassword_ex_samePassword () throws Exception{
+        //given
+        Users users = Users.createUserEntity("hello", encoder.encode("password"));
+        //when
+        ChangePasswordDto dto = new ChangePasswordDto();
+        dto.setCurrentPassword("password");
+        dto.setNewPassword("password");
+
+        assertThatThrownBy(()
+                -> users.changePassword(dto.getCurrentPassword(), dto.getNewPassword(), encoder))
+                .isInstanceOf(ChangePasswordSameException.class);
     }
     
     @Test
