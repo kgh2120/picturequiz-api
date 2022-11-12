@@ -26,7 +26,7 @@ public class TagCreateService {
             throw new TagNameDuplicateException();
         }
 
-        Tag tag = new Tag(TagId.of(tagRepository.nextId()), tagRequest.getName());
+        Tag tag = new Tag(TagId.of(tagRepository.nextId()), tagRequest.getName(), tagRequest.getColor());
         tagRepository.save(tag);
         return tag.createDto();
     }

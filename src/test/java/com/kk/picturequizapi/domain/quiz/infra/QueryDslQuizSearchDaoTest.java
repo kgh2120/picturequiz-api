@@ -182,24 +182,24 @@ class QueryDslQuizSearchDaoTest {
 
     private void createDatas() {
         List<QuizTag> tag = new ArrayList<>();
-        tag.add(new QuizTag(TagId.of("111"),"운동"));
-        tag.add(new QuizTag(TagId.of("112"),"운동2"));
+        tag.add(new QuizTag(TagId.of("111"),"운동","#123123"));
+        tag.add(new QuizTag(TagId.of("112"),"운동2","#123123"));
 
         em.persist(new Quiz(QuizId.of("1111"), new Author(UserId.of(1L),"작가")
                 ,new Picture("/mock"), new Answer(CharacterId.of(1L),"정답"), tag));;
 
         List<QuizTag> tag2 = new ArrayList<>();
-        tag2.add(new QuizTag(TagId.of("222"),"공부"));
-        tag2.add(new QuizTag(TagId.of("2222"),"공부2"));
-        tag2.add(new QuizTag(TagId.of("111"),"운동"));
+        tag2.add(new QuizTag(TagId.of("222"),"공부","#123123"));
+        tag2.add(new QuizTag(TagId.of("2222"),"공부2","#123123"));
+        tag2.add(new QuizTag(TagId.of("111"),"운동","#123123"));
 
         em.persist(new Quiz(QuizId.of("2222"), new Author(UserId.of(1L),"작가")
                 ,new Picture("/mock"), new Answer(CharacterId.of(1L),"정답"), tag2));;
 
         List<QuizTag> tag3 = new ArrayList<>();
-        tag3.add(new QuizTag(TagId.of("333"),"독서"));
-        tag3.add(new QuizTag(TagId.of("3333"),"독서2"));
-        tag3.add(new QuizTag(TagId.of("112"),"운동2"));
+        tag3.add(new QuizTag(TagId.of("333"),"독서","#123123"));
+        tag3.add(new QuizTag(TagId.of("3333"),"독서2","#123123"));
+        tag3.add(new QuizTag(TagId.of("112"),"운동2","#123123"));
 
         em.persist(new Quiz(QuizId.of("3333"), new Author(UserId.of(2L),"작가2")
                 ,new Picture("/mock"), new Answer(CharacterId.of(1L),"정답"), tag3));;

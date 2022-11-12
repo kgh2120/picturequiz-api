@@ -6,4 +6,5 @@ import lombok.Data;
 public class TagCreateRequest {
 
     private String name;
+    private String color;
 }

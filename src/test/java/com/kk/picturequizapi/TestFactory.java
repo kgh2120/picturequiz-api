@@ -65,8 +65,8 @@ public final class TestFactory {
 
     public static Quiz createMockQuiz() throws Exception {
         List<QuizTag> tag = new ArrayList<>();
-        tag.add(new QuizTag(TagId.of("111"),"운동"));
-        tag.add(new QuizTag(TagId.of("112"),"운동2"));
+        tag.add(new QuizTag(TagId.of("111"),"운동", "#123123"));
+        tag.add(new QuizTag(TagId.of("112"),"운동2","#123123"));
 
         return new Quiz(QuizId.of("123"), new Author(UserId.of(1L),"작가")
         ,new Picture("/mock"), new Answer(CharacterId.of(1L),"정답"), tag);

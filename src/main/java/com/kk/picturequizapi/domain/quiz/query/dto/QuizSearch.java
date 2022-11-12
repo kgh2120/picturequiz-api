@@ -1,6 +1,7 @@
 package com.kk.picturequizapi.domain.quiz.query.dto;
 
 import com.kk.picturequizapi.domain.quiz.command.domain.Quiz;
+import com.kk.picturequizapi.domain.tag.query.dto.TagSearch;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -15,16 +16,16 @@ public class QuizSearch {
     private String characterName;
     private String authorNickname;
 
-    private List<String> tagNames;
+    private List<QuizSearchTag> tags;
 
     public QuizSearch(Quiz quiz) {
         this.quizId = quiz.getQuizId().getId();
         this.pictureUrl = quiz.getPicture().getUrl();
         this.characterName = quiz.getAnswer().getName();
         this.authorNickname = quiz.getAuthor().getNickname();
-        this.tagNames = new ArrayList<>();
+        this.tags = new ArrayList<>();
         quiz.getQuizTags().forEach(qt ->
-            tagNames.add(qt.getName())
+                tags.add(new QuizSearchTag(qt.getName(),qt.getColor()))
         );
     }
 }

@@ -30,7 +30,7 @@ class JpaTagSearchDaoTest {
     void findByName () throws Exception{
         //given
         String name = "운동";
-        Tag tag = new Tag(TagId.of("123"), name);
+        Tag tag = new Tag(TagId.of("123"), name,"123123");
         em.persist(tag);
         //when
         Optional<TagSearch> tagSearch = dao.findByName(name);
@@ -42,7 +42,7 @@ class JpaTagSearchDaoTest {
     void findByName_NotFound () throws Exception{
         //given
         String name = "운동";
-        Tag tag = new Tag(TagId.of("123"), "공부");
+        Tag tag = new Tag(TagId.of("123"), "공부","123123");
         em.persist(tag);
         //when
         Optional<TagSearch> tagSearch = dao.findByName(name);

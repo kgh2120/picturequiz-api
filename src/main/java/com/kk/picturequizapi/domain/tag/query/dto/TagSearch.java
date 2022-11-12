@@ -17,6 +17,6 @@ public class TagSearch implements Serializable {
     @Id @Column(name = "tag_id")
     private String id;
     private String name;
-
-
+    @Column(name = "tag_color")
+    private String color;
 }
