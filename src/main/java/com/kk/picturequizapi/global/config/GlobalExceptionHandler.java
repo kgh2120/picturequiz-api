@@ -3,6 +3,7 @@ package com.kk.picturequizapi.global.config;
 import com.kk.picturequizapi.global.exception.AbstractApiException;
 import com.kk.picturequizapi.global.exception.ErrorResponse;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -27,11 +28,15 @@ public class GlobalExceptionHandler {
                 .body(ErrorResponse.createErrorResponse(MISSING_REQUEST_PART, request.getRequestURI()));
     }
 
-
     @ExceptionHandler(MissingServletRequestParameterException.class)
     public ResponseEntity<ErrorResponse> handleMissingServletRequestParameterException(MissingServletRequestPartException ex, HttpServletRequest request) {
         return ResponseEntity.status(MISSING_REQUEST_PARAM.getHttpStatus())
                 .body(ErrorResponse.createErrorResponse(MISSING_REQUEST_PARAM, request.getRequestURI()));
+    }
+    @ExceptionHandler(BindException.class)
+    public ResponseEntity<ErrorResponse> handleBindException(BindException ex, HttpServletRequest request) {
+        return ResponseEntity.status(BIND_ERROR.getHttpStatus())
+                .body(ErrorResponse.createErrorResponse(BIND_ERROR, request.getRequestURI()));
     }
 
 }

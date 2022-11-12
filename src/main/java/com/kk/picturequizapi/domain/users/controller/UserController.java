@@ -12,6 +12,10 @@ import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+
+@Validated
 @Slf4j
 @RequiredArgsConstructor
 @RestController
@@ -21,7 +25,7 @@ public class UserController {
     private final VerificationService verificationService;
 
     @PostMapping("/signUp")
-    public ResponseEntity<SignUpResponseDto> signUp(@RequestBody UserAccessRequestDto dto) {
+    public ResponseEntity<SignUpResponseDto> signUp(@RequestBody @Validated UserAccessRequestDto dto) {
         SignUpResponseDto responseDto = userService.signUp(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }
@@ -32,13 +36,16 @@ public class UserController {
     }
 
     @GetMapping("/my-profile/nickname")
-    public ResponseEntity<Boolean> checkNicknameDuplicate(@RequestParam("nickname") String nickname) {
+    public ResponseEntity<Boolean> checkNicknameDuplicate(
+            @RequestParam("nickname")
+            @NotNull
+            @Pattern(regexp = "^[가-힣a-zA-Z0-9]{4,10}") String nickname) {
         boolean result = userService.isExistNickname(nickname);
         return ResponseEntity.ok(result);
     }
 
     @PatchMapping("/my-profile/nickname")
-    public ResponseEntity<Void> changeNickname(@RequestBody ChangeNicknameRequestDto dto) {
+    public ResponseEntity<Void> changeNickname(@RequestBody @Validated ChangeNicknameRequestDto dto) {
         userService.changeNickname(dto);
         return ResponseEntity.noContent().build();
     }
