@@ -57,7 +57,7 @@ public class QuizCreateService {
             TagSearch tagSearch = tagSearchDao.findByName(name)
                     .orElseThrow(TagNotFoundException::new);
             tags.add(new QuizTag(TagId.of(tagSearch.getId())
-                    , tagSearch.getName()));
+                    , tagSearch.getName() , tagSearch.getColor()));
         });
         return tags;
     }

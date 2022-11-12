@@ -17,9 +17,13 @@ public class QuizTag {
     @Column(name = "tag_name")
     private String name;
 
-    public QuizTag(TagId tagId, String name) {
+    @Column(name = "tag_color")
+    private String color;
+
+    public QuizTag(TagId tagId, String name, String color) {
         this.tagId = tagId;
         this.name = name;
+        this.color = color;
     }
 
     @Override
@@ -27,6 +31,7 @@ public class QuizTag {
         return "QuizTag{" +
                 "tagId=" + tagId +
                 ", name='" + name + '\'' +
+                ", color='" + color + '\'' +
                 '}';
     }
 }

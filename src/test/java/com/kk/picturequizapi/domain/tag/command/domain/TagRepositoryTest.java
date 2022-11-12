@@ -18,7 +18,7 @@ class TagRepositoryTest {
     @Test
     void save () throws Exception{
         //given
-        Tag data = new Tag(TagId.of(repository.nextId()), "운동");
+        Tag data = new Tag(TagId.of(repository.nextId()), "운동","123123");
 
         //when
         repository.save(data);
@@ -46,7 +46,7 @@ class TagRepositoryTest {
     @Test
     void isExist_true () throws Exception{
         //given
-        Tag data = new Tag(TagId.of(repository.nextId()), "운동");
+        Tag data = new Tag(TagId.of(repository.nextId()), "운동","123123");
 
         //when
         repository.save(data);
@@ -63,7 +63,7 @@ class TagRepositoryTest {
     @Test
     void isExist_false () throws Exception{
         //given
-        Tag data = new Tag(TagId.of(repository.nextId()), "운동");
+        Tag data = new Tag(TagId.of(repository.nextId()), "운동","123123");
 
         //when
         repository.save(data);
