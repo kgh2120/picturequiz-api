@@ -77,8 +77,8 @@ class UserControllerTest {
     ObjectMapper mapper = new ObjectMapper();
 
     final UserAccessRequestDto dto = UserAccessRequestDto.builder()
-            .loginId("test")
-            .password("password")
+            .loginId("kgh2120")
+            .password("qwer1234@")
             .build();
 
     @Test
@@ -362,13 +362,13 @@ class UserControllerTest {
     @Test
     void changePassword () throws Exception{
         //given
-        String password = "password";
+        String password = "qwer1234!";
         Users user = createUser("test", password);
         setSecurityAfterLogin(user);
 
         ChangePasswordDto dto = new ChangePasswordDto();
         dto.setCurrentPassword(password);
-        dto.setNewPassword("password123");
+        dto.setNewPassword("qwer4321!");
 
 
         //when
@@ -390,13 +390,13 @@ class UserControllerTest {
     void changePassword_wrong_password () throws Exception{
         //given
 
-        String password = "password";
+        String password = "qwer1234!";
         Users user = createUser("test", password);
         setSecurityAfterLogin(user);
 
         ChangePasswordDto dto = new ChangePasswordDto();
-        dto.setCurrentPassword("password55555");
-        dto.setNewPassword("password123");
+        dto.setCurrentPassword("password55!!5");
+        dto.setNewPassword("password12@@3");
 
         doThrow(PasswordIncorrectException.class)
                 .when(userService)
@@ -426,13 +426,13 @@ class UserControllerTest {
     void changePassword_same () throws Exception{
         //given
 
-        String password = "password";
+        String password = "password1234@";
         Users user = createUser("test", password);
         setSecurityAfterLogin(user);
 
         ChangePasswordDto dto = new ChangePasswordDto();
-        dto.setCurrentPassword("password");
-        dto.setNewPassword("password");
+        dto.setCurrentPassword("password1234@");
+        dto.setNewPassword("password1234@");
 
         doThrow(ChangePasswordSameException.class)
                 .when(userService)
