@@ -22,7 +22,7 @@ public class CustomAuthenticationFailureHandler implements AuthenticationFailure
             , AuthenticationException exception) throws IOException, ServletException {
         log.info("[CustomAuthenticationFailureHandler] - 필터 예외 처리");
         ObjectMapper mapper = new ObjectMapper();
-        ErrorResponse errorResponse = ErrorResponse.createErrorResponse((ErrorCode) exception.getCause(), request.getRequestURI());
+        ErrorResponse errorResponse = ErrorResponse.createErrorResponse(new LoginDataNotFoundException(), request.getRequestURI());
         String errorMessage = mapper.writeValueAsString(errorResponse);
 
         response.setStatus(404);

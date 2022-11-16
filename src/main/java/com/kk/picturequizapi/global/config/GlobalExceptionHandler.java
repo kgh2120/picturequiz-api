@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.multipart.support.MissingServletRequestPartException;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.ConstraintViolationException;
 
 import static com.kk.picturequizapi.global.exception.GlobalErrorCode.*;
 
@@ -35,6 +36,13 @@ public class GlobalExceptionHandler {
     }
     @ExceptionHandler(BindException.class)
     public ResponseEntity<ErrorResponse> handleBindException(BindException ex, HttpServletRequest request) {
+        return ResponseEntity.status(BIND_ERROR.getHttpStatus())
+                .body(ErrorResponse.createErrorResponse(BIND_ERROR, request.getRequestURI()));
+    }
+
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<ErrorResponse> handleBindException(ConstraintViolationException ex, HttpServletRequest request) {
         return ResponseEntity.status(BIND_ERROR.getHttpStatus())
                 .body(ErrorResponse.createErrorResponse(BIND_ERROR, request.getRequestURI()));
     }

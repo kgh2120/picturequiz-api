@@ -15,7 +15,7 @@ public class UserAccessRequestDto {
     private String loginId;
 
     @NotNull
-    @Pattern(regexp = "^(?=.\\d)(?=.[~`!@#$%\\^&()-])(?=.*[a-zA-Z]).{8,20}$")
+    @Pattern(regexp = "^(?=.*\\d)(?=.*[~`!@#$%\\^&()-])(?=.*[a-zA-Z]).{8,20}$")
     private String password;
 
     @Builder
