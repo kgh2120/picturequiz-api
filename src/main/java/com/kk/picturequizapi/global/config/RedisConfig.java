@@ -52,7 +52,7 @@ public class RedisConfig {
         return stringRedisTemplate;
     }
 
-    @Bean @Profile("dev")
+    @Bean @Profile({"dev", "prod"})
     public CacheManager cacheManager() {
         RedisCacheManager.RedisCacheManagerBuilder builder = RedisCacheManager.RedisCacheManagerBuilder.fromConnectionFactory(redisConnectionFactory());
         RedisCacheConfiguration configuration = RedisCacheConfiguration.defaultCacheConfig()

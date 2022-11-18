@@ -9,7 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "character") @Getter @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "characters") @Getter @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Character {
 
     @EmbeddedId

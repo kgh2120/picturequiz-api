@@ -46,6 +46,13 @@ jobs:
         SECRET_FILE_NAME: secret.properties
       run: echo $SECRET_CODE | base64 --decode > $SECRET_DIR/$SECRET_FILE_NAME
 
+    - name: Create application-prod.yml
+      env:
+        SECRET_CODE: ${{ secrets.PROD_PROPERTIES }}
+        SECRET_DIR: src/main/resources
+        SECRET_FILE_NAME: application-prod.yml
+      run: echo $SECRET_CODE | base64 --decode > $SECRET_DIR/$SECRET_FILE_NAME
+
     - name: Build with Gradle
       uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
       with:

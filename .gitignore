@@ -39,6 +39,7 @@ out/
 ## properties
 src/main/resources/secret.properties
 src/main/resources/mailSender.yml
+src/main/resources/application-prod.yml
 
 ### queryDSL ###
 /src/main/generated

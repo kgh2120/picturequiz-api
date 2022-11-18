@@ -29,6 +29,8 @@ dependencies {
 
     implementation 'javax.xml.bind:jaxb-api:2.4.0-b180830.0359'
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+    implementation 'mysql:mysql-connector-java:8.0.31'
+
 
 
     implementation('com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.8.1')
