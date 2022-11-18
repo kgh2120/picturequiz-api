@@ -2,47 +2,15 @@ spring:
   profiles:
     group:
       "default": "dev"
-      "dev":
-      "prod":
+  config:
+    import:
+      - mailSender.yml
+      - secret.properties
+
+  cache:
+    type: redis
 
 quiz:
   limit : 50
 
----
 
-
-
-spring:
-  config:
-    import: classpath:mailSender.yml
-  h2:
-    console:
-      enabled: true
-      settings:
-        web-allow-others: true
-  cache:
-    type: redis
-
-  jpa:
-    hibernate:
-      ddl-auto: create-drop
-    show-sql: true
-    generate-ddl: true
-    defer-datasource-initialization: true
-  redis:
-    host: localhost
-    password:
-    port: 6379
-    pool:
-      max-idle: 8
-      min-idle: 0
-      max-active: 8
-      max-wait: -1
-
----
-spring:
-  config:
-    activate:
-      on-profile: "prod"
-  redis:
-    host: redis

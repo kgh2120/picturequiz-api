@@ -10,7 +10,7 @@ import javax.persistence.Table;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "character") @Getter @NoArgsConstructor
+@Table(name = "characters") @Getter @NoArgsConstructor
 public class CharacterSearch implements Serializable {
 
     @Id @Column(name = "character_id")
