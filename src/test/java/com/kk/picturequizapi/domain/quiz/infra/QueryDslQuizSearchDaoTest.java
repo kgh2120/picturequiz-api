@@ -1,6 +1,5 @@
 package com.kk.picturequizapi.domain.quiz.infra;
 
-import com.kk.picturequizapi.domain.character.command.domain.CharacterId;
 import com.kk.picturequizapi.domain.quiz.command.domain.*;
 import com.kk.picturequizapi.domain.quiz.query.dto.QuizSearchResponse;
 import com.kk.picturequizapi.domain.tag.command.domain.TagId;
@@ -16,7 +15,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.core.env.Environment;
 
 import javax.persistence.EntityManager;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -24,8 +22,8 @@ import java.util.List;
 import static com.kk.picturequizapi.TestFactory.createMockQuiz;
 import static com.kk.picturequizapi.domain.quiz.command.domain.QQuiz.quiz;
 import static com.kk.picturequizapi.domain.quiz.command.domain.QQuizTag.quizTag;
-import static org.assertj.core.api.Assertions.*;
-import static org.springframework.util.StringUtils.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.util.StringUtils.hasText;
 
 @DataJpaTest
 class QueryDslQuizSearchDaoTest {
@@ -186,7 +184,7 @@ class QueryDslQuizSearchDaoTest {
         tag.add(new QuizTag(TagId.of("112"),"운동2","#123123"));
 
         em.persist(new Quiz(QuizId.of("1111"), new Author(UserId.of(1L),"작가")
-                ,new Picture("/mock"), new Answer(CharacterId.of(1L),"정답"), tag));;
+                ,new Picture("/mock"), new Answer("정답"), tag));;
 
         List<QuizTag> tag2 = new ArrayList<>();
         tag2.add(new QuizTag(TagId.of("222"),"공부","#123123"));
@@ -194,7 +192,7 @@ class QueryDslQuizSearchDaoTest {
         tag2.add(new QuizTag(TagId.of("111"),"운동","#123123"));
 
         em.persist(new Quiz(QuizId.of("2222"), new Author(UserId.of(1L),"작가")
-                ,new Picture("/mock"), new Answer(CharacterId.of(1L),"정답"), tag2));;
+                ,new Picture("/mock"), new Answer("정답"), tag2));;
 
         List<QuizTag> tag3 = new ArrayList<>();
         tag3.add(new QuizTag(TagId.of("333"),"독서","#123123"));
@@ -202,7 +200,7 @@ class QueryDslQuizSearchDaoTest {
         tag3.add(new QuizTag(TagId.of("112"),"운동2","#123123"));
 
         em.persist(new Quiz(QuizId.of("3333"), new Author(UserId.of(2L),"작가2")
-                ,new Picture("/mock"), new Answer(CharacterId.of(1L),"정답"), tag3));;
+                ,new Picture("/mock"), new Answer("정답"), tag3));;
 
     }
 

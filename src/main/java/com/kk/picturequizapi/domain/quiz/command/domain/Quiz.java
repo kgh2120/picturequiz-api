@@ -24,7 +24,7 @@ public class Quiz extends BaseEntity {
     @Embedded
     private Answer answer;
 
-    @BatchSize(size = 10)
+    @BatchSize(size = 5)
     @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name = "quiz_tag",  joinColumns = @JoinColumn(name = "quiz_id"))
     private List<QuizTag> quizTags;
