@@ -1,6 +1,5 @@
 package com.kk.picturequizapi.domain.quiz.command.domain;
 
-import com.kk.picturequizapi.domain.character.command.domain.CharacterId;
 import com.kk.picturequizapi.domain.users.entity.UserId;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +8,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import javax.persistence.EntityManager;
 import java.util.ArrayList;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 class QuizRepositoryTest {
@@ -30,7 +29,7 @@ class QuizRepositoryTest {
         Quiz quiz = new Quiz(QuizId.of(quizRepository.nextId()),
                 new Author(UserId.of(1L), "Kim"),
                 new Picture("ex"),
-                new Answer(CharacterId.of(1L), "Test"),
+                new Answer("Test"),
                 new ArrayList<QuizTag>()
                 );
         quizRepository.save(quiz);
