@@ -11,6 +11,5 @@ spring:
     type: redis
 
 quiz:
-  limit : 50
-
+  limit : 12
 

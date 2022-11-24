@@ -20,7 +20,7 @@ class QueryDslQuizSearchDaoSpringBootTest {
     void limitTest () throws Exception{
         Integer limit = env.getProperty("quiz.limit", Integer.class);
 
-        assertThat(limit).isEqualTo(50);
+        assertThat(limit).isEqualTo(12);
     }
 
 }

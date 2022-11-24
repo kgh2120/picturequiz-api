@@ -88,7 +88,7 @@ public class QueryDslQuizSearchDao implements QuizSearchDao {
                 .leftJoin(quiz.quizTags, quizTag)
                 .where(quiz.author.userId.eq(userId))
                 .offset(pageNum*quizLimit)
-                .limit(quizLimit + 1)
+                .limit(quizLimit+1)
                 .fetch();
 
         if(quizzes.isEmpty())
