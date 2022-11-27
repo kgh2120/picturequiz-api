@@ -23,7 +23,7 @@ public class Users implements UserDetails {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String loginId;
 
     @Column(nullable = false)
@@ -68,6 +68,12 @@ public class Users implements UserDetails {
             throw new ChangePasswordSameException();
         }
         this.password = encoder.encode(newPassword);
+    }
+
+    public String createTemporaryPassword(PasswordEncoder encoder){
+        String temporaryPassword = UUID.randomUUID().toString().substring(0, 6);
+        this. password = encoder.encode(temporaryPassword);
+        return temporaryPassword;
     }
 
 

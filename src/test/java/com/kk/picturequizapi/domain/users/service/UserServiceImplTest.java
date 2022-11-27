@@ -3,6 +3,7 @@ package com.kk.picturequizapi.domain.users.service;
 import com.kk.picturequizapi.domain.users.dto.*;
 import com.kk.picturequizapi.domain.users.entity.Users;
 import com.kk.picturequizapi.domain.users.exception.ChangePasswordSameException;
+import com.kk.picturequizapi.domain.users.exception.EmailNotFoundException;
 import com.kk.picturequizapi.domain.users.exception.PasswordIncorrectException;
 import com.kk.picturequizapi.domain.users.repository.UserRepository;
 import org.assertj.core.api.SoftAssertions;
@@ -179,6 +180,30 @@ class UserServiceImplTest {
             assertThat(users.getAuthEmail()).isNull();
             assertThat(users.getLoginId()).isNotEqualTo(id);
         });
-    
+    }
+
+    @Test
+    void findLoginIdTest () throws Exception{
+        //given
+        String email = "email@gmail.com";
+        given(userRepository.findByAuthEmail(anyString()))
+                .willReturn(Optional.of(createUser("loginId","password")));
+
+        //when
+        FindLoginIdDto finded = userService.findLoginId(email);
+
+        //then
+        assertThat(finded.getLoginId()).isEqualTo("loginId");
+    }
+
+    @Test
+    void findLoginIdTest_Email_Not_Found () throws Exception{
+        //given
+        String email = "email@gmail.com";
+        given(userRepository.findByAuthEmail(anyString()))
+                .willThrow(new EmailNotFoundException());
+        //when // then
+        assertThatThrownBy(() ->userService.findLoginId(email))
+                .isInstanceOf(EmailNotFoundException.class);
     }
 }

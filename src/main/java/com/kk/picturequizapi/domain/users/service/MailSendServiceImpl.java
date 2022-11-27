@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 
 @RequiredArgsConstructor
 @Service
-public class VerificationServiceImpl implements VerificationService {
+public class MailSendServiceImpl implements MailSendService {
 
     private final JavaMailSender mailSender;
 
@@ -26,7 +26,7 @@ public class VerificationServiceImpl implements VerificationService {
 
     @Async
     @Override
-    public void mailSend(String email) {
+    public void sendAuthMail(String email) {
 
         try {
             MailHandler mailHandler = new MailHandler(mailSender);
@@ -65,6 +65,31 @@ public class VerificationServiceImpl implements VerificationService {
             throw new VerifyCodeInvalidException();
 
         userService.registerEmailAccount(email);
+    }
+    @Async
+    @Override
+    public void sendTemporaryPasswordMail(String email, String temporaryPassword) {
+        try {
+            MailHandler mailHandler = new MailHandler(mailSender);
+            mailHandler.setTo(email);
+            mailHandler.setSubject("Picture-QUIZ 임시 비밀번호 메일입니다.");
+
+            mailHandler.setText(String.format(
+                    "<div style=\" display: flex;\n" +
+                            "    background-color: antiquewhite;\n" +
+                            "    justify-content: center;\n" +
+                            "    flex-direction: column;\n" +
+                            "    align-items: center;\n" +
+                            "    \">\n" +
+                            "        <h2>임시 비밀번호</span>\n" +
+                            "        <div>%s</div>\n" +
+                            "\n" +
+                            "    </div>"
+                    ,temporaryPassword),true);
+            mailHandler.send();
+        } catch (MessagingException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private String createEmailVerificationCode(String email) {

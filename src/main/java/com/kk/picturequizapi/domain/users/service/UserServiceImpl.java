@@ -2,6 +2,7 @@ package com.kk.picturequizapi.domain.users.service;
 
 import com.kk.picturequizapi.domain.users.dto.*;
 import com.kk.picturequizapi.domain.users.entity.Users;
+import com.kk.picturequizapi.domain.users.exception.InvalidAccessToChangeTemporaryPasswordException;
 import com.kk.picturequizapi.domain.users.exception.LoginDataNotFoundException;
 import com.kk.picturequizapi.domain.users.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -72,6 +73,19 @@ public class UserServiceImpl implements UserService{
                 .orElseThrow(LoginDataNotFoundException::new);
         users.deleteAccount();
 
+    }
+
+    @Override
+    public FindLoginIdDto findLoginId(String email) {
+        Users users = userRepository.findByAuthEmail(email).orElseThrow();
+        return new FindLoginIdDto(users.getLoginId());
+    }
+
+    @Override
+    public String createTemporaryPassword(String email, String loginId) {
+        Users users = userRepository.findByAuthEmailAndLoginId(email, loginId)
+                .orElseThrow(InvalidAccessToChangeTemporaryPasswordException::new);
+        return users.createTemporaryPassword(encoder);
     }
 
     @Override

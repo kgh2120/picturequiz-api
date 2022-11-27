@@ -6,7 +6,7 @@ import com.kk.picturequizapi.domain.users.dto.*;
 import com.kk.picturequizapi.domain.users.entity.Users;
 import com.kk.picturequizapi.domain.users.exception.*;
 import com.kk.picturequizapi.domain.users.service.UserServiceImpl;
-import com.kk.picturequizapi.domain.users.service.VerificationServiceImpl;
+import com.kk.picturequizapi.domain.users.service.MailSendServiceImpl;
 import com.kk.picturequizapi.global.config.GlobalExceptionHandler;
 import com.kk.picturequizapi.global.config.SecurityConfig;
 import com.kk.picturequizapi.global.exception.ErrorResponse;
@@ -52,7 +52,7 @@ class UserControllerTest {
     @MockBean
     UserServiceImpl userService;
     @MockBean
-    VerificationServiceImpl verificationService;
+    MailSendServiceImpl verificationService;
     @MockBean
     JwtProvider jwtProvider;
     @MockBean
@@ -233,7 +233,7 @@ class UserControllerTest {
         Users user = createUser("test", "password");
         setSecurityAfterLogin(user);
 
-        MailSendRequestDto dto = new MailSendRequestDto();
+        MailRequestDto dto = new MailRequestDto();
         dto.setEmail("kgh2120@naver.com");
 
 
@@ -290,10 +290,10 @@ class UserControllerTest {
                 .verifyCode(any(), any());
 
         String path = "/my-profile/verify-code";
-        given(exceptionHandler.handleGlobalException(any(),any()))
+        given(exceptionHandler.handleGlobalException(any(), any()))
                 .willReturn(ResponseEntity.status(404)
                         .body(ErrorResponse.createErrorResponse(new VerifyCodeExpiredException()
-                        ,path)));
+                                , path)));
 
 
         //when
@@ -329,10 +329,10 @@ class UserControllerTest {
                 .verifyCode(any(), any());
 
         String path = "/my-profile/verify-code";
-        given(exceptionHandler.handleGlobalException(any(),any()))
+        given(exceptionHandler.handleGlobalException(any(), any()))
                 .willReturn(ResponseEntity.status(409)
                         .body(ErrorResponse.createErrorResponse(new VerifyCodeInvalidException()
-                                ,path)));
+                                , path)));
 
 
         //when
@@ -350,9 +350,9 @@ class UserControllerTest {
                 .andExpect(jsonPath("$.path", is(path)))
                 .andDo(print());
     }
-    
+
     @Test
-    void changePassword () throws Exception{
+    void changePassword() throws Exception {
         //given
         String password = "qwer1234!";
         Users user = createUser("test", password);
@@ -366,20 +366,19 @@ class UserControllerTest {
         //when
 
 
-       mockMvc.perform(patch("/my-profile/password")
+        mockMvc.perform(patch("/my-profile/password")
                         .header("Authorization", "Bearer token")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(dto)))
-               .andExpect(status().isNoContent())
-               .andDo(print());
-
+                .andExpect(status().isNoContent())
+                .andDo(print());
 
 
     }
-    
+
     @Test
-    void changePassword_wrong_password () throws Exception{
+    void changePassword_wrong_password() throws Exception {
         //given
 
         String password = "qwer1234!";
@@ -395,10 +394,10 @@ class UserControllerTest {
                 .changePassword(any());
 
         String path = "/my-profile/password";
-        given(exceptionHandler.handleGlobalException(any(),any()))
+        given(exceptionHandler.handleGlobalException(any(), any()))
                 .willReturn(ResponseEntity.status(409)
                         .body(ErrorResponse.createErrorResponse(new PasswordIncorrectException()
-                                ,path)));
+                                , path)));
         //when
         mockMvc.perform(patch(path)
                         .header("Authorization", "Bearer token")
@@ -415,7 +414,7 @@ class UserControllerTest {
     }
 
     @Test
-    void changePassword_same () throws Exception{
+    void changePassword_same() throws Exception {
         //given
 
         String password = "password1234@";
@@ -431,10 +430,10 @@ class UserControllerTest {
                 .changePassword(any());
 
         String path = "/my-profile/password";
-        given(exceptionHandler.handleGlobalException(any(),any()))
+        given(exceptionHandler.handleGlobalException(any(), any()))
                 .willReturn(ResponseEntity.status(409)
                         .body(ErrorResponse.createErrorResponse(new ChangePasswordSameException()
-                                ,path)));
+                                , path)));
         //when
         mockMvc.perform(patch(path)
                         .header("Authorization", "Bearer token")
@@ -449,9 +448,9 @@ class UserControllerTest {
                 .andExpect(jsonPath("$.path", is(path)))
                 .andDo(print());
     }
-    
+
     @Test
-    void deleteAccount () throws Exception{
+    void deleteAccount() throws Exception {
         //given
 
         Users user = createUser("test", "password");
@@ -467,8 +466,53 @@ class UserControllerTest {
                         .content(mapper.writeValueAsString(dto)))
                 .andExpect(status().isNoContent())
                 .andDo(print());
-        
-    
+
+
+    }
+
+    @Test
+    void findLoginId() throws Exception {
+        //given
+        given(userService.findLoginId(any()))
+                .willReturn(new FindLoginIdDto("loginId"));
+        MailRequestDto dto = new MailRequestDto();
+        dto.setEmail("email@gmail.com");
+
+        //when
+        mockMvc.perform(post("/user/id")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new ObjectMapper().writeValueAsString(dto)))
+                //then
+                .andExpect(jsonPath("$.loginId").value("loginId"))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+    @Test
+    void findLoginId_EMAIL_NOT_FOUND () throws Exception{
+        //given
+        String path = "/user/id";
+        MailRequestDto dto = new MailRequestDto();
+        dto.setEmail("email@gmail.com");
+        given(userService.findLoginId(any()))
+                .willThrow(new EmailNotFoundException());
+        given(exceptionHandler.handleGlobalException(any(), any()))
+                .willReturn(ResponseEntity.status(404)
+                        .body(ErrorResponse.createErrorResponse(new EmailNotFoundException()
+                                , path)));
+        //when
+
+        mockMvc.perform(post("/user/id")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new ObjectMapper().writeValueAsString(dto)))
+                //then
+                .andExpect(jsonPath("$.httpStatus", is("NOT_FOUND")))
+                .andExpect(jsonPath("$.errorCode", is("U-0007")))
+                .andExpect(jsonPath("$.errorName", is("EMAIL_NOT_FOUND")))
+                .andExpect(jsonPath("$.errorMessage", is("이메일을 통해 인증에 실패했습니다.")))
+                .andExpect(jsonPath("$.path", is(path)))
+                .andExpect(status().isNotFound())
+                .andDo(print());
+
     }
 
 
