@@ -5,6 +5,7 @@ import com.kk.picturequizapi.domain.refreshtoken.service.RefreshTokenService;
 import com.kk.picturequizapi.domain.users.dto.*;
 import com.kk.picturequizapi.domain.users.entity.Users;
 import com.kk.picturequizapi.domain.users.exception.*;
+import com.kk.picturequizapi.domain.users.service.TemporaryPasswordService;
 import com.kk.picturequizapi.domain.users.service.UserServiceImpl;
 import com.kk.picturequizapi.domain.users.service.MailSendServiceImpl;
 import com.kk.picturequizapi.global.config.GlobalExceptionHandler;
@@ -49,6 +50,8 @@ class UserControllerTest {
     @Autowired
     MockMvc mockMvc;
 
+    @MockBean
+    TemporaryPasswordService temporaryPasswordService;
     @MockBean
     UserServiceImpl userService;
     @MockBean
