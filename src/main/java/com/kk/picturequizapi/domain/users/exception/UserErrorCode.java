@@ -18,6 +18,10 @@ public enum UserErrorCode implements ErrorCode {
 
     CHANGE_PASSWORD_SAME(HttpStatus.CONFLICT, "U-0006", "이전 비밀번호와 같은 비밀번호로 변경을 시도하였습니다."),
 
+    EMAIL_NOT_FOUND(HttpStatus.NOT_FOUND, "U-0007", "이메일을 통해 인증에 실패했습니다."),
+
+    INVALID_ACCESS_TO_CHANGE_TEMPORARY_PASSWORD(HttpStatus.NOT_FOUND, "U-0008", "임시 비밀번호 발급을 위한 인증에 실패했습니다.")
+
     ;
     private final HttpStatus httpStatus;
     private final String errorCode;

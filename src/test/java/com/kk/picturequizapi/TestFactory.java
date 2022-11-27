@@ -15,9 +15,9 @@ import java.util.List;
 
 public final class TestFactory {
 
-    public static Users createUser(String id, String pwd) throws Exception {
+    public static Users createUser(String loginId, String pwd) throws Exception {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        Users user = Users.createUserEntity(id, encoder.encode(pwd));
+        Users user = Users.createUserEntity(loginId, encoder.encode(pwd));
         Field idField = user.getClass().getDeclaredField("id");
         idField.setAccessible(true);
         idField.set(user, 1L);

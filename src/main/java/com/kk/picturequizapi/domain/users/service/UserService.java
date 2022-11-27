@@ -22,5 +22,7 @@ public interface UserService extends UserDetailsService {
 
     void deleteAccount();
 
+    FindLoginIdDto findLoginId(String email);
 
+    String createTemporaryPassword(String email, String loginId);
 }

@@ -1,8 +1,9 @@
 package com.kk.picturequizapi.domain.users.controller;
 
 import com.kk.picturequizapi.domain.users.dto.*;
+import com.kk.picturequizapi.domain.users.service.TemporaryPasswordService;
 import com.kk.picturequizapi.domain.users.service.UserService;
-import com.kk.picturequizapi.domain.users.service.VerificationService;
+import com.kk.picturequizapi.domain.users.service.MailSendService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -22,7 +23,8 @@ import javax.validation.constraints.Pattern;
 public class UserController {
 
     private final UserService userService;
-    private final VerificationService verificationService;
+    private final MailSendService mailSendService;
+    private final TemporaryPasswordService temporaryPasswordService;
 
     @PostMapping("/signUp")
     public ResponseEntity<SignUpResponseDto> signUp(@RequestBody @Validated UserAccessRequestDto dto) {
@@ -51,14 +53,14 @@ public class UserController {
     }
 
     @PostMapping("/my-profile/send-mail")
-    public ListenableFuture<ResponseEntity<Void>> sendAuthEmail(@RequestBody @Validated MailSendRequestDto dto) {
-        verificationService.mailSend(dto.getEmail());
+    public ListenableFuture<ResponseEntity<Void>> sendAuthEmail(@RequestBody @Validated MailRequestDto dto) {
+        mailSendService.sendAuthMail(dto.getEmail());
         return new AsyncResult<>(ResponseEntity.noContent().build());
     }
 
     @PatchMapping("/my-profile/verify-code")
     public ResponseEntity<Void> verifyCode(@RequestBody @Validated CodeVerificationRequestDto dto) {
-        verificationService.verifyCode(dto.getEmail(),dto.getCode());
+        mailSendService.verifyCode(dto.getEmail(),dto.getCode());
         return ResponseEntity.noContent().build();
     }
     @PatchMapping("/my-profile/password")
@@ -71,5 +73,16 @@ public class UserController {
     public ResponseEntity<Void> deleteAccount() {
         userService.deleteAccount();
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/user/id")
+    public ResponseEntity<FindLoginIdDto> findLoginId(@RequestBody MailRequestDto dto){
+        FindLoginIdDto loginIdDto = userService.findLoginId(dto.getEmail());
+        return ResponseEntity.ok(loginIdDto);
+    }
+    @PatchMapping("/user/password")
+    public ResponseEntity<Void> changeToTemporaryPassword(@RequestBody TemporaryPasswordDto dto) {
+        temporaryPasswordService.changePasswordToTemporaryPassword(dto.getEmail(), dto.getLoginId());
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

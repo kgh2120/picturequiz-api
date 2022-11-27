@@ -49,7 +49,7 @@ public class SecurityConfig {
                 .antMatchers("/quiz/add").authenticated()
                 .antMatchers(
                             "/signUp", "/login","/refresh","/h2-console/**","/character", "/tag"
-                    ,"/quiz/**").permitAll()
+                    ,"/quiz/**", "/user/**").permitAll()
                     .antMatchers("/**").authenticated()
                     .anyRequest().authenticated()
                 .and()
