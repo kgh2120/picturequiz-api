@@ -1,7 +1,6 @@
 package com.kk.picturequizapi.global.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.kk.picturequizapi.domain.users.exception.LoginDataNotFoundException;
 import com.kk.picturequizapi.global.exception.AbstractApiException;
 import com.kk.picturequizapi.global.exception.ErrorResponse;
 import com.kk.picturequizapi.global.exception.LoginValidateErrorException;
@@ -18,7 +17,7 @@ import java.io.IOException;
 import static com.kk.picturequizapi.global.exception.GlobalErrorCode.*;
 
 
-public class JwtExceptionHandlingFilter extends OncePerRequestFilter {
+public class ExceptionHandlingFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try {

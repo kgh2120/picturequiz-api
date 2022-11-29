@@ -56,12 +56,12 @@ public class SecurityConfig {
                 .cors().configurationSource(corsConfigurationSource())
                 .and()
                 .authenticationManager(authenticationManager)
-                .addFilterBefore(new JwtAuthorizationFilter(authenticationManager,jwtProvider, refreshTokenService, authenticationFailureHandler())
+                .addFilterBefore(new JwtAuthenticationFilter(authenticationManager,jwtProvider, refreshTokenService, authenticationFailureHandler())
                         ,UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(new JwtAuthenticationFilter(jwtProvider,userDetailsService)
-                        ,JwtAuthorizationFilter.class)
-                .addFilterBefore(new JwtExceptionHandlingFilter(),
-                        JwtAuthenticationFilter.class)
+                .addFilterBefore(new JwtAuthorizationFilter(jwtProvider,userDetailsService)
+                        , JwtAuthenticationFilter.class)
+                .addFilterBefore(new ExceptionHandlingFilter(),
+                        JwtAuthorizationFilter.class)
                 .build();
     }
 
