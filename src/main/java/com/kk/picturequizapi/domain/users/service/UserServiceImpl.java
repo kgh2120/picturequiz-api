@@ -2,6 +2,7 @@ package com.kk.picturequizapi.domain.users.service;
 
 import com.kk.picturequizapi.domain.users.dto.*;
 import com.kk.picturequizapi.domain.users.entity.Users;
+import com.kk.picturequizapi.domain.users.exception.EmailNotFoundException;
 import com.kk.picturequizapi.domain.users.exception.InvalidAccessToChangeTemporaryPasswordException;
 import com.kk.picturequizapi.domain.users.exception.LoginDataNotFoundException;
 import com.kk.picturequizapi.domain.users.repository.UserRepository;
@@ -77,7 +78,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public FindLoginIdDto findLoginId(String email) {
-        Users users = userRepository.findByAuthEmail(email).orElseThrow();
+        Users users = userRepository.findByAuthEmail(email).orElseThrow(EmailNotFoundException::new);
         return new FindLoginIdDto(users.getLoginId());
     }
 

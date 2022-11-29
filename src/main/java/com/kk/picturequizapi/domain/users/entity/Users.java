@@ -71,7 +71,7 @@ public class Users implements UserDetails {
     }
 
     public String createTemporaryPassword(PasswordEncoder encoder){
-        String temporaryPassword = UUID.randomUUID().toString().substring(0, 6);
+        String temporaryPassword = UUID.randomUUID().toString().substring(0, 12);
         this. password = encoder.encode(temporaryPassword);
         return temporaryPassword;
     }
