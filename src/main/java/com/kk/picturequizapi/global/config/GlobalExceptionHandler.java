@@ -43,8 +43,8 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<ErrorResponse> handleBindException(ConstraintViolationException ex, HttpServletRequest request) {
-        return ResponseEntity.status(BIND_ERROR.getHttpStatus())
-                .body(ErrorResponse.createErrorResponse(BIND_ERROR, request.getRequestURI()));
+        return ResponseEntity.status(CONSTRAINT_VIOLATION.getHttpStatus())
+                .body(ErrorResponse.createErrorResponse(CONSTRAINT_VIOLATION, request.getRequestURI()));
     }
 
 }

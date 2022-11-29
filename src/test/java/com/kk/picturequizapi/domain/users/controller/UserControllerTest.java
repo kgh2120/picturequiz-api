@@ -12,8 +12,8 @@ import com.kk.picturequizapi.global.config.GlobalExceptionHandler;
 import com.kk.picturequizapi.global.config.SecurityConfig;
 import com.kk.picturequizapi.global.exception.ErrorResponse;
 import com.kk.picturequizapi.global.security.CustomAuthenticationFailureHandler;
-import com.kk.picturequizapi.global.security.JwtAuthenticationFilter;
 import com.kk.picturequizapi.global.security.JwtAuthorizationFilter;
+import com.kk.picturequizapi.global.security.JwtAuthenticationFilter;
 import com.kk.picturequizapi.global.security.JwtProvider;
 import io.jsonwebtoken.Jwts;
 import org.junit.jupiter.api.Test;
@@ -42,8 +42,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
-@WebMvcTest(value = {UserController.class, SecurityConfig.class, JwtAuthorizationFilter.class
-        , JwtAuthenticationFilter.class, CustomAuthenticationFailureHandler.class
+@WebMvcTest(value = {UserController.class, SecurityConfig.class, JwtAuthenticationFilter.class
+        , JwtAuthorizationFilter.class, CustomAuthenticationFailureHandler.class
         , GlobalExceptionHandler.class})
 class UserControllerTest {
 
