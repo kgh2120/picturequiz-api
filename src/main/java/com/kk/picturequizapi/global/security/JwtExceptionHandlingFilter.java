@@ -43,8 +43,10 @@ public class JwtExceptionHandlingFilter extends OncePerRequestFilter {
             errorResponse = ErrorResponse.createErrorResponse(JWT_UNSUPPORTED, request.getRequestURI());
         if (e instanceof SignatureException)
             errorResponse = ErrorResponse.createErrorResponse(JWT_NOT_VERIFIED, request.getRequestURI());
-        if(e instanceof LoginValidateErrorException)
+        if (e instanceof LoginValidateErrorException) {
+            response.setStatus(BIND_ERROR.getHttpStatus().value());
             errorResponse = ErrorResponse.createErrorResponse(BIND_ERROR, request.getRequestURI());
+        }
         ObjectMapper mapper = new ObjectMapper();
         String errorMsg = mapper.writeValueAsString(errorResponse);
 
