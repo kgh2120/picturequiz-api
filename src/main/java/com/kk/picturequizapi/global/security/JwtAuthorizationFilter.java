@@ -5,6 +5,8 @@ import com.kk.picturequizapi.domain.refreshtoken.service.RefreshTokenService;
 import com.kk.picturequizapi.domain.users.dto.TokenResponseDto;
 import com.kk.picturequizapi.domain.users.dto.UserAccessRequestDto;
 import com.kk.picturequizapi.domain.users.entity.Users;
+import com.kk.picturequizapi.domain.users.exception.LoginDataNotFoundException;
+import com.kk.picturequizapi.global.exception.LoginValidateErrorException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -30,6 +32,7 @@ public class JwtAuthorizationFilter extends UsernamePasswordAuthenticationFilter
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         log.info("[JWTAuthorizationFilter] - attemptAuthentication 시작");
+
         ObjectMapper mapper = new ObjectMapper();
         UserAccessRequestDto dto = null;
         try {
@@ -37,9 +40,12 @@ public class JwtAuthorizationFilter extends UsernamePasswordAuthenticationFilter
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+        if(!LoginValidator.validateLogin(dto.getLoginId(), dto.getPassword())){
+            throw new LoginValidateErrorException();
+        }
         UsernamePasswordAuthenticationToken authenticationToken
                 = new UsernamePasswordAuthenticationToken(dto.getLoginId(), dto.getPassword());
-
         return authenticationManager.authenticate(authenticationToken);
 
     }
