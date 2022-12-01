@@ -6,6 +6,7 @@ import com.kk.picturequizapi.global.exception.ErrorResponse;
 import com.kk.picturequizapi.global.exception.LoginValidateErrorException;
 import io.jsonwebtoken.*;
 import org.springframework.http.HttpStatus;
+import org.springframework.transaction.CannotCreateTransactionException;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -22,7 +23,7 @@ public class ExceptionHandlingFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try {
             filterChain.doFilter(request, response);
-        } catch (JwtException | AbstractApiException e) {
+        } catch (JwtException | AbstractApiException | CannotCreateTransactionException e) {
             sendErrorResponse(e, request, response);
 
         }
@@ -45,6 +46,10 @@ public class ExceptionHandlingFilter extends OncePerRequestFilter {
         if (e instanceof LoginValidateErrorException) {
             response.setStatus(BIND_ERROR.getHttpStatus().value());
             errorResponse = ErrorResponse.createErrorResponse(BIND_ERROR, request.getRequestURI());
+        }if (e instanceof CannotCreateTransactionException){
+            response.setStatus(DB_CONNECT_FAIL.getHttpStatus().value());
+            errorResponse = ErrorResponse.createErrorResponse(DB_CONNECT_FAIL, request.getRequestURI());
+
         }
         ObjectMapper mapper = new ObjectMapper();
         String errorMsg = mapper.writeValueAsString(errorResponse);

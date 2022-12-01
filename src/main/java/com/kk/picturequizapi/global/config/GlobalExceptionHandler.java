@@ -12,6 +12,8 @@ import org.springframework.web.multipart.support.MissingServletRequestPartExcept
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.ConstraintViolationException;
 
+import java.net.ConnectException;
+
 import static com.kk.picturequizapi.global.exception.GlobalErrorCode.*;
 
 @RestControllerAdvice
@@ -45,6 +47,12 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleBindException(ConstraintViolationException ex, HttpServletRequest request) {
         return ResponseEntity.status(CONSTRAINT_VIOLATION.getHttpStatus())
                 .body(ErrorResponse.createErrorResponse(CONSTRAINT_VIOLATION, request.getRequestURI()));
+    }
+
+    @ExceptionHandler(ConnectException.class)
+    public ResponseEntity<ErrorResponse> handleConnectException(HttpServletRequest request) {
+        return ResponseEntity.status(DB_CONNECT_FAIL.getHttpStatus())
+                .body(ErrorResponse.createErrorResponse(DB_CONNECT_FAIL, request.getRequestURI()));
     }
 
 }
