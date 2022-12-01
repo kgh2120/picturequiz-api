@@ -2,6 +2,7 @@ package com.kk.picturequizapi.domain.quiz.query.ui;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kk.picturequizapi.domain.quiz.query.application.MyQuizService;
+import com.kk.picturequizapi.domain.quiz.query.application.QuizSearchService;
 import com.kk.picturequizapi.domain.quiz.query.dao.QuizSearchDao;
 import com.kk.picturequizapi.domain.quiz.query.dto.QuizSearchCondition;
 import com.kk.picturequizapi.domain.quiz.query.dto.QuizSearchResponse;
@@ -34,6 +35,8 @@ class QuizSearchControllerTest {
 
     @MockBean
     QuizSearchDao dao;
+    @MockBean
+    QuizSearchService quizSearchService;
 
     @MockBean
     MyQuizService service;
@@ -44,7 +47,7 @@ class QuizSearchControllerTest {
     @Test
     void search_anything () throws Exception{
         //given
-        given(dao.searchQuizByCondition(any(QuizSearchCondition.class),anyInt()))
+        given(quizSearchService.findQuizzes(any()))
                 .willReturn(new QuizSearchResponse(null,1,true));
 
         QuizSearchCondition cond = new QuizSearchCondition();
