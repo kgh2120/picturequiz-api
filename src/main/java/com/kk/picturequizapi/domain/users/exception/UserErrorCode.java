@@ -20,8 +20,9 @@ public enum UserErrorCode implements ErrorCode {
 
     EMAIL_NOT_FOUND(HttpStatus.NOT_FOUND, "U-0007", "이메일을 통해 인증에 실패했습니다."),
 
-    INVALID_ACCESS_TO_CHANGE_TEMPORARY_PASSWORD(HttpStatus.NOT_FOUND, "U-0008", "임시 비밀번호 발급을 위한 인증에 실패했습니다.")
+    INVALID_ACCESS_TO_CHANGE_TEMPORARY_PASSWORD(HttpStatus.NOT_FOUND, "U-0008", "임시 비밀번호 발급을 위한 인증에 실패했습니다."),
 
+    DUPLICATE_LOGIN_ID(HttpStatus.CONFLICT, "U-0009", "입력하신 아이디는 중복되었습니다.")
     ;
     private final HttpStatus httpStatus;
     private final String errorCode;
