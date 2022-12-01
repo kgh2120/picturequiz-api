@@ -3,11 +3,12 @@ package com.kk.picturequizapi.domain.quiz.query.dto;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 @Data @NoArgsConstructor
-public class QuizSearchCondition {
+public class QuizSearchCondition implements Serializable {
 
     private String answerName;
     private QuizSearchOrderCondition orderCondition;
