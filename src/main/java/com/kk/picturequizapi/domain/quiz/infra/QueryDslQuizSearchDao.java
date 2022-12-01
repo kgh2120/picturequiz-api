@@ -3,6 +3,7 @@ package com.kk.picturequizapi.domain.quiz.infra;
 import com.kk.picturequizapi.domain.quiz.command.domain.QQuiz;
 import com.kk.picturequizapi.domain.quiz.command.domain.Quiz;
 import com.kk.picturequizapi.domain.quiz.exception.NoMoreQuizDataException;
+import com.kk.picturequizapi.domain.quiz.exception.NoSearchResultException;
 import com.kk.picturequizapi.domain.quiz.query.dao.QuizSearchDao;
 import com.kk.picturequizapi.domain.quiz.query.dto.QuizSearch;
 import com.kk.picturequizapi.domain.quiz.query.dto.QuizSearchCondition;
@@ -63,20 +64,24 @@ public class QueryDslQuizSearchDao implements QuizSearchDao {
 
         List<Quiz> quizzes = where
                 .orderBy(quizOrder(cond.getOrderCondition()))
-                .offset(pageNum*quizLimit)
-                .limit(quizLimit+1)
+                .offset(pageNum * quizLimit)
+                .limit(quizLimit + 1)
                 .fetch();
 
-        if(quizzes.isEmpty())
-            throw new NoMoreQuizDataException();
+        if (quizzes.isEmpty()) {
+            if (pageNum == 0)
+                throw new NoSearchResultException();
+            else
+                throw new NoMoreQuizDataException();
+        }
 
         boolean hasNext = quizzes.size() > quizLimit;
 
 
         List<QuizSearch> searches = new ArrayList<>();
-        quizzes.forEach( q -> searches.add(new QuizSearch(q)));
+        quizzes.forEach(q -> searches.add(new QuizSearch(q)));
 
-       return new QuizSearchResponse(searches, pageNum+1, hasNext);
+        return new QuizSearchResponse(searches, pageNum + 1, hasNext);
     }
 
     @Override
@@ -87,35 +92,40 @@ public class QueryDslQuizSearchDao implements QuizSearchDao {
                 .distinct()
                 .leftJoin(quiz.quizTags, quizTag)
                 .where(quiz.author.userId.eq(userId))
-                .offset(pageNum*quizLimit)
-                .limit(quizLimit+1)
+                .offset(pageNum * quizLimit)
+                .limit(quizLimit + 1)
                 .fetch();
 
-        if(quizzes.isEmpty())
-            throw new NoMoreQuizDataException();
+        if (quizzes.isEmpty()) {
+            if (pageNum == 0)
+                throw new NoSearchResultException();
+            else
+                throw new NoMoreQuizDataException();
+        }
 
         boolean hasNext = quizzes.size() > quizLimit;
 
 
         List<QuizSearch> searches = new ArrayList<>();
-        quizzes.forEach( q -> searches.add(new QuizSearch(q)));
+        quizzes.forEach(q -> searches.add(new QuizSearch(q)));
 
-        return new QuizSearchResponse(searches, pageNum+1, hasNext);
+        return new QuizSearchResponse(searches, pageNum + 1, hasNext);
     }
 
 
     private OrderSpecifier<?> quizOrder(QuizSearchOrderCondition orderCond) {
-        if(orderCond == null)
-            return new OrderSpecifier(Order.DESC,quiz.viewCount);
+        if (orderCond == null)
+            return new OrderSpecifier(Order.DESC, quiz.viewCount);
 
         switch (orderCond) {
-            case POPULAR: return new OrderSpecifier(Order.DESC,quiz.viewCount);
-            case RECENT: return new OrderSpecifier(Order.DESC,quiz.createdDate);
+            case POPULAR:
+                return new OrderSpecifier(Order.DESC, quiz.viewCount);
+            case RECENT:
+                return new OrderSpecifier(Order.DESC, quiz.createdDate);
             default:
-                return new OrderSpecifier(Order.DESC,quiz.viewCount);
+                return new OrderSpecifier(Order.DESC, quiz.viewCount);
         }
     }
-
 
 
     private BooleanBuilder buildCondition(QuizSearchCondition cond) {

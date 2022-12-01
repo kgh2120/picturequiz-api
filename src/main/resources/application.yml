@@ -6,7 +6,9 @@ spring:
     import:
       - mailSender.yml
       - secret.properties
-
+  datasource:
+    hikari:
+      connection-timeout: 7000
   cache:
     type: redis
 

@@ -20,6 +20,8 @@ public enum GlobalErrorCode implements ErrorCode{
     BIND_ERROR(HttpStatus.BAD_REQUEST, "G-0007","입력 값이 올바른 형식을 따르지 않았습니다."),
     CONSTRAINT_VIOLATION(HttpStatus.BAD_REQUEST, "G-0008","입력 값이 형식 검사를 통과하지 못했습니다.."),
 
+    DB_CONNECT_FAIL(HttpStatus.SERVICE_UNAVAILABLE, "G-0009" , "현재 서비스 상태가 고르지 못해 이용에 차질이 발생합니다. 운영자 이메일을 통해 상황을 제보 부탁드립니다.")
+
     ;
 
     private final HttpStatus httpStatus;
