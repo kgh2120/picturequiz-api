@@ -4,11 +4,12 @@ import com.kk.picturequizapi.domain.quiz.command.domain.Quiz;
 import com.kk.picturequizapi.domain.tag.query.dto.TagSearch;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
-public class QuizSearch {
+public class QuizSearch implements Serializable {
 
 
     private String quizId;
