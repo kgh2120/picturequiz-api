@@ -2,6 +2,7 @@ package com.kk.picturequizapi.global.config;
 
 import com.kk.picturequizapi.global.exception.AbstractApiException;
 import com.kk.picturequizapi.global.exception.ErrorResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
@@ -13,9 +14,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.ConstraintViolationException;
 
 import java.net.ConnectException;
+import java.sql.SQLIntegrityConstraintViolationException;
 
+import static com.kk.picturequizapi.domain.users.exception.UserErrorCode.DUPLICATE_LOGIN_ID;
 import static com.kk.picturequizapi.global.exception.GlobalErrorCode.*;
 
+@Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -54,5 +58,11 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(DB_CONNECT_FAIL.getHttpStatus())
                 .body(ErrorResponse.createErrorResponse(DB_CONNECT_FAIL, request.getRequestURI()));
     }
+    @ExceptionHandler(SQLIntegrityConstraintViolationException.class) // unique or not null 에 걸릴때 터짐. 내가 실수 안했으면 다 잡힘
+    public ResponseEntity<ErrorResponse> handleSQLIntegrityConstraintViolationException(SQLIntegrityConstraintViolationException ex, HttpServletRequest request) {
+        return ResponseEntity.status(DUPLICATE_LOGIN_ID.getHttpStatus())
+                .body(ErrorResponse.createErrorResponse(DUPLICATE_LOGIN_ID, request.getRequestURI()));
+    }
+
 
 }

@@ -25,4 +25,6 @@ public interface UserService extends UserDetailsService {
     FindLoginIdDto findLoginId(String email);
 
     String createTemporaryPassword(String email, String loginId);
+
+    void isExistLoginId(String loginId);
 }

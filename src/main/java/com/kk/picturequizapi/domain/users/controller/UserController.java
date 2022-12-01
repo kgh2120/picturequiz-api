@@ -85,4 +85,10 @@ public class UserController {
         temporaryPasswordService.changePasswordToTemporaryPassword(dto.getEmail(), dto.getLoginId());
         return ResponseEntity.status(HttpStatus.OK).build();
     }
+
+    @GetMapping("/user/id")
+    public ResponseEntity<Void> isExistLoginId(@RequestParam("id") String id) {
+        userService.isExistLoginId(id);
+        return ResponseEntity.ok().build();
+    }
 }
