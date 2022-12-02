@@ -3,6 +3,8 @@ package com.kk.picturequizapi.global.config;
 import com.kk.picturequizapi.global.exception.AbstractApiException;
 import com.kk.picturequizapi.global.exception.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.tomcat.util.http.fileupload.impl.FileSizeLimitExceededException;
+import org.apache.tomcat.util.http.fileupload.impl.SizeLimitExceededException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
@@ -63,6 +65,19 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(DUPLICATE_LOGIN_ID.getHttpStatus())
                 .body(ErrorResponse.createErrorResponse(DUPLICATE_LOGIN_ID, request.getRequestURI()));
     }
+
+    @ExceptionHandler(FileSizeLimitExceededException.class)
+    public ResponseEntity<ErrorResponse> handleFileSizeLimitExceededException(HttpServletRequest request) {
+        return ResponseEntity.status(FILE_SIZE_LIMIT_EXCEEDED.getHttpStatus())
+                .body(ErrorResponse.createErrorResponse(FILE_SIZE_LIMIT_EXCEEDED, request.getRequestURI()));
+    }
+    @ExceptionHandler(SizeLimitExceededException.class)
+    public ResponseEntity<ErrorResponse> handleSizeLimitExceededException(HttpServletRequest request) {
+        return ResponseEntity.status(FILE_SIZE_LIMIT_EXCEEDED.getHttpStatus())
+                .body(ErrorResponse.createErrorResponse(FILE_SIZE_LIMIT_EXCEEDED, request.getRequestURI()));
+    }
+
+
 
 
 }
