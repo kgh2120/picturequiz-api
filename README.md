@@ -5,7 +5,8 @@
 
 ### <p align="center"> Back-end </p>
 
-<p align="center"><img src="https://user-images.githubusercontent.com/76154390/207239961-2c2ee81e-8c3d-4d17-9e0e-597ea24bc439.png"/><p>
+<p align="center"><img src="https://user-images.githubusercontent.com/76154390/207240855-894d21ac-46bf-44ca-bd9b-19346f3d16f3.png"/><p>
+
 
 
 ### <p align="center"> Front-end </p>
