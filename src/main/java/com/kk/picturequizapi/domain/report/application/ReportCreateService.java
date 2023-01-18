@@ -6,11 +6,10 @@ import com.kk.picturequizapi.domain.report.domain.ReportContent;
 import com.kk.picturequizapi.domain.report.domain.ReportId;
 import com.kk.picturequizapi.domain.report.domain.ReportRepository;
 import com.kk.picturequizapi.domain.report.domain.Reporter;
-import com.kk.picturequizapi.domain.report.domain.ReporterService;
 import com.kk.picturequizapi.domain.report.dto.ReportCreateRequest;
+import com.kk.picturequizapi.domain.report.exception.AlreadyReportedQuizException;
 import com.kk.picturequizapi.domain.users.entity.UserId;
 import com.kk.picturequizapi.domain.users.entity.Users;
-import com.kk.picturequizapi.domain.users.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -24,20 +23,28 @@ public class ReportCreateService {
     private final ReportRepository reportRepository;
 
     public void createReport(ReportCreateRequest dto) {
+        Users users = getUserInfoFromAuthentication();
+        inspectDuplicateReport(dto, users);
+        reportRepository.save(createReportEntity(dto, users));
+    }
 
-        Users users = (Users) SecurityContextHolder.getContext().getAuthentication()
-                .getPrincipal();
-
-        if (reportRepository.isExistReport(QuizId.of(dto.getQuizId()), UserId.of(users.getId())
-                , dto.getReportType())) {
-            throw new RuntimeException(); // 중복 신고 예외 처리
-        }
-
+    private Report createReportEntity(ReportCreateRequest dto, Users users) {
         Reporter reporter = Reporter.of(UserId.of(users.getId()), users.getNickname());
         ReportContent reportContent = ReportContent.of(dto.getReportType(),
                 dto.getReportDescription());
-        Report report = Report.of(ReportId.of(reportRepository.nextId()), QuizId.of(dto.getQuizId()),
+        return Report.of(ReportId.of(reportRepository.nextId()), QuizId.of(dto.getQuizId()),
                 reporter, reportContent);
-        reportRepository.save(report);
+    }
+
+    private void inspectDuplicateReport(ReportCreateRequest dto, Users users) {
+        if (reportRepository.isExistReport(QuizId.of(dto.getQuizId()), UserId.of(users.getId())
+                , dto.getReportType())) {
+            throw new AlreadyReportedQuizException(); // 중복 신고 예외 처리
+        }
+    }
+
+    private Users getUserInfoFromAuthentication() {
+        return (Users) SecurityContextHolder.getContext().getAuthentication()
+                .getPrincipal();
     }
 }
