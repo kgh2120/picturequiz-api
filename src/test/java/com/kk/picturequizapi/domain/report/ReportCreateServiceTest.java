@@ -9,6 +9,7 @@ import com.kk.picturequizapi.domain.report.application.ReportCreateService;
 import com.kk.picturequizapi.domain.report.domain.ReportRepository;
 import com.kk.picturequizapi.domain.report.domain.ReportType;
 import com.kk.picturequizapi.domain.report.dto.ReportCreateRequest;
+import com.kk.picturequizapi.domain.report.exception.AlreadyReportedQuizException;
 import com.kk.picturequizapi.domain.users.entity.UserId;
 import com.kk.picturequizapi.domain.users.entity.Users;
 import com.kk.picturequizapi.domain.users.repository.UserRepository;
@@ -27,10 +28,6 @@ class ReportCreateServiceTest {
     @Test
     void 신고_생성 () throws Exception{
         //given
-        // 신고 ID는 리포에서 생성
-        // QuizId는 컨트롤러에서 받기
-        // ReportContent 관련 내용도 컨트롤러에서 받기
-        // Reporter 는 Security에서 토큰 분해해서 사용.
         ReportCreateRequest dto = new ReportCreateRequest("foo", ReportType.ETC, "bar");
         ReportRepository reportRepository = new FakeReportRepository();
 
@@ -53,5 +50,27 @@ class ReportCreateServiceTest {
         assertThat(dup).isTrue();
 
     }
+
+    @Test
+    void 신고_생성_중복_예외 () throws Exception{
+        //given
+        ReportCreateRequest dto = new ReportCreateRequest("foo", ReportType.ETC, "bar");
+        ReportRepository reportRepository = new FakeReportRepository();
+
+
+        Users user = createUser("login", "pw");
+        SecurityContextHolder.getContext()
+                .setAuthentication(
+                        new UsernamePasswordAuthenticationToken(user, user.getPassword()));
+
+        ReportCreateService service = new ReportCreateService(reportRepository); // ReportRepo, UserRepo
+        service.createReport(dto);
+        //when //then
+
+        assertThatThrownBy(() -> service.createReport(dto))
+                .isInstanceOf(AlreadyReportedQuizException.class);
+    }
+
+
 
 }
