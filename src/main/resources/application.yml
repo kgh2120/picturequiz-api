@@ -6,6 +6,7 @@ spring:
     import:
       - mailSender.yml
       - secret.properties
+      - constants.yml
   datasource:
     hikari:
       connection-timeout: 7000

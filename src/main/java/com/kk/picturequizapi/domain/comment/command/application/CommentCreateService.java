@@ -14,11 +14,14 @@ import com.kk.picturequizapi.domain.quiz.command.domain.Author;
 import com.kk.picturequizapi.domain.quiz.command.domain.QuizId;
 import com.kk.picturequizapi.domain.users.entity.UserId;
 import com.kk.picturequizapi.domain.users.entity.Users;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -30,56 +33,97 @@ public class CommentCreateService {
     private final AnonymousCommentRepository anonymousCommentRepository;
     private final QuizIdValidateService quizIdValidateService;
 
-    public void createComment(CommentCreateRequest dto){
-        quizIdValidateService.validateQuizId(dto.getQuizId());
-        // quizId가 존재하는 것인지 체크하기.
-        // 댓글인지 대댓글인지 체크.
-        Long order;
-        if (dto.getParentId() != null) {
-            // parentId가 존재하는지 체크
-            order = commentRepository.findParentCommentOrder(CommentId.of(dto.getParentId()))
-                    .orElseThrow(ParentIdNotFoundException::new);
-        } else {
-            // 존재하지 않다면 lastsequence 따오기, 없으면 1을 갖자
-            order = commentRepository.findLastCommentOrder(QuizId.of(dto.getQuizId()))
-                    .orElseGet(() -> 0L) + 1;
-        }
+    @Value("${default.anonymous}")
+    private String defaultNickname;
 
+    public void createComment(CommentCreateRequest dto) {
+        validateQuizId(dto);
+        Long order = getQuizOrder(dto);
+        Users users = getUserInfoFromToken();
+        createEntityAndSave(dto, order, users);
+    }
 
-        // comment order 따오기.
+    private void createEntityAndSave(CommentCreateRequest dto, Long order, Users users) {
+        commentRepository.save(createEntity(dto, order, users,
+                getNicknameOrCreate(dto, users)));
+    }
 
-        log.info("order = {}", order);
-
-
-        // jwt 에서 정보 긁어 와서 닉네임 있는지 체크
-        Users users = (Users) SecurityContextHolder.getContext().getAuthentication()
-                .getPrincipal();
-
-        String nickname = users.getNickname();
-
-        if (nickname == null) {
-            Long sequence  = anonymousCommentRepository.findUserSequence(
-                            AnonymousCommentId.of(QuizId.of(dto.getQuizId()),
-                                    UserId.of(users.getId())))
-                    .orElseGet(() ->{
-                                Long seq = anonymousCommentRepository.findLastSequence(
-                                                QuizId.of(dto.getQuizId()))
-                                        .orElseGet(() -> 0L);
-                                anonymousCommentRepository.save(AnonymousComment.of(QuizId.of(dto.getQuizId())
-                                        ,UserId.of(users.getId()), ++seq));
-                                return seq;
-                            }
-                          );
-            nickname = "익명" + sequence;
-        }
-
-        Comment comment = Comment.of(CommentId.of(anonymousCommentRepository.nextId())
+    private Comment createEntity(CommentCreateRequest dto, Long order, Users users,
+            String nickname) {
+        return Comment.of(CommentId.of(anonymousCommentRepository.nextId())
                 , CommentId.of(dto.getParentId()), QuizId.of(dto.getQuizId()), new Author(UserId.of(
                         users.getId()), nickname), CommentOrder.of(order),
                 CommentContent.of(dto.getContents()));
+    }
 
-        commentRepository.save(comment);
+    private Users getUserInfoFromToken() {
+        return (Users) SecurityContextHolder.getContext().getAuthentication()
+                .getPrincipal();
+    }
 
+    private String getNicknameOrCreate(CommentCreateRequest dto, Users users) {
+        String nickname = users.getNickname();
+        if (isBlankOrNull(nickname)) {
+            nickname = createAnonymousNickname(dto, users);
+        }
+        return nickname;
+    }
+
+    private boolean isBlankOrNull(String nickname) {
+        return !StringUtils.hasText(nickname);
+    }
+
+    private String createAnonymousNickname(CommentCreateRequest dto, Users users) {
+        return defaultNickname + getAnonymousSequence(dto, users);
+    }
+
+    private Long getAnonymousSequence(CommentCreateRequest dto, Users users) {
+        return findUserAnonymousSequence(dto, users)
+                .orElseGet(() -> createUserAnonymousSequence(dto, users));
+    }
+
+    private Optional<Long> findUserAnonymousSequence(CommentCreateRequest dto, Users users) {
+        return anonymousCommentRepository.findUserSequence(
+                AnonymousCommentId.of(QuizId.of(dto.getQuizId()),
+                        UserId.of(users.getId())));
+    }
+
+    private Long createUserAnonymousSequence(CommentCreateRequest dto, Users users) {
+        return saveUserAnonymousSequence(dto, users, getQuizLastSequence(dto));
+    }
+
+    private Long saveUserAnonymousSequence(CommentCreateRequest dto, Users users, Long seq) {
+        anonymousCommentRepository.save(
+                AnonymousComment.of(QuizId.of(dto.getQuizId())
+                        , UserId.of(users.getId()), ++seq));
+        return seq;
+    }
+
+    private Long getQuizLastSequence(CommentCreateRequest dto) {
+        return anonymousCommentRepository.findLastSequence(
+                        QuizId.of(dto.getQuizId()))
+                .orElseGet(() -> 0L);
+    }
+
+    private void validateQuizId(CommentCreateRequest dto) {
+        quizIdValidateService.validateQuizId(dto.getQuizId());
+    }
+
+    private Long getQuizOrder(CommentCreateRequest dto) {
+        if (isBlankOrNull(dto.getParentId()))
+            return getLastQuizOrder(dto);
+        return getParentQuizOrder(dto);
+
+    }
+
+    private long getLastQuizOrder(CommentCreateRequest dto) {
+        return commentRepository.findLastCommentOrder(QuizId.of(dto.getQuizId()))
+                .orElseGet(() -> 0L) + 1;
+    }
+
+    private Long getParentQuizOrder(CommentCreateRequest dto) {
+        return commentRepository.findParentCommentOrder(CommentId.of(dto.getParentId()))
+                .orElseThrow(ParentIdNotFoundException::new);
     }
 
 }
