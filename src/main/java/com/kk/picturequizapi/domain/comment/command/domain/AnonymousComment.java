@@ -1,4 +1,4 @@
-package com.kk.picturequizapi.domain.comment.domain;
+package com.kk.picturequizapi.domain.comment.command.domain;
 
 import com.kk.picturequizapi.domain.quiz.command.domain.QuizId;
 import com.kk.picturequizapi.domain.users.entity.UserId;
@@ -27,6 +27,10 @@ public class AnonymousComment {
         return new AnonymousComment(AnonymousCommentId.of(quizId,userId)
         ,AnonymousSequence.of(sequence));
 
+    }
+
+    public Long getSequence(){
+        return this.anonymousSequence.getSequence();
     }
 
     @Override

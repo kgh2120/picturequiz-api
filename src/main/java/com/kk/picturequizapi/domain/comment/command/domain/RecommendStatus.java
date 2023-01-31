@@ -1,4 +1,4 @@
-package com.kk.picturequizapi.domain.comment.domain;
+package com.kk.picturequizapi.domain.comment.command.domain;
 
 import java.io.Serializable;
 import java.util.Objects;

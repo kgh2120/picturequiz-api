@@ -1,4 +1,4 @@
-package com.kk.picturequizapi.domain.comment.domain;
+package com.kk.picturequizapi.domain.comment.command.domain;
 
 import com.kk.picturequizapi.domain.users.entity.UserId;
 import java.util.Objects;

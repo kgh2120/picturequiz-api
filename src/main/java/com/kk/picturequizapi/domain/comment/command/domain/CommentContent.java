@@ -1,38 +1,40 @@
-package com.kk.picturequizapi.domain.comment.domain;
+package com.kk.picturequizapi.domain.comment.command.domain;
 
 import java.io.Serializable;
 import java.util.Objects;
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import javax.persistence.Embedded;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
-@NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor
 @Embeddable
-public class CommentOrder implements Serializable {
+public class CommentContent implements Serializable {
 
-    private Long orderNum;
+    @Column(name = "comment_content")
+    private String content;
 
-    public static CommentOrder of(Long orderNum) {
-        return new CommentOrder(orderNum);
+    public static CommentContent of(String content){
+        return new CommentContent(content);
     }
 
     @Override
     public boolean equals(Object o) {
+
         if (this == o) {
             return true;
         }
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        CommentOrder that = (CommentOrder) o;
-        return Objects.equals(orderNum, that.orderNum);
+        CommentContent that = (CommentContent) o;
+        return Objects.equals(content, that.content);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(orderNum);
+        return Objects.hash(content);
     }
 }

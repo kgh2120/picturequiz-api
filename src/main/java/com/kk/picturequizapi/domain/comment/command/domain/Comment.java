@@ -1,4 +1,4 @@
-package com.kk.picturequizapi.domain.comment.domain;
+package com.kk.picturequizapi.domain.comment.command.domain;
 
 import com.kk.picturequizapi.domain.quiz.command.domain.Author;
 import com.kk.picturequizapi.domain.quiz.command.domain.QuizId;
@@ -8,7 +8,9 @@ import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
 @Entity
 public class Comment {
 
@@ -25,21 +27,24 @@ public class Comment {
     @Embedded
     private CommentOrder commentOrder;
     @Embedded
+    private CommentContent commentContent;
+    @Embedded
     private Recommend recommend;
 
     public Comment(CommentId commentId, CommentId parentId, QuizId quizId, Author author,
-            CommentOrder commentOrder) {
+            CommentOrder commentOrder, CommentContent content) {
         this.commentId = commentId;
         this.parentId = parentId;
         this.quizId =quizId;
         this.author = author;
         this.commentOrder = commentOrder;
         this.recommend = Recommend.of();
+        this.commentContent = content;
     }
 
     public static Comment of(CommentId commentId, CommentId parentId, QuizId quizId, Author author,
-            CommentOrder commentOrder){
-        return new Comment(commentId, parentId, quizId,author,commentOrder);
+            CommentOrder commentOrder, CommentContent content){
+        return new Comment(commentId, parentId, quizId,author,commentOrder, content);
     }
 
     @Override
@@ -54,12 +59,13 @@ public class Comment {
         return Objects.equals(commentId, comment.commentId) && Objects.equals(
                 parentId, comment.parentId) && Objects.equals(quizId, comment.quizId)
                 && Objects.equals(author, comment.author) && Objects.equals(
-                commentOrder, comment.commentOrder) && Objects.equals(recommend,
-                comment.recommend);
+                commentOrder, comment.commentOrder) && Objects.equals(commentContent,
+                comment.commentContent) && Objects.equals(recommend, comment.recommend);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(commentId, parentId, quizId, author, commentOrder, recommend);
+        return Objects.hash(commentId, parentId, quizId, author, commentOrder, commentContent,
+                recommend);
     }
 }
