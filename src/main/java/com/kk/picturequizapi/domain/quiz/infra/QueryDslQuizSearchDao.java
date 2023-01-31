@@ -2,6 +2,7 @@ package com.kk.picturequizapi.domain.quiz.infra;
 
 import com.kk.picturequizapi.domain.quiz.command.domain.QQuiz;
 import com.kk.picturequizapi.domain.quiz.command.domain.Quiz;
+import com.kk.picturequizapi.domain.quiz.command.domain.QuizId;
 import com.kk.picturequizapi.domain.quiz.exception.NoMoreQuizDataException;
 import com.kk.picturequizapi.domain.quiz.exception.NoSearchResultException;
 import com.kk.picturequizapi.domain.quiz.query.dao.QuizSearchDao;
@@ -110,6 +111,16 @@ public class QueryDslQuizSearchDao implements QuizSearchDao {
         quizzes.forEach(q -> searches.add(new QuizSearch(q)));
 
         return new QuizSearchResponse(searches, pageNum + 1, hasNext);
+    }
+
+    @Override
+    public boolean isExistsQuizId(QuizId quizId) {
+        Integer exists = queryFactory.selectOne()
+                .from(quiz)
+                .where(quiz.quizId.eq(quizId))
+                .fetchFirst();
+
+        return exists != null;
     }
 
 

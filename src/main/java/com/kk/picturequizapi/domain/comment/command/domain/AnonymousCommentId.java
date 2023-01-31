@@ -1,5 +1,6 @@
-package com.kk.picturequizapi.domain.comment.domain;
+package com.kk.picturequizapi.domain.comment.command.domain;
 
+import com.kk.picturequizapi.domain.quiz.command.domain.QuizId;
 import com.kk.picturequizapi.domain.users.entity.UserId;
 import java.io.Serializable;
 import java.util.Objects;
@@ -11,13 +12,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Embeddable
-public class CommentRecommendId implements Serializable {
+public class AnonymousCommentId implements Serializable {
 
-    private CommentId commentId;
+    private QuizId quizId;
     private UserId userId;
 
-    public static CommentRecommendId of(CommentId commentId, UserId userId){
-        return new CommentRecommendId(commentId,userId);
+
+    public static AnonymousCommentId of(QuizId quizId, UserId userId){
+        return new AnonymousCommentId(quizId,userId);
     }
 
     @Override
@@ -28,13 +30,13 @@ public class CommentRecommendId implements Serializable {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        CommentRecommendId that = (CommentRecommendId) o;
-        return Objects.equals(commentId, that.commentId) && Objects.equals(userId,
+        AnonymousCommentId that = (AnonymousCommentId) o;
+        return Objects.equals(quizId, that.quizId) && Objects.equals(userId,
                 that.userId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(commentId, userId);
+        return Objects.hash(quizId, userId);
     }
 }

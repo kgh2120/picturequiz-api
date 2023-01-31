@@ -1,4 +1,4 @@
-package com.kk.picturequizapi.domain.comment.domain;
+package com.kk.picturequizapi.domain.comment.command.domain;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -35,5 +35,9 @@ public class AnonymousSequence implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(sequence);
+    }
+
+    public Long getSequence() {
+        return this.sequence;
     }
 }
