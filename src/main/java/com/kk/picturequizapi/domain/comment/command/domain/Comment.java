@@ -2,12 +2,15 @@ package com.kk.picturequizapi.domain.comment.command.domain;
 
 import com.kk.picturequizapi.domain.quiz.command.domain.Author;
 import com.kk.picturequizapi.domain.quiz.command.domain.QuizId;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 import javax.persistence.AttributeOverride;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
@@ -30,6 +33,9 @@ public class Comment {
     private CommentContent commentContent;
     @Embedded
     private Recommend recommend;
+
+    @OneToMany(mappedBy = "comment")
+    private Set<CommentRecommend> commentRecommends = new HashSet<>();
 
     public Comment(CommentId commentId, CommentId parentId, QuizId quizId, Author author,
             CommentOrder commentOrder, CommentContent content) {
@@ -67,5 +73,9 @@ public class Comment {
     public int hashCode() {
         return Objects.hash(commentId, parentId, quizId, author, commentOrder, commentContent,
                 recommend);
+    }
+
+    public void associatedWith(CommentRecommend commentRecommend) {
+        commentRecommends.add(commentRecommend);
     }
 }
