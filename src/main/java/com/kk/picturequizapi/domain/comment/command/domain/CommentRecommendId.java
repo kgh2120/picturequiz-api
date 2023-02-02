@@ -13,11 +13,11 @@ import lombok.NoArgsConstructor;
 @Embeddable
 public class CommentRecommendId implements Serializable {
 
-    private CommentId commentId;
-    private UserId userId;
+    private String commentRecommendId;
 
-    public static CommentRecommendId of(CommentId commentId, UserId userId){
-        return new CommentRecommendId(commentId,userId);
+
+    public static CommentRecommendId of(String commentRecommendId){
+        return new CommentRecommendId(commentRecommendId);
     }
 
     @Override
@@ -29,12 +29,11 @@ public class CommentRecommendId implements Serializable {
             return false;
         }
         CommentRecommendId that = (CommentRecommendId) o;
-        return Objects.equals(commentId, that.commentId) && Objects.equals(userId,
-                that.userId);
+        return Objects.equals(commentRecommendId, that.commentRecommendId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(commentId, userId);
+        return Objects.hash(commentRecommendId);
     }
 }
