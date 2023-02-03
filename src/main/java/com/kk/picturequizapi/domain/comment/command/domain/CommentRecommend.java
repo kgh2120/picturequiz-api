@@ -42,6 +42,30 @@ public class CommentRecommend {
         return new CommentRecommend(CommentRecommendId.of(recommendId), UserId.of(userId), comment);
     }
 
+
+    public void recommend(){
+        if(!recommendStatus.isRecommend())
+            comment.increaseRecommend();
+        if(recommendStatus.isNotRecommend())
+            comment.decreaseNotRecommend();
+        if(recommendStatus.isRecommend())
+            comment.decreaseRecommend();
+
+
+        this.recommendStatus = recommendStatus.recommend();
+    }
+
+    public void notRecommend(){
+        if(recommendStatus.isNotRecommend())
+            comment.decreaseNotRecommend();
+        if(recommendStatus.isRecommend())
+            comment.decreaseRecommend();
+        if(!recommendStatus.isNotRecommend())
+            comment.increaseNotRecommend();
+
+        this.recommendStatus = recommendStatus.notRecommend();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {

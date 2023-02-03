@@ -20,6 +20,37 @@ public class Recommend implements Serializable {
         return new Recommend();
     }
 
+    public Recommend increaseRecommend(){
+        Recommend recommend = new Recommend();
+        recommend.numOfRecommend = numOfRecommend+1;
+        recommend.numOfNotRecommend = numOfNotRecommend;
+        return recommend;
+
+    }
+    public Recommend decreaseRecommend(){
+        Recommend recommend = new Recommend();
+        recommend.numOfRecommend = numOfRecommend -1 ;
+        recommend.numOfNotRecommend = numOfNotRecommend;
+        return recommend;
+
+    }
+    public Recommend increaseNotRecommend(){
+
+        Recommend recommend = new Recommend();
+        recommend.numOfRecommend = numOfRecommend;
+        recommend.numOfNotRecommend = numOfNotRecommend + 1;
+        return recommend;
+
+    }
+    public Recommend decreaseNotRecommend(){
+
+        Recommend recommend = new Recommend();
+        recommend.numOfRecommend = numOfRecommend;
+        recommend.numOfNotRecommend = numOfNotRecommend - 1;
+        return recommend;
+
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {

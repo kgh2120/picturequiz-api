@@ -12,6 +12,8 @@ public interface CommentRepository {
 
     Optional<Long> findLastCommentOrder(QuizId quizId);
 
+    Optional<Comment> findById(CommentId commentId);
+
     default String nextId(){
         return UUID.randomUUID().toString();
     }
