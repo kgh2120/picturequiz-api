@@ -8,6 +8,7 @@ import com.kk.picturequizapi.domain.report.domain.ReportRepository;
 import com.kk.picturequizapi.domain.report.domain.ReportType;
 import com.kk.picturequizapi.domain.report.domain.TargetId;
 import com.kk.picturequizapi.domain.report.domain.TargetType;
+import com.kk.picturequizapi.domain.report.domain.TargetValidateService;
 import com.kk.picturequizapi.domain.report.dto.ReportCreateRequest;
 import com.kk.picturequizapi.domain.report.exception.AlreadyReportedQuizException;
 import com.kk.picturequizapi.domain.users.entity.UserId;
@@ -28,7 +29,7 @@ class ReportCreateServiceTest {
         //given
         ReportCreateRequest dto = new ReportCreateRequest("foo",TargetType.QUIZ, ReportType.ETC, "bar");
         ReportRepository reportRepository = new FakeReportRepository();
-
+        TargetValidateService targetValidateService = new StubTargetValidateService();
 
         Users user = createUser("login", "pw");
         SecurityContextHolder.getContext()
@@ -36,7 +37,7 @@ class ReportCreateServiceTest {
                         new UsernamePasswordAuthenticationToken(user, user.getPassword()));
 
 
-        ReportCreateService service = new ReportCreateService(reportRepository); // ReportRepo, UserRepo
+        ReportCreateService service = new ReportCreateService(reportRepository,targetValidateService); // ReportRepo, UserRepo
         //when
         service.createReport(dto);
 
@@ -54,14 +55,14 @@ class ReportCreateServiceTest {
         //given
         ReportCreateRequest dto = new ReportCreateRequest("foo", TargetType.QUIZ,ReportType.ETC, "bar");
         ReportRepository reportRepository = new FakeReportRepository();
-
+        TargetValidateService targetValidateService = new StubTargetValidateService();
 
         Users user = createUser("login", "pw");
         SecurityContextHolder.getContext()
                 .setAuthentication(
                         new UsernamePasswordAuthenticationToken(user, user.getPassword()));
 
-        ReportCreateService service = new ReportCreateService(reportRepository); // ReportRepo, UserRepo
+        ReportCreateService service = new ReportCreateService(reportRepository,targetValidateService); // ReportRepo, UserRepo
         service.createReport(dto);
         //when //then
 
