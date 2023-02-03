@@ -53,6 +53,28 @@ public class Comment {
         return new Comment(commentId, parentId, quizId,author,commentOrder, content);
     }
 
+
+
+    public void associatedWith(CommentRecommend commentRecommend) {
+        commentRecommends.add(commentRecommend);
+    }
+
+    public void increaseRecommend() {
+        this.recommend = recommend.increaseRecommend();
+    }
+
+    public void decreaseNotRecommend() {
+        this.recommend = recommend.decreaseNotRecommend();
+    }
+
+    public void decreaseRecommend() {
+        this.recommend = recommend.decreaseRecommend();
+    }
+
+    public void increaseNotRecommend() {
+        this.recommend = recommend.increaseNotRecommend();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -73,9 +95,5 @@ public class Comment {
     public int hashCode() {
         return Objects.hash(commentId, parentId, quizId, author, commentOrder, commentContent,
                 recommend);
-    }
-
-    public void associatedWith(CommentRecommend commentRecommend) {
-        commentRecommends.add(commentRecommend);
     }
 }

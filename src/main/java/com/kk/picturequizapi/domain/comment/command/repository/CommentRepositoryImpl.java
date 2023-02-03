@@ -31,4 +31,9 @@ public class CommentRepositoryImpl implements CommentRepository {
     public Optional<Long> findLastCommentOrder(QuizId quizId) {
         return queryDslCommentDao.findQuizLastOrder(quizId);
     }
+
+    @Override
+    public Optional<Comment> findById(CommentId commentId) {
+        return jpaCommentRepository.findById(commentId);
+    }
 }
