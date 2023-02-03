@@ -6,7 +6,7 @@ import java.util.UUID;
 
 public interface ReportRepository {
 
-    boolean isExistReport(QuizId of, UserId userId, ReportType etc);
+    boolean isExistReport(TargetId of, TargetType targetType, UserId userId,ReportType etc);
 
     default String nextId() {
         return UUID.randomUUID().toString();
