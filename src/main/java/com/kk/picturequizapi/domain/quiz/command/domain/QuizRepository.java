@@ -12,4 +12,7 @@ public interface QuizRepository {
     default String nextId() {
         return UUID.randomUUID().toString();
     }
+
+    boolean existsById(QuizId quizId);
+
 }

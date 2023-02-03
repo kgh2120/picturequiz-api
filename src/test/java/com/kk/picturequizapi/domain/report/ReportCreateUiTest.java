@@ -16,6 +16,7 @@ import com.kk.picturequizapi.domain.quiz.command.ui.QuizCreateController;
 import com.kk.picturequizapi.domain.quiz.exception.QuizNotFoundByIdException;
 import com.kk.picturequizapi.domain.report.application.ReportCreateService;
 import com.kk.picturequizapi.domain.report.domain.ReportType;
+import com.kk.picturequizapi.domain.report.domain.TargetType;
 import com.kk.picturequizapi.domain.report.dto.ReportCreateRequest;
 import com.kk.picturequizapi.domain.report.exception.AlreadyReportedQuizException;
 import com.kk.picturequizapi.domain.report.ui.ReportCreateController;
@@ -52,7 +53,7 @@ class ReportCreateUiTest {
     @Test
     void 신고_생성 () throws Exception{
         //given
-        ReportCreateRequest dto = new ReportCreateRequest("foo", ReportType.ETC, "hello");
+        ReportCreateRequest dto = new ReportCreateRequest("foo", TargetType.QUIZ, ReportType.ETC, "hello");
         //when
         mockMvc.perform(post("/reports")
                 .header("Authorization", "Bearer Token")
@@ -67,7 +68,7 @@ class ReportCreateUiTest {
     @Test
     void 신고_생성_중복_예외 () throws Exception{
         //given
-        ReportCreateRequest dto = new ReportCreateRequest("foo", ReportType.ETC, "hello");
+        ReportCreateRequest dto = new ReportCreateRequest("foo",TargetType.QUIZ,  ReportType.ETC, "hello");
 
         doThrow(new AlreadyReportedQuizException())
                 .when(reportCreateService).createReport(dto);

@@ -14,6 +14,8 @@ public interface CommentRepository {
 
     Optional<Comment> findById(CommentId commentId);
 
+    boolean existsById(CommentId commentId);
+
     default String nextId(){
         return UUID.randomUUID().toString();
     }

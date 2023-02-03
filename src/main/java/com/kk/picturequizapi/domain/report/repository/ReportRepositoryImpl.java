@@ -4,6 +4,8 @@ import com.kk.picturequizapi.domain.quiz.command.domain.QuizId;
 import com.kk.picturequizapi.domain.report.domain.Report;
 import com.kk.picturequizapi.domain.report.domain.ReportRepository;
 import com.kk.picturequizapi.domain.report.domain.ReportType;
+import com.kk.picturequizapi.domain.report.domain.TargetId;
+import com.kk.picturequizapi.domain.report.domain.TargetType;
 import com.kk.picturequizapi.domain.users.entity.UserId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -13,10 +15,10 @@ import org.springframework.stereotype.Repository;
 public class ReportRepositoryImpl implements ReportRepository {
 
     private final JpaReportRepository jpaReportRepository;
-
     @Override
-    public boolean isExistReport(QuizId of, UserId userId, ReportType etc) {
-        return jpaReportRepository.existsReportByQuizIdAndReporterUserIdAndAndReportContent_ReportType(of, userId, etc);
+    public boolean isExistReport(TargetId of, TargetType targetType, UserId userId,
+            ReportType etc) {
+        return jpaReportRepository.existsReportByTargetIdAndTargetTypeAndReporterUserIdAndAndReportContent_ReportType(of, targetType, userId, etc);
     }
 
     @Override

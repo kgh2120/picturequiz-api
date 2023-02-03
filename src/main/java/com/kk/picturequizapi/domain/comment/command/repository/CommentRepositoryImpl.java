@@ -36,4 +36,9 @@ public class CommentRepositoryImpl implements CommentRepository {
     public Optional<Comment> findById(CommentId commentId) {
         return jpaCommentRepository.findById(commentId);
     }
+
+    @Override
+    public boolean existsById(CommentId commentId) {
+        return jpaCommentRepository.existsById(commentId);
+    }
 }

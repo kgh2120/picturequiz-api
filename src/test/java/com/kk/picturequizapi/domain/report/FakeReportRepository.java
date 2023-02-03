@@ -5,6 +5,8 @@ import com.kk.picturequizapi.domain.report.domain.Report;
 import com.kk.picturequizapi.domain.report.domain.ReportId;
 import com.kk.picturequizapi.domain.report.domain.ReportRepository;
 import com.kk.picturequizapi.domain.report.domain.ReportType;
+import com.kk.picturequizapi.domain.report.domain.TargetId;
+import com.kk.picturequizapi.domain.report.domain.TargetType;
 import com.kk.picturequizapi.domain.users.entity.UserId;
 import java.util.HashMap;
 import java.util.Map;
@@ -16,9 +18,10 @@ public class FakeReportRepository implements
 
 
     @Override
-    public boolean isExistReport(QuizId of, UserId userId, ReportType etc) {
+    public boolean isExistReport(TargetId of, TargetType targetType, UserId userId, ReportType etc) {
         for (Report report : storage.values()) {
-            if(report.getQuizId().equals(of)
+            if(report.getTargetId().equals(of)
+                    && report.getTargetType().equals(targetType)
                     && report.getReporterId().equals(userId)
                     && report.getReportType().equals(etc))
                 return true;
