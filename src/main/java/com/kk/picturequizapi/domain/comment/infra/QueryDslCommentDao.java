@@ -75,7 +75,7 @@ public class QueryDslCommentDao {
                 .on(commentRecommend.userId.eq(userId))
                 .where(comment.quizId.eq(quizId))
                 .orderBy(comment.commentOrder.orderNum.asc())
-                .offset(pageNum)
+                .offset(pageNum * 10)
                 .limit(10)
                 .fetch();
 
