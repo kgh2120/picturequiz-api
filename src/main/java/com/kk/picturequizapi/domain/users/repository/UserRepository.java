@@ -18,6 +18,7 @@ public interface UserRepository extends JpaRepository<Users, Long> {
     Optional<Users> findByAuthEmailAndLoginId(String email, String loginId);
 
     boolean existsByLoginId(String loginId);
-    @Query("select new com.kk.picturequizapi.domain.admin.query.dto.AdminRetrieveResponse(u.loginId, u.nickname, u.createdDate) from Users u")
+    @Query("select new com.kk.picturequizapi.domain.admin.query.dto.AdminRetrieveResponse(u.loginId, u.nickname, u.createdDate) from Users u"
+            + " where u.role = 'ROLE_ADMIN'")
     List<AdminRetrieveResponse> findAllAdminAccount();
 }
