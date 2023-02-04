@@ -2,6 +2,7 @@ package com.kk.picturequizapi.domain.quiz.command.domain;
 
 import com.kk.picturequizapi.domain.quiz.exception.*;
 import com.kk.picturequizapi.global.jpa.BaseEntity;
+import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,6 +25,8 @@ public class Quiz extends BaseEntity {
     @Embedded
     private Answer answer;
 
+    private LocalDateTime createdDateTime;
+
     @BatchSize(size = 5)
     @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name = "quiz_tag",  joinColumns = @JoinColumn(name = "quiz_id"))
@@ -36,6 +39,7 @@ public class Quiz extends BaseEntity {
         setAnswer(answer);
         setQuizTags(quizTags);
         setPicture(picture);
+        createdDateTime = LocalDateTime.now();
 
     }
 

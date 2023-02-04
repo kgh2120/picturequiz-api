@@ -2,6 +2,7 @@ package com.kk.picturequizapi.domain.users.entity;
 
 import com.kk.picturequizapi.domain.users.exception.ChangePasswordSameException;
 import com.kk.picturequizapi.domain.users.exception.PasswordIncorrectException;
+import com.kk.picturequizapi.global.jpa.BaseEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -17,7 +18,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Getter
 @Entity
-public class Users implements UserDetails {
+public class Users extends BaseEntity implements UserDetails {
 
     @Column(name = "user_id")
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
