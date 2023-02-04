@@ -1,5 +1,6 @@
 package com.kk.picturequizapi.domain.report;
 
+import com.kk.picturequizapi.domain.admin.query.dto.AdminRetrieveResponse;
 import com.kk.picturequizapi.domain.users.entity.Users;
 import com.kk.picturequizapi.domain.users.repository.UserRepository;
 import java.util.HashMap;
@@ -41,6 +42,11 @@ public class FakeUserRepository implements UserRepository {
     @Override
     public boolean existsByLoginId(String loginId) {
         return false;
+    }
+
+    @Override
+    public List<AdminRetrieveResponse> findAllAdminAccount() {
+        return null;
     }
 
     @Override
