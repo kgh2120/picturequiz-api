@@ -1,8 +1,6 @@
 package com.kk.picturequizapi.domain.admin.query.dto;
 
 import com.querydsl.core.annotations.QueryProjection;
-import com.querydsl.core.types.dsl.DatePath;
-import com.querydsl.core.types.dsl.NumberExpression;
 import java.time.LocalDate;
 import lombok.Data;
 import lombok.NoArgsConstructor;
