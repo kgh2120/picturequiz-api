@@ -87,6 +87,10 @@ public class Users extends BaseEntity implements UserDetails {
         return temporaryPassword;
     }
 
+    public void initAdminNickname(){
+        this.nickname = "관리자" + id;
+    }
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

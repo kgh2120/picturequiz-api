@@ -18,7 +18,15 @@ public class AdminCreateService {
     private final PasswordEncoder encoder;
 
     public void createAdminAccount(UserAccessRequestDto dto){
-        userRepository.save(createAdminEntity(dto));
+        createAndSaveAdminAccount(dto)
+                .initAdminNickname();
+
+    }
+
+    private Users createAndSaveAdminAccount(UserAccessRequestDto dto) {
+        Users admin = createAdminEntity(dto);
+        userRepository.save(admin);
+        return admin;
     }
 
     private Users createAdminEntity(UserAccessRequestDto dto) {
