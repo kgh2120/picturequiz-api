@@ -3,9 +3,11 @@ package com.kk.picturequizapi.domain.users.entity;
 import com.kk.picturequizapi.domain.users.exception.ChangePasswordSameException;
 import com.kk.picturequizapi.domain.users.exception.PasswordIncorrectException;
 import com.kk.picturequizapi.global.jpa.BaseEntity;
+import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -43,7 +45,15 @@ public class Users extends BaseEntity implements UserDetails {
         Users user = new Users();
         user.loginId = loginId;
         user.password = encrytedPassword;
-        user.role = UserRole.USER;
+        user.role = UserRole.ROLE_USER;
+        return user;
+    }
+
+    public static Users createAdminAccount(String loginId, String encrytedPassword) {
+        Users user = new Users();
+        user.loginId = loginId;
+        user.password = encrytedPassword;
+        user.role = UserRole.ROLE_ADMIN;
         return user;
     }
 
@@ -77,10 +87,14 @@ public class Users extends BaseEntity implements UserDetails {
         return temporaryPassword;
     }
 
+    public void initAdminNickname(){
+        this.nickname = "관리자" + id;
+    }
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return new ArrayList<>();
+        return List.of(new SimpleGrantedAuthority(role.name()));
     }
 
     @Override
