@@ -2,6 +2,7 @@ package com.kk.picturequizapi.domain.comment.command.domain;
 
 import com.kk.picturequizapi.domain.quiz.command.domain.Author;
 import com.kk.picturequizapi.domain.quiz.command.domain.QuizId;
+import com.kk.picturequizapi.global.jpa.BaseEntity;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -15,7 +16,7 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @Entity
-public class Comment {
+public class Comment extends BaseEntity {
 
     @EmbeddedId
     private CommentId commentId;

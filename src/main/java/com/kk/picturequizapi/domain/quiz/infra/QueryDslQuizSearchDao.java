@@ -128,14 +128,10 @@ public class QueryDslQuizSearchDao implements QuizSearchDao {
         if (orderCond == null)
             return new OrderSpecifier(Order.DESC, quiz.viewCount);
 
-        switch (orderCond) {
-            case POPULAR:
-                return new OrderSpecifier(Order.DESC, quiz.viewCount);
-            case RECENT:
-                return new OrderSpecifier(Order.DESC, quiz.createdDate);
-            default:
-                return new OrderSpecifier(Order.DESC, quiz.viewCount);
+        if (orderCond == QuizSearchOrderCondition.RECENT) {
+            return new OrderSpecifier(Order.DESC, quiz.createdDateTime);
         }
+        return new OrderSpecifier(Order.DESC, quiz.viewCount);
     }
 
 

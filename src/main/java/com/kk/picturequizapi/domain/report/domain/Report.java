@@ -7,6 +7,7 @@ import com.kk.picturequizapi.domain.report.exception.InputNullDataOnReportId;
 import com.kk.picturequizapi.domain.report.exception.InputNullDataOnReporter;
 import com.kk.picturequizapi.domain.report.exception.InputNullDataOnTargetType;
 import com.kk.picturequizapi.domain.users.entity.UserId;
+import com.kk.picturequizapi.global.jpa.BaseEntity;
 import java.util.Objects;
 import javax.persistence.Embedded;
 import javax.persistence.EmbeddedId;
@@ -19,7 +20,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Report {
+public class Report extends BaseEntity {
 
     @EmbeddedId
     private ReportId reportId;
