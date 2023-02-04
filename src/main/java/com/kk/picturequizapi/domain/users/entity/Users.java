@@ -49,6 +49,14 @@ public class Users extends BaseEntity implements UserDetails {
         return user;
     }
 
+    public static Users createAdminAccount(String loginId, String encrytedPassword) {
+        Users user = new Users();
+        user.loginId = loginId;
+        user.password = encrytedPassword;
+        user.role = UserRole.ROLE_ADMIN;
+        return user;
+    }
+
     public void changeNickname(String nickname) {
         this.nickname = nickname;
     }
