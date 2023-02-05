@@ -8,13 +8,13 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @Data
-public class MemberCreateCountResponse {
+public class CreateCount {
     private Long count;
     private LocalDate createdDate;
 
 
     @QueryProjection
-    public MemberCreateCountResponse(Long count, LocalDate createdDate) {
+    public CreateCount(Long count, LocalDate createdDate) {
         this.count = count;
         this.createdDate = createdDate;
     }
