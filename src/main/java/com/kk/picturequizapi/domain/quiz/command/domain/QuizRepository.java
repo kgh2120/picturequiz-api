@@ -15,4 +15,6 @@ public interface QuizRepository {
 
     boolean existsById(QuizId quizId);
 
+    void deleteById(QuizId quizId);
+
 }
