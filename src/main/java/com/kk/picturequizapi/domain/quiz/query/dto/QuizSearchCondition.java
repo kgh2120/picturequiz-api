@@ -1,5 +1,7 @@
 package com.kk.picturequizapi.domain.quiz.query.dto;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -14,6 +16,8 @@ public class QuizSearchCondition implements Serializable {
     private QuizSearchOrderCondition orderCondition;
     private List<String> tagNames = new ArrayList<>();
 
+    @NotNull
+    @Min(0)
     private int pageNum;
 
 

@@ -13,6 +13,7 @@ import com.kk.picturequizapi.domain.comment.query.dto.CommentSearchResult;
 import com.kk.picturequizapi.domain.comment.query.dto.QCommentSearch;
 import com.kk.picturequizapi.domain.quiz.command.domain.QuizId;
 import com.kk.picturequizapi.domain.users.entity.UserId;
+import com.kk.picturequizapi.global.exception.CurrentPageBiggerLastPageException;
 import com.querydsl.core.types.dsl.Wildcard;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
@@ -86,6 +87,9 @@ public class QueryDslCommentDao {
                 .from(comment)
                 .where(comment.quizId.eq(quizId))
                 .fetch().get(0)/10 + 1;
+
+        if(pageNum > lastPage)
+            throw new CurrentPageBiggerLastPageException();
 
         return new CommentSearchResult(searches, pageNum+1, lastPage);
     }

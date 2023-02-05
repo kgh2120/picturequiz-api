@@ -30,6 +30,7 @@ import com.kk.picturequizapi.domain.quiz.command.domain.Quiz;
 import com.kk.picturequizapi.domain.report.domain.TargetId;
 import com.kk.picturequizapi.domain.report.domain.TargetType;
 import com.kk.picturequizapi.domain.tag.command.domain.QTag;
+import com.kk.picturequizapi.global.exception.CurrentPageBiggerLastPageException;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
@@ -81,6 +82,8 @@ public class QueryDslAdminReportDao implements AdminReportDao {
                 .where(buildCondition(filter))
                 .fetchOne() / 10 + 1;
 
+        if(pageNum > lastPage)
+            throw new CurrentPageBiggerLastPageException();
         return new ReportRetrieveResponse(responses, pageNum +1, lastPage);
     }
 
@@ -109,6 +112,9 @@ public class QueryDslAdminReportDao implements AdminReportDao {
         long lastPage = total.get() / 10 + 1;
 
         log.info("total = {}", total);
+
+        if(pageNum > lastPage)
+            throw new CurrentPageBiggerLastPageException();
 
         return new ReportTargetRetrieveResponse(targets, pageNum+1, lastPage);
     }
