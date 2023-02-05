@@ -3,6 +3,7 @@ package com.kk.picturequizapi.domain.admin.query.ui;
 import com.kk.picturequizapi.domain.admin.query.dao.AdminCommentDao;
 import com.kk.picturequizapi.domain.admin.query.dao.AdminMemberDao;
 import com.kk.picturequizapi.domain.admin.query.dao.AdminQuizDao;
+import com.kk.picturequizapi.domain.admin.query.dao.AdminReportDao;
 import com.kk.picturequizapi.domain.admin.query.dto.CreateCount;
 import com.kk.picturequizapi.domain.admin.query.dto.CreateCountResponse;
 import java.time.LocalDate;
@@ -22,6 +23,8 @@ public class AdminCreateCountController {
     private final AdminQuizDao adminQuizDao;
     private final AdminCommentDao adminCommentDao;
 
+    private final AdminReportDao adminReportDao;
+
 
     @GetMapping("/admin/members")
     public ResponseEntity<CreateCountResponse> retrieveMemberCreateCount(
@@ -39,6 +42,12 @@ public class AdminCreateCountController {
     public ResponseEntity<CreateCountResponse> retrieveCommentCreateCount(
             @RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
         return ResponseEntity.ok(adminCommentDao.retrieveCreateCount(date));
+    }
+
+    @GetMapping("/admin/reports")
+    public ResponseEntity<CreateCountResponse> retrieveReportCreateCount(
+            @RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
+        return ResponseEntity.ok(adminReportDao.retrieveCreateCount(date));
     }
 
 }
