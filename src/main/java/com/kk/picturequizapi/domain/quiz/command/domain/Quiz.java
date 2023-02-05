@@ -93,4 +93,8 @@ public class Quiz extends BaseEntity {
                 ", quizTags=" + quizTags +
                 '}';
     }
+
+    public void changeAuthorNickname(String nickname) {
+        this.author = author.changeNickname(nickname);
+    }
 }

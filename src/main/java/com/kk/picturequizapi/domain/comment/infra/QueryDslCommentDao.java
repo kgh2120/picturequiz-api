@@ -4,6 +4,7 @@ package com.kk.picturequizapi.domain.comment.infra;
 import static com.kk.picturequizapi.domain.comment.command.domain.QComment.comment;
 import static com.kk.picturequizapi.domain.comment.command.domain.QCommentRecommend.commentRecommend;
 
+import com.kk.picturequizapi.domain.comment.command.domain.Comment;
 import com.kk.picturequizapi.domain.comment.command.domain.CommentId;
 import com.kk.picturequizapi.domain.comment.command.domain.QComment;
 import com.kk.picturequizapi.domain.comment.command.domain.QCommentRecommend;
@@ -95,4 +96,10 @@ public class QueryDslCommentDao {
                 .execute();
     }
 
+    public List<Comment> findAllCommentsByUserId(UserId userId) {
+
+        return jpaQueryFactory.selectFrom(comment)
+                .where(comment.author.userId.eq(userId))
+                .fetch();
+    }
 }

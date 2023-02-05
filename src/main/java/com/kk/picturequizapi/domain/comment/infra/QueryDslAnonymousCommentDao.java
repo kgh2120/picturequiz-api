@@ -6,6 +6,7 @@ import static com.kk.picturequizapi.domain.comment.command.domain.QAnonymousComm
 
 import com.kk.picturequizapi.domain.comment.command.domain.AnonymousCommentId;
 import com.kk.picturequizapi.domain.quiz.command.domain.QuizId;
+import com.kk.picturequizapi.domain.users.entity.UserId;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.Optional;
 import javax.persistence.EntityManager;
@@ -51,4 +52,9 @@ public class QueryDslAnonymousCommentDao {
                 .execute();
     }
 
+    public void deleteAllByUserId(UserId userId) {
+        jpaQueryFactory.delete(anonymousComment)
+                .where(anonymousComment.anonymousCommentId.userId.eq(userId))
+                .execute();
+    }
 }

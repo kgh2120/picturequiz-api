@@ -1,6 +1,7 @@
 package com.kk.picturequizapi.domain.comment.command.domain;
 
 import com.kk.picturequizapi.domain.quiz.command.domain.QuizId;
+import com.kk.picturequizapi.domain.users.entity.UserId;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -18,4 +19,5 @@ public interface AnonymousCommentRepository {
         return UUID.randomUUID().toString();
     }
 
+    void deleteAllByUserId(UserId userId);
 }

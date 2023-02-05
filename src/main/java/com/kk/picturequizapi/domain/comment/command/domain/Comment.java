@@ -119,4 +119,8 @@ public class Comment extends BaseEntity {
         return Objects.hash(commentId, parentId, quizId, author, commentOrder, commentContent,
                 recommend);
     }
+
+    public void changeAuthorNickname(String nickname) {
+        author = author.changeNickname(nickname);
+    }
 }
