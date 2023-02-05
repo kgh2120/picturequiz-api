@@ -1,6 +1,7 @@
 package com.kk.picturequizapi.domain.admin.query.ui;
 
 import com.kk.picturequizapi.domain.admin.query.dao.AdminReportDao;
+import com.kk.picturequizapi.domain.admin.query.dto.ReportCommentResponse;
 import com.kk.picturequizapi.domain.admin.query.dto.ReportFilter;
 import com.kk.picturequizapi.domain.admin.query.dto.ReportOrderCondition;
 import com.kk.picturequizapi.domain.admin.query.dto.ReportQuizResponse;
@@ -39,9 +40,15 @@ public class AdminRetrieveReportController {
     }
 
     @GetMapping("/admin/reports/quiz/{quizId}")
-    public ResponseEntity<ReportQuizResponse> retrieveQuiz(@PathVariable("quizId") String quizId) {
-        ReportQuizResponse response = adminReportDao.retrieveQuiz(TargetId.of(quizId));
+    public ResponseEntity<ReportQuizResponse> retrieveReportedQuiz(@PathVariable("quizId") String quizId) {
+        ReportQuizResponse response = adminReportDao.retrieveReportedQuiz(TargetId.of(quizId));
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/admin/reports/comments/{commentId}")
+    public ResponseEntity<ReportCommentResponse> retrieveReportedComment(@PathVariable("commentId") String commentId) {
+        ReportCommentResponse dto = adminReportDao.retrieveReportedComment(TargetId.of(commentId));
+        return ResponseEntity.ok(dto);
     }
 
 }

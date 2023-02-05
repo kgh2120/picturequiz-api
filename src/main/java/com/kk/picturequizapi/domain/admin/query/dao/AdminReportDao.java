@@ -1,6 +1,7 @@
 package com.kk.picturequizapi.domain.admin.query.dao;
 
 import com.kk.picturequizapi.domain.admin.query.dto.CreateCountResponse;
+import com.kk.picturequizapi.domain.admin.query.dto.ReportCommentResponse;
 import com.kk.picturequizapi.domain.admin.query.dto.ReportFilter;
 import com.kk.picturequizapi.domain.admin.query.dto.ReportOrderCondition;
 import com.kk.picturequizapi.domain.admin.query.dto.ReportQuizResponse;
@@ -17,5 +18,7 @@ public interface AdminReportDao {
 
     ReportTargetRetrieveResponse retrieveReportTargets(ReportFilter type, ReportOrderCondition orderCond, long pageNum, int min);
 
-    ReportQuizResponse retrieveQuiz(TargetId quizId);
+    ReportQuizResponse retrieveReportedQuiz(TargetId quizId);
+
+    ReportCommentResponse retrieveReportedComment(TargetId commentId);
 }
