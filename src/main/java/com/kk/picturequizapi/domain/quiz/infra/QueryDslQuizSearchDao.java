@@ -1,5 +1,6 @@
 package com.kk.picturequizapi.domain.quiz.infra;
 
+import com.kk.picturequizapi.domain.comment.exception.QuizIdNotFoundException;
 import com.kk.picturequizapi.domain.quiz.command.domain.QQuiz;
 import com.kk.picturequizapi.domain.quiz.command.domain.Quiz;
 import com.kk.picturequizapi.domain.quiz.command.domain.QuizId;
@@ -121,6 +122,18 @@ public class QueryDslQuizSearchDao implements QuizSearchDao {
                 .fetchFirst();
 
         return exists != null;
+    }
+
+    @Override
+    public QuizSearch retrieveQuiz(QuizId quizId) {
+        Quiz one = queryFactory.selectFrom(quiz)
+                .leftJoin(quiz.quizTags, quizTag)
+                .where(quiz.quizId.eq(quizId))
+                .fetchOne();
+        if(one == null)
+            throw new QuizIdNotFoundException();
+
+        return new QuizSearch(one);
     }
 
 
