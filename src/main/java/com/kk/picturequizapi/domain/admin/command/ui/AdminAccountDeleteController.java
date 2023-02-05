@@ -1,6 +1,6 @@
 package com.kk.picturequizapi.domain.admin.command.ui;
 
-import com.kk.picturequizapi.domain.admin.command.application.AdminDeleteService;
+import com.kk.picturequizapi.domain.admin.command.application.AdminAccountDeleteService;
 import com.kk.picturequizapi.domain.users.dto.UserIdRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -10,14 +10,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
 @RestController
-public class AdminDeleteController {
+public class AdminAccountDeleteController {
 
-    private final AdminDeleteService adminDeleteService;
+    private final AdminAccountDeleteService adminAccountDeleteService;
 
     @DeleteMapping("/admin")
     public ResponseEntity<Void> deleteAdminAccount(@RequestBody UserIdRequestDto dto){
 
-        adminDeleteService.deleteAdminAccount(dto.getUserId());
+        adminAccountDeleteService.deleteAdminAccount(dto.getUserId());
         return ResponseEntity.ok().build();
     }
 

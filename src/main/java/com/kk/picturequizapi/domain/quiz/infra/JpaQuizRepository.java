@@ -7,5 +7,4 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface JpaQuizRepository extends QuizRepository, JpaRepository<Quiz, QuizId> {
 
-
 }

@@ -3,22 +3,21 @@ package com.kk.picturequizapi.domain.admin.infra;
 
 import static com.kk.picturequizapi.domain.comment.command.domain.QComment.comment;
 import static com.kk.picturequizapi.domain.quiz.command.domain.QQuiz.quiz;
-import static com.kk.picturequizapi.domain.users.entity.QUsers.*;
+import static com.kk.picturequizapi.domain.users.entity.QUsers.users;
 
 import com.kk.picturequizapi.domain.admin.query.dao.AdminMemberDao;
 import com.kk.picturequizapi.domain.admin.query.dto.AdminMemberInfo;
 import com.kk.picturequizapi.domain.admin.query.dto.AdminMemberPageRequest;
 import com.kk.picturequizapi.domain.admin.query.dto.AdminMemberPageResponse;
-import com.kk.picturequizapi.domain.admin.query.dto.MemberCreateCountResponse;
+import com.kk.picturequizapi.domain.admin.query.dto.CreateCount;
+import com.kk.picturequizapi.domain.admin.query.dto.CreateCountResponse;
 import com.kk.picturequizapi.domain.admin.query.dto.MemberOrderCondition;
 import com.kk.picturequizapi.domain.admin.query.dto.QAdminMemberInfo;
-import com.kk.picturequizapi.domain.admin.query.dto.QMemberCreateCountResponse;
-import com.kk.picturequizapi.domain.users.entity.QUsers;
-import com.kk.picturequizapi.domain.users.entity.UserId;
+import com.kk.picturequizapi.domain.admin.query.dto.QCreateCount;
+
 import com.kk.picturequizapi.domain.users.entity.UserRole;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
-import com.querydsl.core.types.dsl.Wildcard;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.time.LocalDate;
 import java.util.List;
@@ -45,8 +44,12 @@ public class QueryDslAdminMemberDao implements AdminMemberDao {
 
 
     @Override
-    public List<MemberCreateCountResponse> retrieveCreateCount(LocalDate date) {
-        return jpaQueryFactory.select(new QMemberCreateCountResponse(users.count(),users.createdDate))
+    public CreateCountResponse retrieveCreateCount(LocalDate date) {
+        return new CreateCountResponse(date, getCreateCount(date)) ;
+
+    }
+    private List<CreateCount> getCreateCount(LocalDate date) {
+        return jpaQueryFactory.select(new QCreateCount(users.count(), users.createdDate))
                 .from(users)
                 .where(users.createdDate.after(date.minusWeeks(1))
                         .and(users.createdDate.before(date.plusDays(1)))
@@ -55,7 +58,6 @@ public class QueryDslAdminMemberDao implements AdminMemberDao {
                 .fetch();
 
     }
-
     @Override
     public AdminMemberPageResponse retrieveMemberAdminPage(AdminMemberPageRequest dto) {
 

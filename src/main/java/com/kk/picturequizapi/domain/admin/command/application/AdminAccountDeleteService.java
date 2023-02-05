@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Transactional
 @Service
-public class AdminDeleteService {
+public class AdminAccountDeleteService {
 
     private final UserRepository userRepository;
 
