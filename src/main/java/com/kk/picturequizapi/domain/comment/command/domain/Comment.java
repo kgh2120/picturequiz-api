@@ -1,7 +1,10 @@
 package com.kk.picturequizapi.domain.comment.command.domain;
 
+import com.kk.picturequizapi.domain.comment.exception.AccessDeletedCommentException;
+import com.kk.picturequizapi.domain.comment.exception.CommentNotYoursException;
 import com.kk.picturequizapi.domain.quiz.command.domain.Author;
 import com.kk.picturequizapi.domain.quiz.command.domain.QuizId;
+import com.kk.picturequizapi.domain.users.entity.UserId;
 import com.kk.picturequizapi.global.jpa.BaseEntity;
 import java.util.HashSet;
 import java.util.Objects;
@@ -86,6 +89,13 @@ public class Comment extends BaseEntity {
         this.recommend = Recommend.of();
         this.commentContent = CommentContent.of("[삭제된 댓글입니다.]");
         this.commentRecommends.clear();
+    }
+
+    public void validateAccessAuthority(long userId){
+        if(this.author == null || this.author.getUserId() == null)
+            throw new AccessDeletedCommentException();
+         if(!this.author.getUserId().equals(UserId.of(userId)))
+             throw new CommentNotYoursException();
     }
 
     @Override
