@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import javax.persistence.AttributeOverride;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.EmbeddedId;
@@ -35,7 +36,7 @@ public class Comment extends BaseEntity {
     @Embedded
     private Recommend recommend;
 
-    @OneToMany(mappedBy = "comment")
+    @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL ,orphanRemoval = true)
     private Set<CommentRecommend> commentRecommends = new HashSet<>();
 
     public Comment(CommentId commentId, CommentId parentId, QuizId quizId, Author author,
@@ -74,6 +75,17 @@ public class Comment extends BaseEntity {
 
     public void increaseNotRecommend() {
         this.recommend = recommend.increaseNotRecommend();
+    }
+
+    public boolean isParentComment(){
+        return parentId == null;
+    }
+
+    public void delete(){
+        this.author = new Author();
+        this.recommend = Recommend.of();
+        this.commentContent = CommentContent.of("[삭제된 댓글입니다.]");
+        this.commentRecommends.clear();
     }
 
     @Override
