@@ -2,11 +2,13 @@ package com.kk.picturequizapi.domain.users.service;
 
 import com.kk.picturequizapi.domain.users.dto.*;
 import com.kk.picturequizapi.domain.users.entity.Users;
+import com.kk.picturequizapi.domain.users.exception.BlockUserLoginException;
 import com.kk.picturequizapi.domain.users.exception.DuplicateLoginIdException;
 import com.kk.picturequizapi.domain.users.exception.EmailNotFoundException;
 import com.kk.picturequizapi.domain.users.exception.InvalidAccessToChangeTemporaryPasswordException;
 import com.kk.picturequizapi.domain.users.exception.LoginDataNotFoundException;
 import com.kk.picturequizapi.domain.users.repository.UserRepository;
+import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -98,8 +100,15 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findByLoginId(username)
+        Users users = userRepository.findByLoginId(username)
                 .orElseThrow(LoginDataNotFoundException::new);
+        isBlockedUser(users);
+        return users;
+    }
+
+    private void isBlockedUser(Users users) {
+        if(users.getBlockedDate()!=null && users.getBlockedDate().isAfter(LocalDate.now()))
+            throw new BlockUserLoginException(users.getBlockedDate());
     }
 
     private Users getUser() {

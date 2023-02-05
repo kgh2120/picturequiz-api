@@ -3,6 +3,7 @@ package com.kk.picturequizapi.domain.users.entity;
 import com.kk.picturequizapi.domain.users.exception.ChangePasswordSameException;
 import com.kk.picturequizapi.domain.users.exception.PasswordIncorrectException;
 import com.kk.picturequizapi.global.jpa.BaseEntity;
+import java.time.LocalDate;
 import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -35,6 +36,7 @@ public class Users extends BaseEntity implements UserDetails {
     private String nickname;
 
     private String authEmail;
+    private LocalDate blockedDate;
 
     @Enumerated(EnumType.STRING)
     private UserRole role;
@@ -89,6 +91,10 @@ public class Users extends BaseEntity implements UserDetails {
 
     public void initAdminNickname(){
         this.nickname = "관리자" + id;
+    }
+
+    public void block(long days){
+        this.blockedDate = LocalDate.now().plusDays(days);
     }
 
 

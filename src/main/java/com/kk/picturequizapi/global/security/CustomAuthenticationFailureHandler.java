@@ -2,6 +2,7 @@ package com.kk.picturequizapi.global.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.kk.picturequizapi.domain.users.exception.BlockUserLoginException;
 import com.kk.picturequizapi.domain.users.exception.LoginDataNotFoundException;
 import com.kk.picturequizapi.global.exception.ErrorCode;
 import com.kk.picturequizapi.global.exception.ErrorResponse;
@@ -41,6 +42,9 @@ public class CustomAuthenticationFailureHandler implements AuthenticationFailure
                     break;
                 case "LoginDataNotFoundException" :
                     errorResponse = ErrorResponse.createErrorResponse(LOGIN_DATA_NOT_FOUND,request.getRequestURI());
+                    break;
+                case "BlockUserLoginException" :
+                    errorResponse = ErrorResponse.createErrorResponse((BlockUserLoginException)exception.getCause(),request.getRequestURI());
                     break;
             }
         }

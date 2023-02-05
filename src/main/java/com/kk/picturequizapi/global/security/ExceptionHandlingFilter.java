@@ -1,6 +1,7 @@
 package com.kk.picturequizapi.global.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.kk.picturequizapi.domain.users.exception.BlockUserLoginException;
 import com.kk.picturequizapi.global.exception.AbstractApiException;
 import com.kk.picturequizapi.global.exception.ErrorResponse;
 import com.kk.picturequizapi.global.exception.LoginValidateErrorException;
@@ -17,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import static com.kk.picturequizapi.domain.users.exception.UserErrorCode.BLOCK_USER_LOGIN;
 import static com.kk.picturequizapi.global.exception.GlobalErrorCode.*;
 
 
@@ -50,6 +52,10 @@ public class ExceptionHandlingFilter extends OncePerRequestFilter {
             response.setStatus(BIND_ERROR.getHttpStatus().value());
             errorResponse = ErrorResponse.createErrorResponse(BIND_ERROR, request.getRequestURI());
         }
+        if (e instanceof BlockUserLoginException) {
+            response.setStatus(BLOCK_USER_LOGIN.getHttpStatus().value());
+            errorResponse = ErrorResponse.createErrorResponse((BlockUserLoginException)e, request.getRequestURI());
+        }
         if (e instanceof CannotCreateTransactionException) {
             response.setStatus(DB_CONNECT_FAIL.getHttpStatus().value());
             errorResponse = ErrorResponse.createErrorResponse(DB_CONNECT_FAIL, request.getRequestURI());
@@ -62,13 +68,6 @@ public class ExceptionHandlingFilter extends OncePerRequestFilter {
             response.setStatus(FILE_SIZE_LIMIT_EXCEEDED.getHttpStatus().value());
             errorResponse = ErrorResponse.createErrorResponse(FILE_SIZE_LIMIT_EXCEEDED, request.getRequestURI());
         }
-
-
-
-
-
-
-
         ObjectMapper mapper = new ObjectMapper();
         String errorMsg = mapper.writeValueAsString(errorResponse);
 

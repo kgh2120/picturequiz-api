@@ -11,7 +11,7 @@ public abstract class AbstractApiException extends RuntimeException implements E
     private final HttpStatus httpStatus;
     private final String errorCode;
     private final String errorName;
-    private final String errorMessage;
+    protected String errorMessage;
 
     public AbstractApiException (ErrorCode errorCode) {
 
@@ -20,6 +20,7 @@ public abstract class AbstractApiException extends RuntimeException implements E
         errorName = errorCode.getErrorName();
         errorMessage = errorCode.getErrorMessage();
     }
+
 
 
 }
