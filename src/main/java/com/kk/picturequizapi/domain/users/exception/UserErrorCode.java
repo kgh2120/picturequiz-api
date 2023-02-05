@@ -24,7 +24,9 @@ public enum UserErrorCode implements ErrorCode {
 
     DUPLICATE_LOGIN_ID(HttpStatus.CONFLICT, "U-0009", "입력하신 아이디는 중복되었습니다."),
 
-    USER_ID_NOT_FOUND(HttpStatus.NOT_FOUND, "U-0010", "입력하신 유저 아이디는 존재하지 않습니다.")
+    USER_ID_NOT_FOUND(HttpStatus.NOT_FOUND, "U-0010", "입력하신 유저 아이디는 존재하지 않습니다."),
+
+    BLOCK_USER_LOGIN(HttpStatus.UNAUTHORIZED, "U-0011", "회원님의 계정이 정지당하여 이용할 수가 없습니다. 정지 기간 : ")
     ;
     private final HttpStatus httpStatus;
     private final String errorCode;
