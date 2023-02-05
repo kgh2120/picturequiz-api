@@ -16,6 +16,8 @@ public interface CommentRepository {
 
     boolean existsById(CommentId commentId);
 
+    void clearCommentsOnQuiz(QuizId quizId);
+
     default String nextId(){
         return UUID.randomUUID().toString();
     }
