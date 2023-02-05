@@ -24,7 +24,9 @@ public enum GlobalErrorCode implements ErrorCode{
 
     FILE_SIZE_LIMIT_EXCEEDED(HttpStatus.BAD_REQUEST, "G-0010", "업로드하신 파일의 크기가 너무 큽니다. 10MB 아래의 파일로 설정해주세요"),
 
-    CURRENT_PAGE_BIGGER_LAST_PAGE(HttpStatus.BAD_REQUEST, "G-0011", "페이지 조회 시 현재 페이지가 마지막 페이지보다 높을 수 없습니다.")
+    CURRENT_PAGE_BIGGER_LAST_PAGE(HttpStatus.BAD_REQUEST, "G-0011", "페이지 조회 시 현재 페이지가 마지막 페이지보다 높을 수 없습니다."),
+
+    ARGUMENT_TYPE_MISMATCH(HttpStatus.BAD_REQUEST, "G-0012", "입력한 인자가 타입이 맞지 않습니다."),
 
     ;
 

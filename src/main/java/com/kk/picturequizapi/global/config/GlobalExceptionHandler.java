@@ -10,6 +10,7 @@ import org.springframework.validation.BindException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.multipart.support.MissingServletRequestPartException;
 
 import javax.servlet.http.HttpServletRequest;
@@ -42,6 +43,13 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(MISSING_REQUEST_PARAM.getHttpStatus())
                 .body(ErrorResponse.createErrorResponse(MISSING_REQUEST_PARAM, request.getRequestURI()));
     }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<ErrorResponse> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException ex, HttpServletRequest request) {
+        return ResponseEntity.status(ARGUMENT_TYPE_MISMATCH.getHttpStatus())
+                .body(ErrorResponse.createErrorResponse(ARGUMENT_TYPE_MISMATCH, request.getRequestURI()));
+    }
+
     @ExceptionHandler(BindException.class)
     public ResponseEntity<ErrorResponse> handleBindException(BindException ex, HttpServletRequest request) {
         return ResponseEntity.status(BIND_ERROR.getHttpStatus())
