@@ -4,6 +4,7 @@ import com.kk.picturequizapi.domain.admin.query.dao.AdminReportDao;
 import com.kk.picturequizapi.domain.admin.query.dto.ReportFilter;
 import com.kk.picturequizapi.domain.admin.query.dto.ReportOrderCondition;
 import com.kk.picturequizapi.domain.admin.query.dto.ReportRetrieveResponse;
+import com.kk.picturequizapi.domain.admin.query.dto.ReportTargetRetrieveResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,6 +25,15 @@ public class AdminRetrieveReportController {
         ReportRetrieveResponse retrieveResponse = adminReportDao.retrieveReports(filter,
                 orderCond, pageNum);
         return ResponseEntity.ok(retrieveResponse);
+    }
+
+    @GetMapping("/admin/reports/target/{type}")
+    public ResponseEntity<ReportTargetRetrieveResponse> retrieveReportTarget(@PathVariable("type") ReportFilter type, @RequestParam("pageNum") long pageNum,
+            @RequestParam(value = "min", required = false, defaultValue = "0") int min,
+            @RequestParam(value = "order", required = false, defaultValue = "RECENT")  ReportOrderCondition orderCond){
+        ReportTargetRetrieveResponse response = adminReportDao.retrieveReportTargets(
+                type, orderCond, pageNum, min);
+        return ResponseEntity.ok(response);
     }
 
 }

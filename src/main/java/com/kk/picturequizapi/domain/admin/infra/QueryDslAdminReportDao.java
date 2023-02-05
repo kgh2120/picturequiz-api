@@ -7,10 +7,13 @@ import com.kk.picturequizapi.domain.admin.query.dto.CreateCount;
 import com.kk.picturequizapi.domain.admin.query.dto.CreateCountResponse;
 import com.kk.picturequizapi.domain.admin.query.dto.QCreateCount;
 import com.kk.picturequizapi.domain.admin.query.dto.QReportResponse;
+import com.kk.picturequizapi.domain.admin.query.dto.QReportTarget;
 import com.kk.picturequizapi.domain.admin.query.dto.ReportFilter;
 import com.kk.picturequizapi.domain.admin.query.dto.ReportOrderCondition;
 import com.kk.picturequizapi.domain.admin.query.dto.ReportResponse;
 import com.kk.picturequizapi.domain.admin.query.dto.ReportRetrieveResponse;
+import com.kk.picturequizapi.domain.admin.query.dto.ReportTarget;
+import com.kk.picturequizapi.domain.admin.query.dto.ReportTargetRetrieveResponse;
 import com.kk.picturequizapi.domain.report.domain.TargetType;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Order;
@@ -19,12 +22,14 @@ import com.querydsl.core.types.dsl.Wildcard;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicLong;
 import javax.persistence.EntityManager;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-
+@Slf4j
 @Transactional
 @Repository
 public class QueryDslAdminReportDao implements AdminReportDao {
@@ -64,6 +69,35 @@ public class QueryDslAdminReportDao implements AdminReportDao {
         return new ReportRetrieveResponse(responses, pageNum +1, lastPage);
     }
 
+    @Override
+    public ReportTargetRetrieveResponse retrieveReportTargets(ReportFilter type, ReportOrderCondition orderCond, long pageNum,
+            int min) {
+
+        List<ReportTarget> targets = jpaQueryFactory.select(
+                        new QReportTarget(report.targetId.id, report.targetType, report.targetId.count()))
+                .from(report)
+                .where(buildCondition(type))
+                .groupBy(report.targetId)
+                .having(report.targetId.count().goe(min))
+                .orderBy(reportOrder(orderCond))
+                .offset(pageNum * 10)
+                .limit(10)
+                .fetch();
+
+        AtomicLong total = new AtomicLong();
+        jpaQueryFactory.select(report.targetId.count())
+                .from(report)
+                .where(buildCondition(type))
+                .groupBy(report.targetId)
+                .having(report.targetId.count().goe(min))
+                .fetch().forEach(total::addAndGet);
+        long lastPage = total.get() / 10 + 1;
+
+        log.info("total = {}", total);
+
+        return new ReportTargetRetrieveResponse(targets, pageNum+1, lastPage);
+    }
+
     private List<CreateCount> getCreateCount(LocalDate date) {
         return jpaQueryFactory.select(new QCreateCount(report.count(), report.createdDate))
                 .from(report)
@@ -79,8 +113,9 @@ public class QueryDslAdminReportDao implements AdminReportDao {
             case COMMENT: return bb.and(report.targetType.eq(TargetType.COMMENT));
             default:return bb;
         }
-
     }
+
+
 
     private OrderSpecifier<?> reportOrder(ReportOrderCondition orderCond) {
         if (orderCond == null)
