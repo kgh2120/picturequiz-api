@@ -3,8 +3,10 @@ package com.kk.picturequizapi.domain.admin.query.ui;
 import com.kk.picturequizapi.domain.admin.query.dao.AdminReportDao;
 import com.kk.picturequizapi.domain.admin.query.dto.ReportFilter;
 import com.kk.picturequizapi.domain.admin.query.dto.ReportOrderCondition;
+import com.kk.picturequizapi.domain.admin.query.dto.ReportQuizResponse;
 import com.kk.picturequizapi.domain.admin.query.dto.ReportRetrieveResponse;
 import com.kk.picturequizapi.domain.admin.query.dto.ReportTargetRetrieveResponse;
+import com.kk.picturequizapi.domain.report.domain.TargetId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,6 +35,12 @@ public class AdminRetrieveReportController {
             @RequestParam(value = "order", required = false, defaultValue = "RECENT")  ReportOrderCondition orderCond){
         ReportTargetRetrieveResponse response = adminReportDao.retrieveReportTargets(
                 type, orderCond, pageNum, min);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/admin/reports/quiz/{quizId}")
+    public ResponseEntity<ReportQuizResponse> retrieveQuiz(@PathVariable("quizId") String quizId) {
+        ReportQuizResponse response = adminReportDao.retrieveQuiz(TargetId.of(quizId));
         return ResponseEntity.ok(response);
     }
 

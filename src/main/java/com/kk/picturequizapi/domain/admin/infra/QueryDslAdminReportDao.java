@@ -1,20 +1,30 @@
 package com.kk.picturequizapi.domain.admin.infra;
 
+import static com.kk.picturequizapi.domain.quiz.command.domain.QQuiz.quiz;
+import static com.kk.picturequizapi.domain.quiz.command.domain.QQuizTag.quizTag;
 import static com.kk.picturequizapi.domain.report.domain.QReport.report;
+import static com.kk.picturequizapi.domain.tag.command.domain.QTag.tag;
 
 import com.kk.picturequizapi.domain.admin.query.dao.AdminReportDao;
 import com.kk.picturequizapi.domain.admin.query.dto.CreateCount;
 import com.kk.picturequizapi.domain.admin.query.dto.CreateCountResponse;
 import com.kk.picturequizapi.domain.admin.query.dto.QCreateCount;
+import com.kk.picturequizapi.domain.admin.query.dto.QReportCount;
 import com.kk.picturequizapi.domain.admin.query.dto.QReportResponse;
 import com.kk.picturequizapi.domain.admin.query.dto.QReportTarget;
+import com.kk.picturequizapi.domain.admin.query.dto.ReportCount;
 import com.kk.picturequizapi.domain.admin.query.dto.ReportFilter;
 import com.kk.picturequizapi.domain.admin.query.dto.ReportOrderCondition;
+import com.kk.picturequizapi.domain.admin.query.dto.ReportQuizResponse;
 import com.kk.picturequizapi.domain.admin.query.dto.ReportResponse;
 import com.kk.picturequizapi.domain.admin.query.dto.ReportRetrieveResponse;
 import com.kk.picturequizapi.domain.admin.query.dto.ReportTarget;
 import com.kk.picturequizapi.domain.admin.query.dto.ReportTargetRetrieveResponse;
+import com.kk.picturequizapi.domain.quiz.command.domain.QQuiz;
+import com.kk.picturequizapi.domain.quiz.command.domain.Quiz;
+import com.kk.picturequizapi.domain.report.domain.TargetId;
 import com.kk.picturequizapi.domain.report.domain.TargetType;
+import com.kk.picturequizapi.domain.tag.command.domain.QTag;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
@@ -96,6 +106,24 @@ public class QueryDslAdminReportDao implements AdminReportDao {
         log.info("total = {}", total);
 
         return new ReportTargetRetrieveResponse(targets, pageNum+1, lastPage);
+    }
+
+    @Override
+    public ReportQuizResponse retrieveQuiz(TargetId quizId) {
+        Quiz quiz = jpaQueryFactory.selectFrom(QQuiz.quiz).distinct()
+                .leftJoin(QQuiz.quiz.quizTags, quizTag).fetchJoin()
+                .where(QQuiz.quiz.quizId.id.eq(quizId.getId()))
+                .fetchFirst();
+
+        List<ReportCount> counts = jpaQueryFactory.select(
+                        new QReportCount(report.reportContent.reportType, report.reportId.count()))
+                .from(report)
+                .where(report.targetId.eq(quizId)
+                        .and(report.targetType.eq(TargetType.QUIZ)))
+                .groupBy(report.reportContent.reportType)
+                .fetch();
+
+        return new ReportQuizResponse(quiz,counts);
     }
 
     private List<CreateCount> getCreateCount(LocalDate date) {
