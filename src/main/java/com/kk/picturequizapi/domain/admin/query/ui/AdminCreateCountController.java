@@ -1,5 +1,6 @@
 package com.kk.picturequizapi.domain.admin.query.ui;
 
+import com.kk.picturequizapi.domain.admin.query.dao.AdminCommentDao;
 import com.kk.picturequizapi.domain.admin.query.dao.AdminMemberDao;
 import com.kk.picturequizapi.domain.admin.query.dao.AdminQuizDao;
 import com.kk.picturequizapi.domain.admin.query.dto.CreateCount;
@@ -19,6 +20,7 @@ public class AdminCreateCountController {
 
     private final AdminMemberDao adminMemberDao;
     private final AdminQuizDao adminQuizDao;
+    private final AdminCommentDao adminCommentDao;
 
 
     @GetMapping("/admin/members")
@@ -31,6 +33,12 @@ public class AdminCreateCountController {
     public ResponseEntity<CreateCountResponse> retrieveQuizCreateCount(
             @RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
         return ResponseEntity.ok(adminQuizDao.retrieveCreateCount(date));
+    }
+
+    @GetMapping("/admin/comments")
+    public ResponseEntity<CreateCountResponse> retrieveCommentCreateCount(
+            @RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
+        return ResponseEntity.ok(adminCommentDao.retrieveCreateCount(date));
     }
 
 }

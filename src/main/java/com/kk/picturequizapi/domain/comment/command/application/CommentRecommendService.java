@@ -23,7 +23,7 @@ public class CommentRecommendService {
 
 
     public void recommend(String commentId) {
-       getCommentRecommend(commentId).recommend();
+        getCommentRecommend(commentId).recommend();
     }
 
     public void notRecommend(String commentId) {
@@ -40,15 +40,14 @@ public class CommentRecommendService {
     private CommentRecommend createCommentRecommendEntity(String commentId) {
         Comment comment = commentRepository.findById(CommentId.of(commentId))
                 .orElseThrow();
-
-        return commentRecommendRepository.save(
-                CommentRecommend.of(commentRecommendRepository.nextId(),
-                        getUserIdFromAuthentication(), comment));
+        return CommentRecommend.of(commentRecommendRepository.nextId(),
+                getUserIdFromAuthentication(), comment);
 
     }
 
 
     private Long getUserIdFromAuthentication() {
-        return ((Users) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
+        return ((Users) SecurityContextHolder.getContext().getAuthentication()
+                .getPrincipal()).getId();
     }
 }

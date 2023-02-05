@@ -46,4 +46,9 @@ public class CommentRepositoryImpl implements CommentRepository {
     public void clearCommentsOnQuiz(QuizId quizId) {
         queryDslCommentDao.clearCommentOnQuiz(quizId);
     }
+
+    @Override
+    public void deleteById(CommentId commentId) {
+        jpaCommentRepository.deleteById(commentId);
+    }
 }

@@ -18,6 +18,8 @@ public interface CommentRepository {
 
     void clearCommentsOnQuiz(QuizId quizId);
 
+    void deleteById(CommentId commentId);
+
     default String nextId(){
         return UUID.randomUUID().toString();
     }
