@@ -32,4 +32,9 @@ public class AnonymousCommentRepositoryImpl implements AnonymousCommentRepositor
     public Optional<Long> findLastSequence(QuizId quizId) {
         return queryDslAnonymousCommentDao.findLastSequence(quizId);
     }
+
+    @Override
+    public void clearAnonymousComment(QuizId quizId) {
+        queryDslAnonymousCommentDao.clearAnonymousDate(quizId);
+    }
 }

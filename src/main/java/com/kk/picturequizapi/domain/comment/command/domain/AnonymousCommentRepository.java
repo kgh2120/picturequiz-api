@@ -12,6 +12,8 @@ public interface AnonymousCommentRepository {
 
     Optional<Long> findLastSequence(QuizId quizId);
 
+    void clearAnonymousComment(QuizId quizId);
+
     default String nextId(){
         return UUID.randomUUID().toString();
     }

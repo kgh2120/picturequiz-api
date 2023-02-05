@@ -45,4 +45,10 @@ public class QueryDslAnonymousCommentDao {
         return Optional.ofNullable(sequence);
     }
 
+    public void clearAnonymousDate(QuizId quizId){
+        jpaQueryFactory.delete(anonymousComment)
+                .where(anonymousComment.anonymousCommentId.quizId.eq(quizId))
+                .execute();
+    }
+
 }
