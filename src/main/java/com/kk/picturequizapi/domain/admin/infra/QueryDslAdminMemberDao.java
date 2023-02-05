@@ -16,6 +16,7 @@ import com.kk.picturequizapi.domain.admin.query.dto.QAdminMemberInfo;
 import com.kk.picturequizapi.domain.admin.query.dto.QCreateCount;
 
 import com.kk.picturequizapi.domain.users.entity.UserRole;
+import com.kk.picturequizapi.global.exception.CurrentPageBiggerLastPageException;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -76,6 +77,9 @@ public class QueryDslAdminMemberDao implements AdminMemberDao {
 
         Long lastPage = jpaQueryFactory.select(users.count())
                 .from(users).fetchOne()/10 + 1;
+
+        if(dto.getPageNum() > lastPage)
+            throw new CurrentPageBiggerLastPageException();
 
         return new AdminMemberPageResponse(memberInfos, dto.getPageNum() +1, lastPage );
     }

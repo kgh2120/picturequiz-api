@@ -22,7 +22,11 @@ public enum GlobalErrorCode implements ErrorCode{
 
     DB_CONNECT_FAIL(HttpStatus.SERVICE_UNAVAILABLE, "G-0009" , "현재 서비스 상태가 고르지 못해 이용에 차질이 발생합니다. 운영자 이메일을 통해 상황을 제보 부탁드립니다."),
 
-    FILE_SIZE_LIMIT_EXCEEDED(HttpStatus.BAD_REQUEST, "G-0010", "업로드하신 파일의 크기가 너무 큽니다. 10MB 아래의 파일로 설정해주세요")
+    FILE_SIZE_LIMIT_EXCEEDED(HttpStatus.BAD_REQUEST, "G-0010", "업로드하신 파일의 크기가 너무 큽니다. 10MB 아래의 파일로 설정해주세요"),
+
+    CURRENT_PAGE_BIGGER_LAST_PAGE(HttpStatus.BAD_REQUEST, "G-0011", "페이지 조회 시 현재 페이지가 마지막 페이지보다 높을 수 없습니다."),
+
+    ARGUMENT_TYPE_MISMATCH(HttpStatus.BAD_REQUEST, "G-0012", "입력한 인자가 타입이 맞지 않습니다."),
 
     ;
 
