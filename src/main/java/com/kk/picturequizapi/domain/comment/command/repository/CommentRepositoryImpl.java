@@ -6,6 +6,8 @@ import com.kk.picturequizapi.domain.comment.command.domain.CommentRepository;
 import com.kk.picturequizapi.domain.comment.infra.JpaCommentRepository;
 import com.kk.picturequizapi.domain.comment.infra.QueryDslCommentDao;
 import com.kk.picturequizapi.domain.quiz.command.domain.QuizId;
+import com.kk.picturequizapi.domain.users.entity.UserId;
+import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -50,5 +52,10 @@ public class CommentRepositoryImpl implements CommentRepository {
     @Override
     public void deleteById(CommentId commentId) {
         jpaCommentRepository.deleteById(commentId);
+    }
+
+    @Override
+    public List<Comment> findAllCommentsByUserId(UserId userId) {
+        return queryDslCommentDao.findAllCommentsByUserId(userId);
     }
 }

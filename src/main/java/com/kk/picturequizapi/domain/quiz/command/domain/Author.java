@@ -28,4 +28,8 @@ public class Author {
                 ", nickname='" + nickname + '\'' +
                 '}';
     }
+
+    public Author changeNickname(String nickname) {
+        return new Author(this.userId, nickname);
+    }
 }

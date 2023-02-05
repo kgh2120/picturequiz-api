@@ -2,12 +2,14 @@ package com.kk.picturequizapi.domain.users.service;
 
 import com.kk.picturequizapi.domain.users.dto.*;
 import com.kk.picturequizapi.domain.users.entity.Users;
+import com.kk.picturequizapi.domain.users.event.NicknameChangedEvent;
 import com.kk.picturequizapi.domain.users.exception.BlockUserLoginException;
 import com.kk.picturequizapi.domain.users.exception.DuplicateLoginIdException;
 import com.kk.picturequizapi.domain.users.exception.EmailNotFoundException;
 import com.kk.picturequizapi.domain.users.exception.InvalidAccessToChangeTemporaryPasswordException;
 import com.kk.picturequizapi.domain.users.exception.LoginDataNotFoundException;
 import com.kk.picturequizapi.domain.users.repository.UserRepository;
+import com.kk.picturequizapi.global.event.Events;
 import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -53,6 +55,7 @@ public class UserServiceImpl implements UserService{
         Users users = userRepository.findByLoginId(getUser().getLoginId())
                 .orElseThrow(LoginDataNotFoundException::new); // 예외 처리를 해야 하나? 없을 수가 없는 거 같은뎀
         users.changeNickname(dto.getNickname());
+        Events.raise(new NicknameChangedEvent(users.getId(),dto.getNickname()));
     }
 
     @Transactional

@@ -1,6 +1,8 @@
 package com.kk.picturequizapi.domain.comment.command.domain;
 
 import com.kk.picturequizapi.domain.quiz.command.domain.QuizId;
+import com.kk.picturequizapi.domain.users.entity.UserId;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -24,4 +26,5 @@ public interface CommentRepository {
         return UUID.randomUUID().toString();
     }
 
+    List<Comment> findAllCommentsByUserId(UserId of);
 }

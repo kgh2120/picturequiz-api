@@ -6,6 +6,7 @@ import com.kk.picturequizapi.domain.comment.command.domain.AnonymousCommentRepos
 import com.kk.picturequizapi.domain.comment.infra.JpaAnonymousCommentRepository;
 import com.kk.picturequizapi.domain.comment.infra.QueryDslAnonymousCommentDao;
 import com.kk.picturequizapi.domain.quiz.command.domain.QuizId;
+import com.kk.picturequizapi.domain.users.entity.UserId;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -36,5 +37,10 @@ public class AnonymousCommentRepositoryImpl implements AnonymousCommentRepositor
     @Override
     public void clearAnonymousComment(QuizId quizId) {
         queryDslAnonymousCommentDao.clearAnonymousDate(quizId);
+    }
+
+    @Override
+    public void deleteAllByUserId(UserId userId) {
+        queryDslAnonymousCommentDao.deleteAllByUserId(userId);
     }
 }
