@@ -49,6 +49,7 @@ public class SecurityConfig {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/quiz/add").authenticated()
+                .antMatchers(HttpMethod.DELETE,"/quiz/**").authenticated()
                 .antMatchers(
                         "/signUp", "/login", "/refresh", "/h2-console/**", "/character", "/tag"
                         , "/quiz/**", "/user/**").permitAll()

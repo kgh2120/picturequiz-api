@@ -41,4 +41,9 @@ public class CommentRepositoryImpl implements CommentRepository {
     public boolean existsById(CommentId commentId) {
         return jpaCommentRepository.existsById(commentId);
     }
+
+    @Override
+    public void clearCommentsOnQuiz(QuizId quizId) {
+        queryDslCommentDao.clearCommentOnQuiz(quizId);
+    }
 }

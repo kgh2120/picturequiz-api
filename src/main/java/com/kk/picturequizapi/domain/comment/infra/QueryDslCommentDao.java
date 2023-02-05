@@ -89,4 +89,10 @@ public class QueryDslCommentDao {
         return new CommentSearchResult(searches, pageNum+1, lastPage);
     }
 
+    public void clearCommentOnQuiz(QuizId quizId){
+        jpaQueryFactory.delete(comment)
+                .where(comment.quizId.eq(quizId))
+                .execute();
+    }
+
 }
