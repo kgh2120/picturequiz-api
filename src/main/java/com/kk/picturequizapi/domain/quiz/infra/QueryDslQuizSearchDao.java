@@ -1,8 +1,11 @@
 package com.kk.picturequizapi.domain.quiz.infra;
 
+import com.kk.picturequizapi.domain.comment.exception.QuizIdNotFoundException;
 import com.kk.picturequizapi.domain.quiz.command.domain.QQuiz;
 import com.kk.picturequizapi.domain.quiz.command.domain.Quiz;
+import com.kk.picturequizapi.domain.quiz.command.domain.QuizId;
 import com.kk.picturequizapi.domain.quiz.exception.NoMoreQuizDataException;
+import com.kk.picturequizapi.domain.quiz.exception.NoSearchResultException;
 import com.kk.picturequizapi.domain.quiz.query.dao.QuizSearchDao;
 import com.kk.picturequizapi.domain.quiz.query.dto.QuizSearch;
 import com.kk.picturequizapi.domain.quiz.query.dto.QuizSearchCondition;
@@ -15,6 +18,8 @@ import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,17 +39,22 @@ public class QueryDslQuizSearchDao implements QuizSearchDao {
 
     private final JPAQueryFactory queryFactory;
 
+    private final Environment env;
+    private int quizLimit;
+
     @Autowired
-    public QueryDslQuizSearchDao(EntityManager em) {
+    public QueryDslQuizSearchDao(EntityManager em, Environment env) {
         this.em = em;
         this.queryFactory = new JPAQueryFactory(em);
+        this.env = env;
+        quizLimit = Integer.parseInt(this.env.getProperty("quiz.limit"));
     }
 
     @Override
     public QuizSearchResponse searchQuizByCondition(QuizSearchCondition cond, int pageNum) {
 
         JPAQuery<Quiz> where = queryFactory.selectFrom(quiz).distinct()
-                .leftJoin(quiz.quizTags, quizTag)
+                .leftJoin(quiz.quizTags, quizTag).fetchJoin()
                 .where(buildCondition(cond));
 
         if (cond.getTagNames() != null) { // ??
@@ -53,62 +63,89 @@ public class QueryDslQuizSearchDao implements QuizSearchDao {
                     .having(quiz.quizId.count().goe((long) cond.getTagNames().size()));
         }
 
-        int limit = 10;
+
         List<Quiz> quizzes = where
                 .orderBy(quizOrder(cond.getOrderCondition()))
-                .offset(pageNum*limit)
-                .limit(limit+1)
+                .offset(pageNum * quizLimit)
+                .limit(quizLimit + 1)
                 .fetch();
 
-        if(quizzes.isEmpty())
-            throw new NoMoreQuizDataException();
+        if (quizzes.isEmpty()) {
+            if (pageNum == 0)
+                throw new NoSearchResultException();
+            else
+                throw new NoMoreQuizDataException();
+        }
 
-        boolean hasNext = quizzes.size() > limit;
+        boolean hasNext = quizzes.size() > quizLimit;
 
 
         List<QuizSearch> searches = new ArrayList<>();
-        quizzes.forEach( q -> searches.add(new QuizSearch(q)));
+        quizzes.forEach(q -> searches.add(new QuizSearch(q)));
 
-       return new QuizSearchResponse(searches, pageNum+1, hasNext);
+        return new QuizSearchResponse(searches, pageNum + 1, hasNext);
     }
 
     @Override
     public QuizSearchResponse searchMyQuizzes(UserId userId, int pageNum) {
 
-        int limit = 10;
+
         List<Quiz> quizzes = queryFactory.selectFrom(quiz)
                 .distinct()
-                .leftJoin(quiz.quizTags, quizTag)
+                .leftJoin(quiz.quizTags, quizTag).fetchJoin()
                 .where(quiz.author.userId.eq(userId))
-                .offset(pageNum*limit)
-                .limit(limit + 1)
+                .offset(pageNum * quizLimit)
+                .limit(quizLimit + 1)
                 .fetch();
 
-        if(quizzes.isEmpty())
-            throw new NoMoreQuizDataException();
+        if (quizzes.isEmpty()) {
+            if (pageNum == 0)
+                throw new NoSearchResultException();
+            else
+                throw new NoMoreQuizDataException();
+        }
 
-        boolean hasNext = quizzes.size() > limit;
+        boolean hasNext = quizzes.size() > quizLimit;
 
 
         List<QuizSearch> searches = new ArrayList<>();
-        quizzes.forEach( q -> searches.add(new QuizSearch(q)));
+        quizzes.forEach(q -> searches.add(new QuizSearch(q)));
 
-        return new QuizSearchResponse(searches, pageNum+1, hasNext);
+        return new QuizSearchResponse(searches, pageNum + 1, hasNext);
+    }
+
+    @Override
+    public boolean isExistsQuizId(QuizId quizId) {
+        Integer exists = queryFactory.selectOne()
+                .from(quiz)
+                .where(quiz.quizId.eq(quizId))
+                .fetchFirst();
+
+        return exists != null;
+    }
+
+    @Override
+    public QuizSearch retrieveQuiz(QuizId quizId) {
+        Quiz one = queryFactory.selectFrom(quiz)
+                .leftJoin(quiz.quizTags, quizTag)
+                .where(quiz.quizId.eq(quizId))
+                .fetchOne();
+        if(one == null)
+            throw new QuizIdNotFoundException();
+
+        return new QuizSearch(one);
     }
 
 
     private OrderSpecifier<?> quizOrder(QuizSearchOrderCondition orderCond) {
-        if(orderCond == null)
-            return new OrderSpecifier(Order.DESC,quiz.viewCount);
+        if (orderCond == null)
+            return new OrderSpecifier(Order.DESC, quiz.viewCount);
 
-        switch (orderCond) {
-            case POPULAR: return new OrderSpecifier(Order.DESC,quiz.viewCount);
-            case RECENT: return new OrderSpecifier(Order.DESC,quiz.createdDate);
-            default:
-                return new OrderSpecifier(Order.DESC,quiz.viewCount);
+        if (orderCond == QuizSearchOrderCondition.RECENT) {
+            return new OrderSpecifier(Order.DESC, quiz.createdDateTime);
         }
+        return new OrderSpecifier(Order.DESC, quiz.viewCount);
     }
-
 
 
     private BooleanBuilder buildCondition(QuizSearchCondition cond) {

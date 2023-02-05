@@ -7,7 +7,7 @@ import java.util.List;
 @Data
 public class QuizCreateRequest {
 
-    private Long characterId;
+    private String characterName;
     private List<String> tagNames;
 
 

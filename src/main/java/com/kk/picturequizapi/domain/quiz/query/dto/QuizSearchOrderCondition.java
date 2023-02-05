@@ -1,5 +1,7 @@
 package com.kk.picturequizapi.domain.quiz.query.dto;
 
-public enum QuizSearchOrderCondition {
+import java.io.Serializable;
+
+public enum QuizSearchOrderCondition implements Serializable {
     RECENT,POPULAR
 }

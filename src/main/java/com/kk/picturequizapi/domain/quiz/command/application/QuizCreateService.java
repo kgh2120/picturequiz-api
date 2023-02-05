@@ -21,7 +21,6 @@ import java.util.List;
 public class QuizCreateService {
 
     private final AuthorService authorService;
-    private final AnswerService answerService;
     private final QuizRepository quizRepository;
     private final PictureUploadService pictureUploadService;
     private final TagSearchDao tagSearchDao;
@@ -48,7 +47,7 @@ public class QuizCreateService {
     }
 
     private Answer createAnswer(QuizCreateRequest request) {
-        return answerService.createAnswer(request.getCharacterId());
+        return new Answer(request.getCharacterName());
     }
 
     private List<QuizTag> createQuizTag(List<String> tagNames) {
@@ -57,7 +56,7 @@ public class QuizCreateService {
             TagSearch tagSearch = tagSearchDao.findByName(name)
                     .orElseThrow(TagNotFoundException::new);
             tags.add(new QuizTag(TagId.of(tagSearch.getId())
-                    , tagSearch.getName()));
+                    , tagSearch.getName() , tagSearch.getColor()));
         });
         return tags;
     }

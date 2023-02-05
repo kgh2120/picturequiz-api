@@ -50,6 +50,7 @@ class TagCreateControllerTest {
         //given
         TagCreateRequest r = new TagCreateRequest();
         r.setName("운동");
+        r.setColor("#123123");
         given(service.createTag(any()))
                 .willReturn(createTagSearch().get());
 
@@ -71,6 +72,7 @@ class TagCreateControllerTest {
         //given
         TagCreateRequest r = new TagCreateRequest();
         r.setName("운동");
+        r.setColor("#123123");
         given(service.createTag(any()))
                 .willThrow(TagNameDuplicateException.class);
         String path = "/tag";

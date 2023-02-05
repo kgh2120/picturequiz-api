@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -17,13 +18,17 @@ public class Tag {
     private TagId tagId;
     private String name;
 
-    public Tag(TagId tagId, String name) {
+    @Column(name = "tag_color")
+    private String colorCode;
+
+    public Tag(TagId tagId, String name, String color) {
         this.tagId = tagId;
         this.name = name;
+        this.colorCode = color;
     }
 
 
     public TagSearch createDto() {
-        return new TagSearch(tagId.getId(), name);
+        return new TagSearch(tagId.getId(), name, colorCode);
     }
 }

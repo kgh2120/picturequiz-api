@@ -18,6 +18,10 @@ public enum QuizErrorCode implements ErrorCode {
     NO_MORE_QUIZ_DATA(HttpStatus.NOT_FOUND,"q-0007","더이상 조회할 수 있는 퀴즈가 존재하지 않습니다."),
 
     QUIZ_NOT_FOUND_BY_ID(HttpStatus.NOT_FOUND,"q-0008","ID에 매칭되는 퀴즈가 존재하지 않습니다."),
+
+    NO_SEARCH_RESULT(HttpStatus.NOT_FOUND, "q-0009", "검색 조건에 맞는 퀴즈가 존재하지 않습니다."),
+
+    QUIZ_IS_NOT_YOURS(HttpStatus.FORBIDDEN, "q-0010", "퀴즈에 대한 권한이 존재하지 않습니다.")
     ;
 
     private final HttpStatus httpStatus;

@@ -36,7 +36,7 @@ class TagCreateServiceTest {
         given(repository.existsByName(any()))
                 .willReturn(false);
         given(repository.save(any()))
-                .willReturn(new Tag(createTagId(), "운동"));
+                .willReturn(new Tag(createTagId(), "운동","#123123"));
         //when
         TagCreateRequest r = new TagCreateRequest();
         r.setName("운동");

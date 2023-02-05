@@ -24,8 +24,8 @@ public class RefreshTokenController {
 
         TokenResponseDto dto = refreshTokenService.refreshTokens(refreshToken);
 
-        response.addHeader("accessToken", dto.getAccessToken());
-        response.addHeader("refreshToekn",dto.getRefreshToken());
+        response.addHeader("access-token", dto.getAccessToken());
+        response.addHeader("refresh-token",dto.getRefreshToken());
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }

@@ -4,7 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data @NoArgsConstructor @AllArgsConstructor
+@Data @NoArgsConstructor
 public class PlayQuizResponse {
     private String url;
+    private String characterName;
+
+    public PlayQuizResponse(String ... quizInfo) {
+        this.url = quizInfo[0];
+        this.characterName = quizInfo[1];
+    }
 }
