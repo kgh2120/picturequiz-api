@@ -38,7 +38,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(MissingServletRequestParameterException.class)
-    public ResponseEntity<ErrorResponse> handleMissingServletRequestParameterException(MissingServletRequestPartException ex, HttpServletRequest request) {
+    public ResponseEntity<ErrorResponse> handleMissingServletRequestParameterException(MissingServletRequestParameterException ex, HttpServletRequest request) {
         return ResponseEntity.status(MISSING_REQUEST_PARAM.getHttpStatus())
                 .body(ErrorResponse.createErrorResponse(MISSING_REQUEST_PARAM, request.getRequestURI()));
     }
