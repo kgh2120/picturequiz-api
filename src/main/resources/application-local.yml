@@ -14,7 +14,8 @@ spring:
 
   jpa:
     show-sql: true
-
+    hibernate:
+      ddl-auto: create-drop
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     database: mysql
 
@@ -22,4 +23,4 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password: 1234
-    url: jdbc:mysql://localhost:3306/picture_quiz?user=root&useUnicode=true&serverTimezone=Asia/Seoul&useSSL=false&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://localhost:3306/pq?user=root&useUnicode=true&serverTimezone=Asia/Seoul&useSSL=false&allowPublicKeyRetrieval=true
