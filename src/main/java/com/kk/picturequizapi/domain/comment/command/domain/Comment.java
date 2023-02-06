@@ -89,9 +89,9 @@ public class Comment extends BaseEntity {
     }
 
     public void delete(){
-        this.author = new Author();
+        this.author = new Author(null, "[삭제]");
         this.recommend = Recommend.of();
-        this.commentContent = CommentContent.of("[삭제된 댓글입니다.]");
+        this.commentContent = CommentContent.of("[삭제된 댓글입니다]");
         this.commentRecommends.clear();
     }
 
