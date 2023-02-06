@@ -70,13 +70,14 @@ public class QueryDslCommentDao {
                                 comment.recommend.numOfRecommend,
                                 comment.recommend.numOfNotRecommend,
                                 commentRecommend.recommendStatus.recommend,
-                                commentRecommend.recommendStatus.notRecommend))
+                                commentRecommend.recommendStatus.notRecommend,
+                                comment.createdDateTime))
                 .distinct()
                 .from(comment)
                 .leftJoin(comment.commentRecommends, commentRecommend)
                 .on(commentRecommend.userId.eq(userId))
                 .where(comment.quizId.eq(quizId))
-                .orderBy(comment.commentOrder.orderNum.asc())
+                .orderBy(comment.commentOrder.orderNum.asc(), comment.createdDateTime.asc())
                 .offset(pageNum * 10)
                 .limit(10)
                 .fetch();
