@@ -84,15 +84,19 @@ public class QueryDslCommentDao {
 
         log.info("comments = {} ",searches);
 
-        Long lastPage = jpaQueryFactory.select(Wildcard.count)
+        Long total = jpaQueryFactory.select(Wildcard.count)
                 .from(comment)
                 .where(comment.quizId.eq(quizId))
-                .fetch().get(0)/10 + 1;
+                .fetch().get(0);
+        Long lastPage = total /10;
+
+        if(total%10 == 0)
+            lastPage--;
 
         if(pageNum > lastPage)
             throw new CurrentPageBiggerLastPageException();
 
-        return new CommentSearchResult(searches, pageNum+1, lastPage);
+        return new CommentSearchResult(searches,pageNum, pageNum+1, lastPage);
     }
 
     public void clearCommentOnQuiz(QuizId quizId){
