@@ -54,7 +54,7 @@ public class QueryDslQuizSearchDao implements QuizSearchDao {
     public QuizSearchResponse searchQuizByCondition(QuizSearchCondition cond, int pageNum) {
 
         JPAQuery<Quiz> where = queryFactory.selectFrom(quiz).distinct()
-                .leftJoin(quiz.quizTags, quizTag).fetchJoin()
+                .leftJoin(quiz.quizTags, quizTag)
                 .where(buildCondition(cond));
 
         if (cond.getTagNames() != null) { // ??
@@ -92,7 +92,7 @@ public class QueryDslQuizSearchDao implements QuizSearchDao {
 
         List<Quiz> quizzes = queryFactory.selectFrom(quiz)
                 .distinct()
-                .leftJoin(quiz.quizTags, quizTag).fetchJoin()
+                .leftJoin(quiz.quizTags, quizTag)
                 .where(quiz.author.userId.eq(userId))
                 .offset(pageNum * quizLimit)
                 .limit(quizLimit + 1)
