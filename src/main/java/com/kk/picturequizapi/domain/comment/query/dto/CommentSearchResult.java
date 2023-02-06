@@ -12,6 +12,7 @@ public class CommentSearchResult {
 
     private List<CommentSearch> comments;
     private Long currentPage;
+    private Long nextPage;
     private Long lastPage;
 
 }
