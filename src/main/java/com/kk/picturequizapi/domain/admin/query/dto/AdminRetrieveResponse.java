@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 public class AdminRetrieveResponse {
+
+    private long adminId;
     private String loginId;
     private String nickName;
     private LocalDate createdAt;
