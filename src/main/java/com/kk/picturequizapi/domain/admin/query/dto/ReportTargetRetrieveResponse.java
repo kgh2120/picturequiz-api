@@ -13,6 +13,7 @@ public class ReportTargetRetrieveResponse {
     private List<ReportTarget> targets;
 
     private long currentPage;
+    private long nextPage;
     private long lastPage;
 
 

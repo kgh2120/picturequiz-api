@@ -77,14 +77,17 @@ public class QueryDslAdminReportDao implements AdminReportDao {
                 .limit(10)
                 .fetch();
 
-        Long lastPage = jpaQueryFactory.select(Wildcard.count)
+        Long total = jpaQueryFactory.select(Wildcard.count)
                 .from(report)
                 .where(buildCondition(filter))
-                .fetchOne() / 10 + 1;
+                .fetchOne();
+        Long lastPage = total / 10;
 
+        if(total != 0 && total%10 == 0)
+            lastPage--;
         if(pageNum > lastPage)
             throw new CurrentPageBiggerLastPageException();
-        return new ReportRetrieveResponse(responses, pageNum +1, lastPage);
+        return new ReportRetrieveResponse(responses,pageNum, pageNum +1, lastPage);
     }
 
     @Override
@@ -109,14 +112,15 @@ public class QueryDslAdminReportDao implements AdminReportDao {
                 .groupBy(report.targetId)
                 .having(report.targetId.count().goe(min))
                 .fetch().forEach(total::addAndGet);
-        long lastPage = total.get() / 10 + 1;
+        long lastPage = total.get() / 10;
 
-        log.info("total = {}", total);
 
+        if(total.get() != 0 && total.get()%10 == 0)
+            lastPage--;
         if(pageNum > lastPage)
             throw new CurrentPageBiggerLastPageException();
 
-        return new ReportTargetRetrieveResponse(targets, pageNum+1, lastPage);
+        return new ReportTargetRetrieveResponse(targets, pageNum,pageNum+1, lastPage);
     }
 
     @Override

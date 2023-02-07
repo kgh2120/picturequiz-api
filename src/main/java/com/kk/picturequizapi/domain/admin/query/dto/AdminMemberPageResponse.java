@@ -12,5 +12,6 @@ public class AdminMemberPageResponse {
 
     private List<AdminMemberInfo> members;
     private long currentPage;
+    private long nextPage;
     private long lastPage;
 }
