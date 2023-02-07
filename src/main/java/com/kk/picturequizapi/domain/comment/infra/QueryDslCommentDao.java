@@ -90,7 +90,7 @@ public class QueryDslCommentDao {
                 .fetch().get(0);
         Long lastPage = total /10;
 
-        if(total%10 == 0)
+        if(total != 0 && total%10 == 0)
             lastPage--;
 
         if(pageNum > lastPage)
