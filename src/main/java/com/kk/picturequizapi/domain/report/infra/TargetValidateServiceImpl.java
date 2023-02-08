@@ -22,6 +22,8 @@ public class TargetValidateServiceImpl implements TargetValidateService {
     public void validateTargetId(TargetId targetId, TargetType type) {
         if(!isTargetIdExist(targetId,type))
             throw new InvalidTargetIdException();
+        commentRepository.findById(CommentId.of(targetId.getId()))
+                .orElseThrow().validateAlreadyDeleted();
     }
 
     private boolean isTargetIdExist(TargetId targetId, TargetType type){
