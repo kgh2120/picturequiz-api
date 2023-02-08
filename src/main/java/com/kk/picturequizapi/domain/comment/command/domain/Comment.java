@@ -68,6 +68,10 @@ public class Comment extends BaseEntity {
         commentRecommends.add(commentRecommend);
     }
 
+    public CommentId getCommentId(){
+        return commentId;
+    }
+
     public void increaseRecommend() {
         this.recommend = recommend.increaseRecommend();
     }
@@ -96,8 +100,7 @@ public class Comment extends BaseEntity {
     }
 
     public void validateAccessAuthority(long userId){
-        if(this.author == null || this.author.getUserId() == null)
-            throw new AccessDeletedCommentException();
+        validateAlreadyDeleted();
          if(!this.author.getUserId().equals(UserId.of(userId)))
              throw new CommentNotYoursException();
     }
@@ -126,5 +129,10 @@ public class Comment extends BaseEntity {
 
     public void changeAuthorNickname(String nickname) {
         author = author.changeNickname(nickname);
+    }
+
+    public void validateAlreadyDeleted() {
+        if(this.author == null || this.author.getUserId() == null)
+            throw new AccessDeletedCommentException();
     }
 }

@@ -70,7 +70,7 @@ public class QueryDslAdminMemberDao implements AdminMemberDao {
                 .leftJoin(quiz).on(quiz.author.userId.id.eq(users.id))
                 .leftJoin(comment).on(comment.author.userId.id.eq(users.id))
                 .groupBy(users.id)
-                .orderBy(memberOrder(dto.getOrderCondition()))
+                .orderBy(memberOrder(dto.getOrderCondition()),users.id.asc())
                 .offset(dto.getPageNum() * 10)
                 .limit(10)
                 .fetch();

@@ -1,6 +1,6 @@
 package com.kk.picturequizapi.domain.quiz.command.application;
 
-import com.kk.picturequizapi.domain.comment.command.application.QuizDeletedEvent;
+import com.kk.picturequizapi.global.event.QuizDeletedEvent;
 import com.kk.picturequizapi.domain.quiz.command.domain.Quiz;
 import com.kk.picturequizapi.domain.quiz.command.domain.QuizId;
 import com.kk.picturequizapi.domain.quiz.command.domain.QuizRepository;

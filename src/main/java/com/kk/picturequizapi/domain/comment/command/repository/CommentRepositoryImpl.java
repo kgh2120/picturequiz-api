@@ -9,6 +9,7 @@ import com.kk.picturequizapi.domain.quiz.command.domain.QuizId;
 import com.kk.picturequizapi.domain.users.entity.UserId;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -52,6 +53,13 @@ public class CommentRepositoryImpl implements CommentRepository {
     @Override
     public void deleteById(CommentId commentId) {
         jpaCommentRepository.deleteById(commentId);
+    }
+
+    @Override
+    public List<CommentId> getCommentIdsByQuizId(QuizId quizId) {
+        return jpaCommentRepository.findAllByQuizId(quizId)
+                .stream().map(Comment::getCommentId)
+                .collect(Collectors.toList());
     }
 
     @Override

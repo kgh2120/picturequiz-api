@@ -9,6 +9,7 @@ import com.kk.picturequizapi.domain.report.domain.TargetId;
 import com.kk.picturequizapi.domain.report.domain.TargetType;
 import com.kk.picturequizapi.domain.users.entity.UserId;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class FakeReportRepository implements
@@ -30,8 +31,19 @@ public class FakeReportRepository implements
     }
 
     @Override
+    public void clearTarget(TargetId targetId, TargetType targetType) {
+
+    }
+
+
+    @Override
     public void save(Report report) {
         storage.put(ReportId.of(report.getReportIdToString()),report);
+
+    }
+
+    @Override
+    public void clearCommentReports(List<String> ids) {
 
     }
 }

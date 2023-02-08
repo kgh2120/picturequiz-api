@@ -97,4 +97,6 @@ public class Quiz extends BaseEntity {
     public void changeAuthorNickname(String nickname) {
         this.author = author.changeNickname(nickname);
     }
+
+
 }
