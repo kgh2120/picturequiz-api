@@ -4,6 +4,8 @@ import com.kk.picturequizapi.domain.comment.command.domain.Comment;
 import com.kk.picturequizapi.domain.comment.command.domain.CommentId;
 import com.kk.picturequizapi.domain.comment.command.domain.CommentRepository;
 import com.kk.picturequizapi.domain.comment.exception.CommentIdNotFoundException;
+import com.kk.picturequizapi.global.event.CommentDeletedEvent;
+import com.kk.picturequizapi.global.event.Events;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +19,7 @@ public class AdminCommentDeleteService {
 
     public void deleteComment(String commentId) {
         deleteComment(commentId, findComment(commentId));
+        Events.raise(new CommentDeletedEvent(commentId));
     }
 
     private Comment findComment(String commentId) {
@@ -30,5 +33,6 @@ public class AdminCommentDeleteService {
             return;
         }
         commentRepository.deleteById(CommentId.of(commentId));
+
     }
 }

@@ -6,6 +6,8 @@ import com.kk.picturequizapi.domain.comment.command.domain.CommentRepository;
 import com.kk.picturequizapi.domain.comment.exception.CommentIdNotFoundException;
 import com.kk.picturequizapi.domain.comment.exception.CommentNotYoursException;
 import com.kk.picturequizapi.domain.users.entity.Users;
+import com.kk.picturequizapi.global.event.CommentDeletedEvent;
+import com.kk.picturequizapi.global.event.Events;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -20,6 +22,7 @@ public class DeleteMyCommentService {
 
     public void deleteMyComment(String commentId) {
         deleteComment(commentId, findComment(commentId));
+        Events.raise(new CommentDeletedEvent(commentId));
     }
 
 

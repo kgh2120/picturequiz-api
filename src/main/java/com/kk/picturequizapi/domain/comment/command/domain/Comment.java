@@ -68,6 +68,10 @@ public class Comment extends BaseEntity {
         commentRecommends.add(commentRecommend);
     }
 
+    public CommentId getCommentId(){
+        return commentId;
+    }
+
     public void increaseRecommend() {
         this.recommend = recommend.increaseRecommend();
     }

@@ -6,7 +6,9 @@ import com.kk.picturequizapi.domain.report.domain.ReportRepository;
 import com.kk.picturequizapi.domain.report.domain.ReportType;
 import com.kk.picturequizapi.domain.report.domain.TargetId;
 import com.kk.picturequizapi.domain.report.domain.TargetType;
+import com.kk.picturequizapi.domain.report.infra.QueryDslReportDao;
 import com.kk.picturequizapi.domain.users.entity.UserId;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Repository;
 public class ReportRepositoryImpl implements ReportRepository {
 
     private final JpaReportRepository jpaReportRepository;
+    private final QueryDslReportDao queryDslReportDao;
     @Override
     public boolean isExistReport(TargetId of, TargetType targetType, UserId userId,
             ReportType etc) {
@@ -22,7 +25,18 @@ public class ReportRepositoryImpl implements ReportRepository {
     }
 
     @Override
+    public void clearTarget(TargetId targetId, TargetType targetType) {
+        jpaReportRepository.deleteAllByTargetIdAndTargetType(targetId,targetType);
+
+    }
+
+    @Override
     public void save(Report report) {
         jpaReportRepository.save(report);
+    }
+
+    @Override
+    public void clearCommentReports(List<String> ids) {
+        queryDslReportDao.clearCommentReports(ids);
     }
 }

@@ -22,6 +22,8 @@ public interface CommentRepository {
 
     void deleteById(CommentId commentId);
 
+    List<CommentId> getCommentIdsByQuizId(QuizId quizId);
+
     default String nextId(){
         return UUID.randomUUID().toString();
     }
