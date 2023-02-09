@@ -64,8 +64,8 @@ jobs:
         id: docker_build
         uses: docker/build-push-action@v2
         with:
-          context: . 			# dockerfile이 있는 위치랑 맞춰주자
-          file: ./Dockerfile	# 빌드할 Dockerfile이 있는 디렉토리
+          context: .
+          file: ./Dockerfile
           push: true
           tags: ${{ env.DOCKER_IMAGE }}:latest
 
