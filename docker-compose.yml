@@ -6,7 +6,7 @@ services:
     ports:
       - 6379:6379
   picture-api:
-    image: kgh2120/picture-api:alpha
+    image: ghcr.io/kgh2120/picture-api:latest
     ports:
       - 8080:8080
     depends_on:
