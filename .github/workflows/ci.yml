@@ -59,11 +59,7 @@ jobs:
       uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
       with:
         arguments: build
-  docker:
-    needs: build
-    name: Docker Build and Push
-    runs-on: ubuntu-latest
-    steps:
+
       - name: Set up docker buildx
         id: buildx
         uses: docker/setup-buildx-action@v1
@@ -73,7 +69,6 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GHCR_TOKEN }}
-
 
       - name: Build and push
         id: docker_build
