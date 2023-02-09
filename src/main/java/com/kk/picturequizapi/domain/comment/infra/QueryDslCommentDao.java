@@ -70,28 +70,33 @@ public class QueryDslCommentDao {
                                 comment.recommend.numOfRecommend,
                                 comment.recommend.numOfNotRecommend,
                                 commentRecommend.recommendStatus.recommend,
-                                commentRecommend.recommendStatus.notRecommend))
+                                commentRecommend.recommendStatus.notRecommend,
+                                comment.createdDateTime))
                 .distinct()
                 .from(comment)
                 .leftJoin(comment.commentRecommends, commentRecommend)
                 .on(commentRecommend.userId.eq(userId))
                 .where(comment.quizId.eq(quizId))
-                .orderBy(comment.commentOrder.orderNum.asc())
+                .orderBy(comment.commentOrder.orderNum.asc(), comment.createdDateTime.asc())
                 .offset(pageNum * 10)
                 .limit(10)
                 .fetch();
 
         log.info("comments = {} ",searches);
 
-        Long lastPage = jpaQueryFactory.select(Wildcard.count)
+        Long total = jpaQueryFactory.select(Wildcard.count)
                 .from(comment)
                 .where(comment.quizId.eq(quizId))
-                .fetch().get(0)/10 + 1;
+                .fetch().get(0);
+        Long lastPage = total /10;
+
+        if(total != 0 && total%10 == 0)
+            lastPage--;
 
         if(pageNum > lastPage)
             throw new CurrentPageBiggerLastPageException();
 
-        return new CommentSearchResult(searches, pageNum+1, lastPage);
+        return new CommentSearchResult(searches,pageNum, pageNum+1, lastPage);
     }
 
     public void clearCommentOnQuiz(QuizId quizId){

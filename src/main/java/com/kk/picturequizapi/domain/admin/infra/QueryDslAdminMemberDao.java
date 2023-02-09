@@ -70,18 +70,22 @@ public class QueryDslAdminMemberDao implements AdminMemberDao {
                 .leftJoin(quiz).on(quiz.author.userId.id.eq(users.id))
                 .leftJoin(comment).on(comment.author.userId.id.eq(users.id))
                 .groupBy(users.id)
-                .orderBy(memberOrder(dto.getOrderCondition()))
+                .orderBy(memberOrder(dto.getOrderCondition()),users.id.asc())
                 .offset(dto.getPageNum() * 10)
                 .limit(10)
                 .fetch();
 
-        Long lastPage = jpaQueryFactory.select(users.count())
-                .from(users).fetchOne()/10 + 1;
+        Long total = jpaQueryFactory.select(users.count())
+                .from(users).fetchOne();
+        Long lastPage = total /10;
 
+
+        if(total != 0 && total%10 == 0)
+            lastPage--;
         if(dto.getPageNum() > lastPage)
             throw new CurrentPageBiggerLastPageException();
 
-        return new AdminMemberPageResponse(memberInfos, dto.getPageNum() +1, lastPage );
+        return new AdminMemberPageResponse(memberInfos,dto.getPageNum(), dto.getPageNum() +1, lastPage );
     }
 
     private OrderSpecifier<?> memberOrder(MemberOrderCondition orderCond) {

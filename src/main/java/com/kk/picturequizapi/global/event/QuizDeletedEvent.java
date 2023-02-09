@@ -1,4 +1,4 @@
-package com.kk.picturequizapi.domain.comment.command.application;
+package com.kk.picturequizapi.global.event;
 
 import com.kk.picturequizapi.global.event.Event;
 import lombok.AllArgsConstructor;

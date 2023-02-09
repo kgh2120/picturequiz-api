@@ -16,6 +16,7 @@ public class QuizSearchService {
     private final QuizSearchDao quizSearchDao;
 
     @Cacheable(cacheNames = "quiz", key = "#cond?.answerName + #cond?.tagNames+  #cond.orderCondition + '_'+ #cond.pageNum ")
+//    @Cacheable(key = "#myQuizService.")
     public QuizSearchResponse findQuizzes(QuizSearchCondition cond){
 
         return quizSearchDao.searchQuizByCondition(cond, cond.getPageNum());

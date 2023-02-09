@@ -27,7 +27,4 @@ public class AdminMemberInfo {
         this.nOfQuiz = nOfQuiz;
         this.nOfComment = nOfComment;
     }
-    public void injectNumOfQuizAndComment(long nOfQuiz, long nOfComment){
-
-    }
 }

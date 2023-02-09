@@ -19,8 +19,14 @@ public class CommentSearchService {
     private final CommentSearchDao commentSearchDao;
 
     public CommentSearchResult retrieveComments(String quizId, int pageNum){
-        Long id = ((Users) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
-                .getId();
+        Long id;
+        try {
+            id = ((Users) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
+                    .getId();
+        } catch (ClassCastException e) {
+            id = null;
+        }
+
 
         return commentSearchDao.retrieveComments(QuizId.of(quizId),
                 UserId.of(id), pageNum);

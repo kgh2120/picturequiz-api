@@ -12,6 +12,7 @@ public class ReportRetrieveResponse {
 
     private List<ReportResponse> reports;
     private long currentPage;
+    private long nextPage;
     private long lastPage;
 
 }
